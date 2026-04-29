@@ -107,7 +107,7 @@ int main(object me, string arg)
 			if(stringp(map = read_file("/doc/map/" + file)))
 			{
 				map = make_color(map);
-				map = replace_string(map, name, HIR+name+NOR);
+				map = replace_string(map, name, HBBLU+HIY+name+NOR);
 				if (me->query("env/no_more"))
 					write(map);
 				else
