@@ -93,6 +93,10 @@
  call <玩家ID>->move("/d/city/wumiao")       # 移动到扬州武庙
  call <玩家ID>->add_or_create_item("/clone/money/gold", 100)  # 给100金
 
+  克隆金币                                                                                   
+  spclone clone/money/gold 100
+  give <玩家id> gold
+
  其他常用命令
 
  ┌────────────────────────────┬────────────────────────────┐
@@ -119,6 +123,11 @@
  │ eval LPC表达式             │ 执行任意LPC代码（admin级） │
  └────────────────────────────┴────────────────────────────┘
 
+查看转生次数：            
+call <玩家ID> query("scborn/times")                                                    
+设置转生次数：
+call <玩家ID> set("scborn/times", 0)
+
  关键文件路径
 
  - mudcore/include/mudcore.h — WIZARD 宏定义（admin账号名）
@@ -128,3 +137,6 @@
  - cmds/adm/promote.c — admin晋升命令
  - cmds/wiz/call.c — 万能调用命令
  - cmds/wiz/data.c — 数据查看命令
+
+不饥渴
+set no_hunger 1

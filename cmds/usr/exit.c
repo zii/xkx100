@@ -114,7 +114,7 @@ int savequit(object me)
 		}
 //************* End of added ******************
 
-    if ( a==1 &&	me->save() )
+    if ( a &&	me->save() )
     {
     	destruct(me);
     	return 1;

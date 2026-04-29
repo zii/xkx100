@@ -30,6 +30,7 @@ string *player_settings = ({
 	"no_fight",
 	"can_tell",
 	"auto_reply",
+	"no_hunger",
 });
 
 string *wizard_settings = ({

@@ -366,16 +366,19 @@ int heal_up()
 
   	      return 0;
   
-	if( my["water"] > 0 ) { my["water"] -= 1; update_flag++; }
-  	if( my["food"] > 0 ) { my["food"] -= 1; update_flag++; }
-  
-	if( my["water"] < 1 &&  //人和宠物如果没饮水，不能恢复身体。
-		(userp(this_object()) || this_object()->query("ownername")) )
-		return update_flag;
-	
-	if( my["food"] < 1 &&  //人和宠物如果没食物，不能恢复身体。
-		(userp(this_object()) || this_object()->query("ownername")) )
-		return update_flag;
+	if (!query("env/no_hunger"))
+	{
+		if( my["water"] > 0 ) { my["water"] -= 1; update_flag++; }
+  		if( my["food"] > 0 ) { my["food"] -= 1; update_flag++; }
+
+		if( my["water"] < 1 &&  //人和宠物如果没饮水，不能恢复身体。
+			(userp(this_object()) || this_object()->query("ownername")) )
+			return update_flag;
+
+		if( my["food"] < 1 &&  //人和宠物如果没食物，不能恢复身体。
+			(userp(this_object()) || this_object()->query("ownername")) )
+			return update_flag;
+	}
 
 	my["jing"] += my["con"] / 3 + my["max_jingli"] / 10;
 	if( my["jing"] >= my["eff_jing"] )
