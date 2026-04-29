@@ -179,7 +179,7 @@ string build_minimap(object env)
 	string current, _n, _s, _e, _w, _nw, _ne, _sw, _se;
 	string line1, line2, line3, line4, line5, pad_left, result;
 	string n_conn, s_conn;
-	int i, cw, ww, ew, center, right_edge, nw_center, ne_center;
+	int i, cw, ww, ew, center, right_edge, nw_center, ne_center, pad_n;
 
 	if (!mapp(exits = env->query("exits")))
 		return "";
@@ -269,7 +269,9 @@ string build_minimap(object env)
 #undef PAD
 
 	pad_left = "";
-	for (i = 0; i < 20; i++) pad_left += " ";
+	pad_n = 30 - center;
+	if (pad_n < 2) pad_n = 2;
+	for (i = 0; i < pad_n; i++) pad_left += " ";
 
 	result = "";
 	if (line1 != "") result += pad_left + line1 + "\n";
