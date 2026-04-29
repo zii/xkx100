@@ -1,0 +1,62 @@
+# xkx100
+侠客行100 UTF-8 中文版
+
+Updated the files to work with FluffOS following the guidelines in the following,
+https://forum.fluffos.info/t/common-lpc-migration-issues-v2019/1341
+
+## 使用说明
+
+项目下载
+
+    # clone xkx100
+    git clone --recurse-submodules https://github.com/MudRen/xkx100.git
+    # 更新mudcore框架(可选)
+    git submodule update --remote
+
+请使用 fluffos v2019 最新版驱动
+
+    driver config.ini
+
+## Docker 运行
+
+使用 Docker 镜像 `ghcr.io/fluffos/fluffos:v2019.20220507`：
+
+```bash
+cd /path/to/xkx100
+
+docker run -d --name xkx100 \
+  -v $(pwd):/mudlib \
+  -p 5555:5555 \
+  -p 6666:6666 \
+  -p 8888:8888 \
+  --entrypoint sh \
+  ghcr.io/fluffos/fluffos:v2019.20220507 \
+  -c "cd /mudlib && /fluffos/bin/driver /mudlib/config.ini"
+```
+
+> 注意：`cd /mudlib &&` 是必须的，因为 driver 在读取 `mudlib directory` 配置前会先打开日志文件，而容器默认工作目录不是 `/mudlib`。
+
+**管理命令：**
+
+| 命令 | 说明 |
+|------|------|
+| `docker logs xkx100` | 查看启动日志 |
+| `docker logs -f xkx100` | 实时跟踪日志 |
+| `docker stop xkx100` | 停止服务 |
+| `docker start xkx100` | 启动服务 |
+| `docker rm xkx100` | 删除容器 |
+
+**验证：**
+
+```bash
+telnet localhost 5555   # GBK编码
+telnet localhost 6666   # UTF-8编码
+```
+
+游戏端口：5555(GBK编码)、6666(UTF8编码)；网页访问端口：8888
+
+本LIB为GBK旧版升级到utf-8版，目前代码基本无编译错误，原代码BUG已基本修复，升级造成的BUG已知部分已修复，不过中文字符判断（中文判断`[0..1]`需要改为`[0..0]`）可能存在遗漏，目前已知存在以下问题：
+
+1. 中文字符排版显示未完全修复，比如地图，会影响排版美观；
+2. 表情系统无效，因为emoted.o文件中空，可自己使用 edemote 指令补充；
+3. 技能中文翻译不全，因为e2c_dict.o是从[炎黄LIB](https://github.com/oiuv/mud)中复制过来的，对游戏中显示为英文的地方需要自己补充翻译（补充方式如：chinese city=扬州）
