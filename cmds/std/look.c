@@ -128,12 +128,166 @@ object i_have(object env,string name)
 	}
 	return 0;
 }
+
+// 去除所有 ANSI 颜色码（包括背景色）
+string clean_color(string arg)
+{
+	if(!arg) return "";
+	arg = replace_string(arg, BLK, "");
+	arg = replace_string(arg, RED, "");
+	arg = replace_string(arg, GRN, "");
+	arg = replace_string(arg, YEL, "");
+	arg = replace_string(arg, BLU, "");
+	arg = replace_string(arg, MAG, "");
+	arg = replace_string(arg, CYN, "");
+	arg = replace_string(arg, WHT, "");
+	arg = replace_string(arg, HIR, "");
+	arg = replace_string(arg, HIG, "");
+	arg = replace_string(arg, HIY, "");
+	arg = replace_string(arg, HIB, "");
+	arg = replace_string(arg, HIM, "");
+	arg = replace_string(arg, HIC, "");
+	arg = replace_string(arg, HIW, "");
+	arg = replace_string(arg, NOR, "");
+	arg = replace_string(arg, BLINK, "");
+	arg = replace_string(arg, BBLK, "");
+	arg = replace_string(arg, BRED, "");
+	arg = replace_string(arg, BGRN, "");
+	arg = replace_string(arg, BYEL, "");
+	arg = replace_string(arg, BBLU, "");
+	arg = replace_string(arg, BMAG, "");
+	arg = replace_string(arg, BCYN, "");
+	arg = replace_string(arg, BWHT, "");
+	arg = replace_string(arg, HBRED, "");
+	arg = replace_string(arg, HBGRN, "");
+	arg = replace_string(arg, HBYEL, "");
+	arg = replace_string(arg, HBBLU, "");
+	arg = replace_string(arg, HBMAG, "");
+	arg = replace_string(arg, HBCYN, "");
+	arg = replace_string(arg, HBWHT, "");
+	return arg;
+}
+
+#define LOAD_ROOM(var, dir) do { \
+	if (exits[dir] && objectp(load_object(exits[dir]))) \
+		var = clean_color(load_object(exits[dir])->query("short")); \
+} while(0)
+
+string build_minimap(object env)
+{
+	mapping exits;
+	string current, _n, _s, _e, _w, _nw, _ne, _sw, _se;
+	string line1, line2, line3, line4, line5, pad_left, result;
+	string n_conn, s_conn;
+	int i, cw, ww, ew, center, right_edge, nw_center, ne_center;
+
+	if (!mapp(exits = env->query("exits")))
+		return "";
+	if (!exits["north"] && !exits["south"] && !exits["east"] && !exits["west"] &&
+		!exits["northwest"] && !exits["northeast"] && !exits["southwest"] && !exits["southeast"] &&
+		!exits["northup"] && !exits["northdown"] && !exits["southup"] && !exits["southdown"] &&
+		!exits["eastup"] && !exits["eastdown"] && !exits["westup"] && !exits["westdown"] &&
+		!exits["enter"] && !exits["out"] && !exits["up"] && !exits["down"])
+		return "";
+
+	current = HIG + clean_color(env->query("short")) + NOR;
+
+	n_conn = "│";
+	s_conn = "↓";
+
+	if (exits["north"]) { LOAD_ROOM(_n, "north"); }
+	else if (exits["northup"]) { LOAD_ROOM(_n, "northup"); }
+	else if (exits["northdown"]) { LOAD_ROOM(_n, "northdown"); }
+	else if (exits["enter"]) { LOAD_ROOM(_n, "enter"); n_conn = HIR"∧"NOR; }
+	else if (exits["up"]) { LOAD_ROOM(_n, "up"); n_conn = HIR"↑"NOR; }
+
+	if (exits["south"]) { LOAD_ROOM(_s, "south"); }
+	else if (exits["southup"]) { LOAD_ROOM(_s, "southup"); }
+	else if (exits["southdown"]) { LOAD_ROOM(_s, "southdown"); }
+	else if (exits["down"]) { LOAD_ROOM(_s, "down"); s_conn = HIR"↓"NOR; }
+	else if (exits["out"]) { LOAD_ROOM(_s, "out"); s_conn = HIR"∨"NOR; }
+
+	if (exits["east"]) { LOAD_ROOM(_e, "east"); }
+	else if (exits["eastup"]) { LOAD_ROOM(_e, "eastup"); }
+	else if (exits["eastdown"]) { LOAD_ROOM(_e, "eastdown"); }
+
+	if (exits["west"]) { LOAD_ROOM(_w, "west"); }
+	else if (exits["westup"]) { LOAD_ROOM(_w, "westup"); }
+	else if (exits["westdown"]) { LOAD_ROOM(_w, "westdown"); }
+
+	LOAD_ROOM(_nw, "northwest");
+	LOAD_ROOM(_ne, "northeast");
+	LOAD_ROOM(_sw, "southwest");
+	LOAD_ROOM(_se, "southeast");
+
+	cw = strwidth(current);
+	ww = _w ? strwidth(_w) : 0;
+	ew = _e ? strwidth(_e) : 0;
+
+	center = (ww > 0 ? ww + 4 : 0) + cw / 2;
+	right_edge = (ww > 0 ? ww + 4 : 0) + cw + 4 + (ew > 0 ? ew : 0);
+	nw_center = (_nw || _sw) && center > 0 ? center / 2 : 0;
+	ne_center = (_ne || _se) ? (center + right_edge) / 2 : 0;
+
+	line1 = ""; line2 = ""; line3 = ""; line4 = ""; line5 = "";
+
+#define PAD(col) do { \
+	int _cl = strwidth(result); \
+	for (i = _cl; i < (col); i++) result += " "; \
+} while(0)
+
+	result = line1;
+	if (_nw) { int pos = nw_center - strwidth(_nw)/2; if (pos < 0) pos = 0; PAD(pos); result += _nw; }
+	if (_n) { int pos = center - strwidth(_n)/2; if (pos < 0) pos = 0; PAD(pos); result += _n; }
+	if (_ne) { int pos = ne_center - strwidth(_ne)/2; if (pos < 0) pos = 0; PAD(pos); result += _ne; }
+	line1 = result;
+
+	result = line2;
+	if (_nw) { PAD(nw_center); result += "＼"; }
+	if (_n) { PAD(center); result += n_conn; }
+	if (_ne) { PAD(ne_center); result += "／"; }
+	line2 = result;
+
+	result = line3;
+	if (_w) result += _w + "────";
+	result += current;
+	if (_e) result += "────" + _e;
+	line3 = result;
+
+	result = line4;
+	if (_sw) { PAD(nw_center); result += "／"; }
+	if (_s) { PAD(center); result += s_conn; }
+	if (_se) { PAD(ne_center); result += "＼"; }
+	line4 = result;
+
+	result = line5;
+	if (_sw) { int pos = nw_center - strwidth(_sw)/2; if (pos < 0) pos = 0; PAD(pos); result += _sw; }
+	if (_s) { int pos = center - strwidth(_s)/2; if (pos < 0) pos = 0; PAD(pos); result += _s; }
+	if (_se) { int pos = ne_center - strwidth(_se)/2; if (pos < 0) pos = 0; PAD(pos); result += _se; }
+	line5 = result;
+
+#undef PAD
+
+	pad_left = "";
+	for (i = 0; i < 20; i++) pad_left += " ";
+
+	result = "";
+	if (line1 != "") result += pad_left + line1 + "\n";
+	if (line2 != "") result += pad_left + line2 + "\n";
+	result += pad_left + line3 + "\n";
+	if (line4 != "") result += pad_left + line4 + "\n";
+	if (line5 != "") result += pad_left + line5 + "\n";
+	return result;
+}
+
+#undef LOAD_ROOM
+
 int look_room(object me, object env)
 {
 	int i;
 	object *inv/*, room*/;
 	mapping exits;
-	string str, *dirs/*, nature*/, time = NATURE_D->game_time();
+	string str, *dirs/*, nature*/, time = NATURE_D->game_time(), minimap;
 
 	if( !env )
 	{
@@ -171,6 +325,12 @@ int look_room(object me, object env)
 
 	inv = all_inventory(env);
 	str += combined(inv);
+	// 小地图
+	if (!me->query("env/no_map"))
+	{
+		minimap = build_minimap(env);
+		if (minimap != "") str = minimap + str;
+	}
 	write(str);
 // 小地图描述
 /*	if (!this_player()->query("env/no_map"))
