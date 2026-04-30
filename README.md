@@ -81,11 +81,18 @@ telnet localhost 6666   # UTF-8编码
 
 游戏端口：5555(GBK编码)、6666(UTF8编码)；网页访问端口：8888
 
-本LIB为GBK旧版升级到utf-8版，目前代码基本无编译错误，原代码BUG已基本修复，升级造成的BUG已知部分已修复，不过中文字符判断（中文判断`[0..1]`需要改为`[0..0]`）可能存在遗漏，目前已知存在以下问题：
+## 性能优化
 
-1. 中文字符排版显示未完全修复，比如地图，会影响排版美观；
-2. 表情系统无效，因为emoted.o文件中空，可自己使用 edemote 指令补充；
-3. 技能中文翻译不全，因为e2c_dict.o是从[炎黄LIB](https://github.com/oiuv/mud)中复制过来的，对游戏中显示为英文的地方需要自己补充翻译（补充方式如：chinese city=扬州）
+将 `/d/`（房间文件，约 9000 个）挂载为 Docker tmpfs，避免 macOS 文件共享（VirtioFS）的 I/O 开销，显著提升文件读写和对象加载速度。
+
+```yaml
+tmpfs:
+  - /mudlib/d:rw,noexec,nosuid,size=64M
+```
+
+启动时自动从 host 复制到 tmpfs，39M 数据耗时 < 1s，重启容器后生效。
+
+roomid 原来要走 macOS → VirtioFS → VM 读 8965 个文件，现在全在 Docker 内存里。同样的原理，update 房间、goto 去新区域、look 第一次进房间，都会快。
 
 **添加新指令:**
 
