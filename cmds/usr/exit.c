@@ -105,6 +105,9 @@ link_ob = me->query_temp("link_ob");
 		}
 //************* End of added ******************
 
+    // 记录下线位置
+    if (environment(me))
+        me->set("last_location", base_name(environment(me)));
     if ( a &&	me->save() )
     {
     	destruct(me);

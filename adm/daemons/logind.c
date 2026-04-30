@@ -1172,6 +1172,8 @@ varargs void enter_world(object ob, object user, int silent)
         if (ob->query("registered") == 0) cat(UNREG_MOTD);
         else cat(MOTD);
         if( user->is_ghost() ) startroom = DEATH_ROOM;
+        else if( stringp(user->query("last_location")) )
+            startroom = user->query("last_location");
         else if( !stringp(startroom = user->query("startroom")) )
             startroom = baseroom;
 
