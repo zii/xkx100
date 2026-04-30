@@ -6,6 +6,11 @@ services:
     container_name: xkx100
     working_dir: /mudlib
     restart: unless-stopped
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - cp -a /host-mudlib/d/. /mudlib/d/ && exec /fluffos/bin/driver /mudlib/config.ini
+    tmpfs:
+      - /mudlib/d:rw,noexec,nosuid,size=64M
     volumes:
-      - ./:/mudlib
-    command: ["config.ini"]
+      - ./:/mudlib:rw
+      - ./:/host-mudlib:ro
