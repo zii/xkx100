@@ -18,13 +18,13 @@ void create()
 	setup();
 }
 void init()
-{	
+{
 	object ob;
 
 	::init();
 	if( interactive(ob = this_player()) && !is_fighting() ) {
 		remove_call_out("greeting");
-		call_out("greeting", 1, ob);
+		//call_out("greeting", 1, ob);
 	}
 }
 
@@ -67,8 +67,8 @@ tell_object(ob,"\n\n店小二笑咪咪地说道：这位"+RANK_D->query_respect(
 }
 int accept_object(object who, object ob)
 {
-	
-	if (ob->query("money_id") && ob->value() >= 5000) 
+
+	if (ob->query("money_id") && ob->value() >= 5000)
 	{
 		tell_object(who, "小二一哈腰，说道：多谢您老，客官请上楼歇息。\n");
 

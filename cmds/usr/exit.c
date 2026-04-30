@@ -30,9 +30,7 @@ int main(object me, string arg)
 	if( me->is_busy()) return notify_fail("你现在正忙着做其他事，不能退出游戏！\n");
 	if (me->query_temp("sleeped")) me->set("marks/insleeping",1);
 
-	if( me->over_encumbranced() )
-		return notify_fail("身上带的东西太多了，离不开游戏了。\n");
-	return savequit(me);
+return savequit(me);
 }
 int savequit(object me)
 {
@@ -45,14 +43,7 @@ int savequit(object me)
         if( time()-me->query_temp("LAST_PKER_TIME")<7200&&!wizardp(me))
               return notify_fail("你刚杀人不久，暂时无法离开游戏。\n");
 
-	if( !wizardp(me) ) {
-		inv = all_inventory(me);
-		for(i=0; i<sizeof(inv); i++)
-			if( !inv[i]->query_autoload() )
-				DROP_CMD->do_drop(me, inv[i]);
-	}
-
-	link_ob = me->query_temp("link_ob");
+link_ob = me->query_temp("link_ob");
 	if(me->query_temp("guardto"))
 		environment(me)->delete("guarded/"+me->query_temp("guardto"));
 

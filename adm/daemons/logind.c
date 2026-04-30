@@ -1004,7 +1004,7 @@ private init_new_player(object user)
 
 varargs void enter_world(object ob, object user, int silent)
 {
-    object cloth, shoe, mailbox, gift, login_ob;
+    object cloth, shoe, gift, login_ob;
     string startroom;
     string baseroom;
     mixed *ltime;
@@ -1045,6 +1045,15 @@ varargs void enter_world(object ob, object user, int silent)
 
     write("\n目前权限：" + wizhood(user) + "\n");
     user->setup();
+    // 清理旧信箱，不再发放
+    if (present("mailbox", user)) destruct(present("mailbox", user));
+    // 自动穿上护甲类物品
+    {
+        object *inv = all_inventory(user);
+        int idx;
+        for (idx = 0; idx < sizeof(inv); idx++)
+            catch(inv[idx]->wear());
+    }
     if (!user->query("food") && !user->query("water") &&
         ob->query("age") == 14)
     {
@@ -1144,10 +1153,16 @@ varargs void enter_world(object ob, object user, int silent)
             shoe = new("/clone/cloth/male-shoe");
         }
     }
-    cloth->move(user);
-    cloth->wear();
-    shoe->move(user);
-    shoe->wear();
+    if (!present("cloth", user)) {
+        cloth->move(user);
+        cloth->wear();
+    } else
+        destruct(cloth);
+    if (!present("shoe", user)) {
+        shoe->move(user);
+        shoe->wear();
+    } else
+        destruct(shoe);
 
     if( !silent )
     {
@@ -1179,9 +1194,7 @@ varargs void enter_world(object ob, object user, int silent)
     CHANNEL_D->do_channel( this_object(), "sys",
         sprintf("%s(%s)由%s连线进入。共清除 " + reclaim_objects() + " 个变数。\n", user->name(),user->query("id"), query_ip_name(user)) );
     UPDATE_D->check_user(user);
-    mailbox = new("/clone/misc/mailbox");
-    mailbox->move(user);
-//  user->start_call_out( (: call_other,"/cmds/usr/news","check_me",user :),5);
+    //  user->start_call_out( (: call_other,"/cmds/usr/news","check_me",user :),5);
 }
 
 varargs void reconnect(object ob, object user, int silent)

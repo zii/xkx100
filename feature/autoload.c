@@ -15,7 +15,7 @@ void save_autoload()
 	inv = all_inventory();
 	autoload = allocate(sizeof(inv));
 	for(i=0, j=0; i<sizeof(inv); i++) {
-		if( !(param = inv[i]->query_autoload()) ) continue;
+		param = inv[i]->query_autoload();
 		autoload[j] = base_name(inv[i]);
 		if( stringp(param) ) autoload[j] += ":" + param;
 		j++;
@@ -46,7 +46,12 @@ void restore_autoload()
 		}
 		export_uid(ob);
 		ob->move(this_object());
-		ob->autoload(param);
+		err = catch(ob->autoload(param));
+		if( err )
+			log_file("AUTOLOAD", sprintf("Fail to call autoload on %s of %s, error %s\n",
+				file, this_object()->query("name"), err));
+		// 自动穿上护甲类物品
+		catch(ob->wear());
 	}
 	else {
 	        write("你觉得似乎失落了什么重要的东西，最好通知一下巫师。\n"); 

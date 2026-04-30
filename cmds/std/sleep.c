@@ -104,17 +104,16 @@ int main(object me, string arg)
 
 		if( userp(me) ) me->set_temp("noliving/sleeped", 1);
 		else me->disable_player("<睡梦中>");
-//	call_out("wakeup", random(45-me->query("con"))+45, me, where);
-		sleeptime=random(45-me->query("con"))+20;
-		if (me->query("mud_age")<86400*4)//18以下加快醒来
-			sleeptime-=20;
-		if (where->query("hotel"))
-		{//客栈睡觉时间减少
-			me->delete_temp("rent_paid");
-			sleeptime=sleeptime*1/2;
-		}
-		if (sleeptime < 10) sleeptime=10;
-//		call_out("wakeup", sleeptime, me, where);
+		sleeptime = 1; // 改成1秒醒
+		// sleeptime=random(45-me->query("con"))+20;
+		// if (me->query("mud_age")<86400*4)//18以下加快醒来
+		// 	sleeptime-=20;
+		// if (where->query("hotel"))
+		// {//客栈睡觉时间减少
+		// 	me->delete_temp("rent_paid");
+		// 	sleeptime=sleeptime*1/2;
+		// }
+		// if (sleeptime < 10) sleeptime=10;
 		me->start_call_out((:call_other,__FILE__,"wakeup",me,where:),sleeptime);
 		return 1;
 	}
