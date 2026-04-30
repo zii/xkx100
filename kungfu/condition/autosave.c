@@ -10,7 +10,7 @@ int update_condition(object me, int duration)
 	switch (duration)
 	{
 		case 1:
-			message("channel:snow",HIG"【存盘】您的档案已自动存盘。\n"NOR,me);
+			//message("channel:snow",HIG"【存盘】您的档案已自动存盘。\n"NOR,me);
 			me->save();
 			break;
 		case 4:
@@ -55,7 +55,7 @@ int update_condition(object me, int duration)
 			else message_vision("$N守了一会，腰有点酸了。\n", me);
 		}
 	}
-  if (me->query("max_nuqi")>0 && me->query("nuqi")>0 && 
+  if (me->query("max_nuqi")>0 && me->query("nuqi")>0 &&
         me->query("nuqi") < me->query("max_nuqi"))
    me->add("nuqi",-5);
    if (me->query("nuqi") < 0) me->set("nuqi",0);

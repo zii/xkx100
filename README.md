@@ -1,19 +1,16 @@
 # xkx100
 侠客行100 UTF-8 中文版
-
-Updated the files to work with FluffOS following the guidelines in the following,
-https://forum.fluffos.info/t/common-lpc-migration-issues-v2019/1341
+(基于MudRen/xkx100的fork)
 
 ## 使用说明
 
 项目下载
 
     # clone xkx100
-    git clone --recurse-submodules https://github.com/MudRen/xkx100.git
-    # 更新mudcore框架(可选)
-    git submodule update --remote
+    git clone --recurse-submodules https://github.com/zii/xkx100.git
 
-请使用 fluffos v2019 最新版驱动
+
+请使用 fluffos 最新版驱动
 
     driver config.ini
 
@@ -92,8 +89,8 @@ telnet localhost 6666   # UTF-8编码
 
 **添加新指令:**
 
-set no_more 1 设置map地图不再分页渲染
-set no_hunger 1 后不再扣除食物饮水，也不阻断气血恢复
+set no_more 1 - map 不分页
+set no_hunger 1 - 不饥渴
 
 **添加新巫师指令:**
 

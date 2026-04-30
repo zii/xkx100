@@ -34,7 +34,7 @@ void reset()
 string query_save_file()
 {
 	string id;
-	
+
 	id = geteuid();
 	if( !id ) id = getuid();
 	if( !stringp(id) ) return 0;
@@ -58,8 +58,8 @@ void update_age()
 	if( !last_age_set ) last_age_set = time();
   if (! environment() ||
             ! environment()->is_chat_room() ||
-            ! query("env/halt_age"))		
-// qingyun add last 3 line 
+            ! query("env/halt_age"))
+// qingyun add last 3 line
 	add("mud_age", time() - last_age_set);
 	last_age_set = time();
 	set("age", 14 + (int)query("age_modify") + ((int)query("mud_age") / 86400));
@@ -91,7 +91,7 @@ private void user_dump(int type)
 //			(this_object()->query("id") != "winder"))
 			if (!environment()->is_chat_room() || !this_object()->query("env/halt_age"))
 			{
-			tell_object( this_object(), "对不起，您已经发呆超过 " 
+			tell_object( this_object(), "对不起，您已经发呆超过 "
 				+ IDLE_TIMEOUT/60 + " 分钟了，请下次再来。\n");
 			tell_room( environment(), "一阵风吹来，将发呆中的" + query("name")
 				+ "化为一堆飞灰，消失了。\n",({this_object()}));
@@ -136,4 +136,3 @@ void reconnect()
 	remove_call_out("user_dump");
 	tell_object(this_object(), "重新连线完毕。\n");
 }
-
