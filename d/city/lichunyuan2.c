@@ -18,10 +18,10 @@ LONG);
 //            __DIR__"usa/albright" : 1,
         ]));
 	set("no_clean_up", 0);
-        set("no_fight", "1");
-        set("no_steal", "1");
-        set("no_beg", "1");
-        set("piao_room", "1");
+    set("no_fight", "1");
+    set("no_steal", "1");
+    set("no_beg", "1");
+    set("piao_room", "1");
 	set("coor/x", 30);
 	set("coor/y", 20);
 	set("coor/z", 10);

@@ -5,7 +5,7 @@ void cat(string file)
 	write(read_file(file));
 }
 
-void log_file(string file, string text)
+void log_file(string file, string text, int no_ts)
 {
 	write_file(LOG_DIR + file, text);
 }

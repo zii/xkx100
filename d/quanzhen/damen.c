@@ -4,8 +4,8 @@
 #include <ansi.h>
 inherit ROOM;
 void init();
-void close_gate();
-int valid_leave();
+int close_gate();
+int valid_leave(object me, string dir);
 string look_gate();
 int do_knock(string arg);
 

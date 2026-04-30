@@ -639,6 +639,9 @@ query_services(string mud, string address, string port, string tcp)
 #if PREF_TELL & SVC_TCP
       if (tcp == TCP_SOME && !(mud_svc[mud]["tell"] & (SVC_TCP | SVC_NO_TCP)))
    SUPPORT_Q->send_support_q(address, port, "tcp", "tell");
+#elif PREF_TELL & SVC_UDP
+      if (!(mud_svc[mud]["tell"] & (SVC_UDP | SVC_NO_UDP)))
+   SUPPORT_Q->send_support_q(address, port, "tell");
 #endif
     }
 #endif // PREF_TELL

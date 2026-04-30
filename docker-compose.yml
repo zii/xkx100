@@ -6,9 +6,15 @@ services:
     container_name: xkx100
     working_dir: /mudlib
     restart: unless-stopped
+    stop_grace_period: 2s
     entrypoint: ["/bin/sh", "-c"]
     command:
-      - cp -a /d-source/. /mudlib/d/ && exec /fluffos/bin/driver /mudlib/config.ini
+      - |
+        cp -a /d-source/. /mudlib/d/
+        /fluffos/bin/driver /mudlib/config.ini &
+        PID=$$!
+        trap 'kill -TERM $$PID 2>/dev/null; sleep 2; kill -KILL $$PID 2>/dev/null; exit 0' TERM
+        wait $$PID
     tmpfs:
       - /mudlib/d:rw,noexec,nosuid,size=64M
     volumes:

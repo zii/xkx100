@@ -77,7 +77,7 @@ int main(object me, string arg)
 					"满身的热气" + "不断折磨着你，让你辗转难眠。\n");
 					return 1;
 				}
-// 感冒到此结束 
+// 感冒到此结束
 	if((!arg) || arg==(string)me->query("id"))
 	{
 		if (where->query("sleep_room"))
@@ -99,7 +99,7 @@ int main(object me, string arg)
 
 		me->set("no_get", 1);
 		me->set("no_get_from", 1);
-		me->set_temp("sleeped",1);
+		//me->set_temp("sleeped",1); // 允许连续睡觉
 
 
 		if( userp(me) ) me->set_temp("noliving/sleeped", 1);
@@ -108,7 +108,7 @@ int main(object me, string arg)
 		sleeptime=random(45-me->query("con"))+20;
 		if (me->query("mud_age")<86400*4)//18以下加快醒来
 			sleeptime-=20;
-		if (where->query("hotel")) 
+		if (where->query("hotel"))
 		{//客栈睡觉时间减少
 			me->delete_temp("rent_paid");
 			sleeptime=sleeptime*1/2;
@@ -205,7 +205,7 @@ void wakeup(object me,object where)
 	if ((me->query("mud_age")-me->query("last_slp"))<120 && me->query("max_jing")>160)
 	{
 		//在时间限制内  恢复一半的精气和四分一内力
-		//精气短的比如新手也让恢复一半 
+		//精气短的比如新手也让恢复一半
 		me->add("qi", me->query("eff_qi")/2 - me->query("qi")/2 );
 		me->add("jing", me->query("eff_jing")/2 - me->query("jing")/2 );
 		if (me->query("neili") < me->query("max_neili"))
@@ -283,11 +283,11 @@ int wakeup2(object me,object slept,object where)
 
 		if((int)(me->query("mud_age")/86400) < 4 ||
 			(int)(me->query("mud_age")/864000) < me->query("child") ||
-			(int)(me->query("mud_age")/86400) > 36  
+			(int)(me->query("mud_age")/86400) > 36
 			)
 			return 1;
 
-		if (me->query_condition("huaiyun"))	return 1;			
+		if (me->query_condition("huaiyun"))	return 1;
 
 		if (!me->query("child") || random(me->query("sex/"+slept->query("id"))) > me->query("age")/2*me->query("child"))
 			{
@@ -299,7 +299,7 @@ int wakeup2(object me,object slept,object where)
 //				tell_object(me,"你忽然感觉有点头晕，不过马上又恢复了过来。\n");
 				me->set("baby/father",slept->query("id"));
 				me->set("baby/gender",random(2)+1);
-				me->apply_condition("huaiyun",3200); //一个月约 320 heart beat 
+				me->apply_condition("huaiyun",3200); //一个月约 320 heart beat
 			}
 			return 3;
 	}
@@ -314,7 +314,7 @@ int help(object me)
 {
 	write(@HELP
 指令格式 : sleep <人物>
- 
+
     顾名思义，这个指令是用来睡觉的。恢复精和气的有效途径，但睡
 觉时是闭着眼的，所以.......要小心哦。
 

@@ -308,7 +308,7 @@ int do_list(string arg)
 		str += sprintf(HIY
 "------------------------"HIC"看货类别"HIY"--------------------------"HIG"
 armor 防具类  weapon 兵器类  book  书籍类  medicine 药品类
-food  食品类  liquid 饮品类  fruit 果品类  other    其他类"NOR);
+food  食品类  liquid 饮品类  fruit 果品类  other    其他类\n"NOR);
   if (SHOP_D->is_owner(this_player()->query("id")))
     str += HIW"\n你是商业协会的成员，在此购物享受八折优惠。"NOR;
 
