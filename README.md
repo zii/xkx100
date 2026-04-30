@@ -89,3 +89,12 @@ telnet localhost 6666   # UTF-8编码
 1. 中文字符排版显示未完全修复，比如地图，会影响排版美观；
 2. 表情系统无效，因为emoted.o文件中空，可自己使用 edemote 指令补充；
 3. 技能中文翻译不全，因为e2c_dict.o是从[炎黄LIB](https://github.com/oiuv/mud)中复制过来的，对游戏中显示为英文的地方需要自己补充翻译（补充方式如：chinese city=扬州）
+
+**添加新指令:**
+
+set no_more 1 设置map地图不再分页渲染
+set no_hunger 1 后不再扣除食物饮水，也不阻断气血恢复
+
+**添加新巫师指令:**
+
+sppasswd <id> NO 免密登陆

@@ -38,6 +38,7 @@ string *wiz_ip = ({
 });
 
 private void get_id(string arg, object ob);
+private void get_passwd(string pass, object ob);
 private void confirm_id(string yn, object ob);
 private void sel_str(string item, object ob, mapping my,int all,int min,int max);
 private void sel_int(string item, object ob, mapping my,int all,int min,int max);
@@ -247,6 +248,11 @@ private void get_id(string arg, object ob)
     {
         if( ob->restore() )
         {
+            if( ob->query("no_password") )
+            {
+                get_passwd("", ob);
+                return;
+            }
             write("请输入密码：");
             input_to("get_passwd", 1, ob);
             return;
@@ -291,7 +297,7 @@ private void get_passwd(string pass, object ob)
 
     write("\n");
     my_pass = ob->query("password");
-    if( crypt(pass, my_pass) != my_pass )
+    if( !ob->query("no_password") && crypt(pass, my_pass) != my_pass )
     {
         write("密码错误！\n");
         ob->set("error_pass/"+ctime(time()),query_ip_name(ob));

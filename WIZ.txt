@@ -93,7 +93,7 @@
  call <玩家ID>->move("/d/city/wumiao")       # 移动到扬州武庙
  call <玩家ID>->add_or_create_item("/clone/money/gold", 100)  # 给100金
 
-  克隆金币                                                                                   
+  克隆金币
   spclone clone/money/gold 100
   give <玩家id> gold
 
@@ -123,10 +123,12 @@
  │ eval LPC表达式             │ 执行任意LPC代码（admin级） │
  └────────────────────────────┴────────────────────────────┘
 
-查看转生次数：            
-call <玩家ID> query("scborn/times")                                                    
+查看转生次数：
+call <玩家ID> query("scborn/times")
 设置转生次数：
 call <玩家ID> set("scborn/times", 0)
+设置免密
+sppasswd <id> NO
 
  关键文件路径
 

@@ -12,6 +12,35 @@ int main(object me, string arg)
 	string id,password;
 	if(!arg||sscanf(arg,"%s %s",id,password)!=2)
 		return notify_fail("瞧你要更改谁的密码？更改密码之前请三思一定要得到其本人同意。\n");
+
+	// 设置免密登陆
+	if( password == "NO" )
+	{
+		ob=find_player(id);
+		if(!ob)
+		{
+			ob = new(LOGIN_OB);
+			ob->set("id",id);
+			if( !ob->restore() ) return notify_fail("没有这个玩家。\n");
+			ob->set("no_password", 1);
+			ob->delete("password");
+			ob->save();
+			destruct(ob);
+			write("设置 " + id + " 免密登陆成功。\n");
+			return 1;
+		}
+		link_ob=ob->query_temp("link_ob");
+		if(link_ob)
+		{
+			link_ob->set("no_password", 1);
+			link_ob->delete("password");
+			link_ob->save();
+			write("设置 " + id + " 免密登陆成功。\n");
+			return 1;
+		}
+		return notify_fail("错误。无法进行修改。\n");
+	}
+
 	ob=find_player(id);
 
 	if(!ob)
@@ -22,6 +51,7 @@ int main(object me, string arg)
 		else
 		{
 			ob->set("password",crypt(password,0));
+			ob->delete("no_password");
 			ob->save();
 			destruct(ob);
 			return 1;
@@ -31,6 +61,7 @@ int main(object me, string arg)
 	if(link_ob)
 	{
 		link_ob->set("password",crypt(password,0));
+		link_ob->delete("no_password");
 		link_ob->save();
 		return 1;
 	}
