@@ -31,7 +31,8 @@ string *player_settings = ({
 	"can_tell",
 	"auto_reply",
 	"no_hunger",
-});
+		"no_weather",
+	});
 
 string *wizard_settings = ({
 	"immortal",

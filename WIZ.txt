@@ -142,5 +142,3 @@ roomid <关键词>
  - cmds/wiz/call.c — 万能调用命令
  - cmds/wiz/data.c — 数据查看命令
 
-不饥渴
-set no_hunger 1

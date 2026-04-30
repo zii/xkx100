@@ -64,7 +64,8 @@ void update_day_phase()
 	remove_call_out("update_day_phase");
 
 	current_day_phase = (++current_day_phase) % sizeof(day_phase);
-	message("outdoor:vision", HIG"【窗外】"NOR + day_phase[current_day_phase]["time_msg"] + NOR"。\n", users());
+	message("outdoor:vision", HIG"【窗外】"NOR + day_phase[current_day_phase]["time_msg"] + NOR"。\n",
+		filter(users(), (: !$1->query("env/no_weather") :)));
 	if( !undefinedp(day_phase[current_day_phase]["event_fun"]) )
 		call_other(this_object(), day_phase[current_day_phase]["event_fun"]);
 

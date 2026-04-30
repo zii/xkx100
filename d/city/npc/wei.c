@@ -37,7 +37,7 @@ void create()
 	]) );
 
 	setup();
-	set("chat_chance", 15);
+	set("chat_chance", 3);
 	set("chat_msg", ({
 		"韦春芳得意地说道：当年老娘我标致得很，每天有好几个客人。\n",
 		"韦春芳怒骂道：辣块妈妈，要是罗刹鬼、红毛鬼子到丽春院来，老娘用
@@ -96,8 +96,8 @@ int do_sell(string arg)
 {
 	object ob, myenv;
 	int value;
- 
-	
+
+
 	if (!arg || !(ob = present(arg, this_player())))
 		return notify_fail("你要卖什么？\n");
 	if (!userp(ob))

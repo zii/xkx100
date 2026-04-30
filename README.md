@@ -98,6 +98,7 @@ roomid 原来要走 macOS → VirtioFS → VM 读 8965 个文件，现在全在 
 
 set no_more 1 - map 不分页
 set no_hunger 1 - 不饥渴
+set no_weather 1 - 不显示天气信息
 
 **添加新巫师指令:**
 
