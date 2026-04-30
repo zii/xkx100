@@ -1,0 +1,3 @@
+services:
+  xkx100:
+    network_mode: host
