@@ -39,7 +39,7 @@ string* clothlong = ({
 
 void create()
 {
-	int i = random(sizeof(clothname));
+	int i = 0;
 
 	set_name(clothname[i], ({ clothid[i], "cloth" }));
 	set_weight(1000);

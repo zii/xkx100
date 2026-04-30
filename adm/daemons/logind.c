@@ -999,12 +999,52 @@ private init_new_player(object user)
     user->set("water", (user->query("str")+10)*10);
 
     user->set("channels", ({ "chat", "rumor", "party", "xkx", "sing" , "es" , "snow" }) );
+
+    // 给新玩家发初始衣鞋（仅一次）
+    {
+        object cloth, shoe;
+        if (wizhood(user) != "(player)") {
+            shoe = new("/clone/cloth/wiz-shoe.c");
+        } else if (user->query("class")=="bonze") {
+            if (user->query("gender")=="女性") {
+                cloth = new("/clone/cloth/ni-cloth");
+                shoe = new("/clone/cloth/ni-shoe");
+            } else {
+                cloth = new("/clone/cloth/seng-cloth");
+                shoe = new("/clone/cloth/seng-shoe");
+            }
+        } else if (user->query("class")=="taoist") {
+            if (user->query("gender")=="女性") {
+                cloth = new("/clone/cloth/daogu-cloth");
+                shoe = new("/clone/cloth/dao-shoe");
+            } else {
+                cloth = new("/clone/cloth/dao-cloth");
+                shoe = new("/clone/cloth/dao-shoe");
+            }
+        } else {
+            if (user->query("gender")=="女性") {
+                cloth = new("/clone/cloth/female-cloth");
+                shoe = new("/clone/cloth/female-shoe");
+            } else {
+                cloth = new("/clone/cloth/male-cloth");
+                shoe = new("/clone/cloth/male-shoe");
+            }
+        }
+        if (cloth) {
+            cloth->move(user);
+            cloth->wear();
+        }
+        if (shoe) {
+            shoe->move(user);
+            shoe->wear();
+        }
+    }
 }
 
 
 varargs void enter_world(object ob, object user, int silent)
 {
-    object cloth, shoe, gift, login_ob;
+    object gift, login_ob;
     string startroom;
     string baseroom;
     mixed *ltime;
@@ -1095,74 +1135,7 @@ varargs void enter_world(object ob, object user, int silent)
     if (!is_holiday && user->query("holiday_cards"))
         user->delete("holiday_cards");
 
-    if (wizhood(user) == "(player)")
-    {
-        if (user->query("class")=="bonze")
-        {
-            if (user->query("gender")=="女性")
-            {
-                cloth = new("/clone/cloth/ni-cloth");
-                shoe = new("/clone/cloth/ni-shoe");
-            }
-            else
-            {
-                cloth = new("/clone/cloth/seng-cloth");
-                shoe = new("/clone/cloth/seng-shoe");
-            }
-        }
-        else
-        {
-            if (user->query("class")=="taoist")
-            {
-                if ( user->query("gender")=="女性")
-                {
-                    cloth = new("/clone/cloth/daogu-cloth");
-                    shoe = new("/clone/cloth/dao-shoe");
-                }
-                else
-                {
-                    cloth = new("/clone/cloth/dao-cloth");
-                    shoe = new("/clone/cloth/dao-shoe");
-                }
-            }
-            else
-            {
-                if ( user->query("gender")=="女性")
-                {
-                    cloth =new("/clone/cloth/female-cloth");
-                    shoe = new("/clone/cloth/female-shoe");
-                }
-                else
-                {
-                    cloth = new("/clone/cloth/male-cloth");
-                    shoe = new("/clone/cloth/male-shoe");
-                }
-            }
-        }
-    }
-    else
-    {
-        if ( !user->query("no_look_wiz") )
-        {
-            cloth = new("/clone/cloth/wiz-cloth.c");
-            shoe = new("/clone/cloth/wiz-shoe.c");
-        }
-        else
-        {
-            cloth = new("/clone/cloth/male-cloth");
-            shoe = new("/clone/cloth/male-shoe");
-        }
-    }
-    if (!present("cloth", user)) {
-        cloth->move(user);
-        cloth->wear();
-    } else
-        destruct(cloth);
-    if (!present("shoe", user)) {
-        shoe->move(user);
-        shoe->wear();
-    } else
-        destruct(shoe);
+    // 衣鞋已在 init_new_player 中发放，老人由 autoload 恢复
 
     if( !silent )
     {

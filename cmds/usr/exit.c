@@ -7,7 +7,7 @@ inherit F_CLEAN_UP;
 
 
 int savequit(object me);
-void create() 
+void create()
 {
 	seteuid(getuid());
 	set("name", "离线指令");
@@ -17,14 +17,14 @@ void create()
 
 int main(object me, string arg)
 {
-	if( time() - me->query("last/lastquit") < 30 && !wizardp(me))
+	if( time() - me->query("last/lastquit") < 3 && !wizardp(me))
 		return notify_fail("你离上次离开游戏的时间间隔不足，暂时无法离开游戏。\n");
-		
+
 	if( environment(me)->query("no_quit"))
 		return notify_fail("空间已经封闭，没有人能够退出这个时空了\n");
 
 /*
-	if( LOGIN_D->get_madlock()) 
+	if( LOGIN_D->get_madlock())
 		return notify_fail("时空已经封闭，没有人能够退出这个时空了。\n");
 */
 	if( me->is_busy()) return notify_fail("你现在正忙着做其他事，不能退出游戏！\n");

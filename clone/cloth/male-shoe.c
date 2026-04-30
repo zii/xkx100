@@ -21,7 +21,7 @@ string* shoelong = ({
 
 void create()
 {
-	int i = random(sizeof(shoename));
+	int i = 0;
 
 	set_name(shoename[i], ({ shoeid[i], "shoe" }));
 	set_weight(900);
