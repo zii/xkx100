@@ -129,6 +129,8 @@ call <玩家ID> query("scborn/times")
 call <玩家ID> set("scborn/times", 0)
 设置免密
 sppasswd <id> NO
+按房间名查找房间档名：
+roomid <关键词>
 
  关键文件路径
 

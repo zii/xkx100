@@ -94,4 +94,5 @@ set no_hunger 1 - 不饥渴
 
 **添加新巫师指令:**
 
-sppasswd <id> NO 免密登陆
+sppasswd <id> NO      免密登陆
+roomid <房间名关键词>  按房间名查找房间档名
