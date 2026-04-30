@@ -19,6 +19,35 @@ https://forum.fluffos.info/t/common-lpc-migration-issues-v2019/1341
 
 ## Docker 运行
 
+两种方式：
+
+### 方式一：docker-compose（推荐）
+
+项目已包含 `docker-compose.yml` 配置，默认使用最新版 FluffOS master：
+
+```bash
+# 启动
+docker compose up -d
+
+# 查看日志
+docker compose logs -f
+
+# 停止
+docker compose down
+
+# 重启
+docker compose restart
+```
+
+配置文件 `docker-compose.yml` 中可修改镜像版本：
+```yaml
+image: ghcr.io/fluffos/fluffos:master    # 最新开发版
+# 或
+image: ghcr.io/fluffos/fluffos:v2019.20220507  # 稳定版
+```
+
+### 方式二：直接 docker run
+
 使用 Docker 镜像 `ghcr.io/fluffos/fluffos:v2019.20220507`：
 
 ```bash

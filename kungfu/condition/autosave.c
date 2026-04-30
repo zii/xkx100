@@ -22,7 +22,7 @@ int update_condition(object me, int duration)
 				message_vision( HIY"$N伸伸舌头舔了舔干裂的嘴唇，看来要喝点什么了。\n"NOR, me);
 			break;
 		default:
-			if (duration == 13) duration = 0;	
+			if (duration == 60) duration = 0;
 			break;
 	}
 	if( me->query_temp("guardfor") ) obj = me->query_temp("guardfor");

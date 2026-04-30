@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  xkx100:
+    image: ghcr.io/fluffos/fluffos:master
+    container_name: xkx100
+    working_dir: /mudlib
+    volumes:
+      - ./:/mudlib
+    ports:
+      - "5555:5555"
+      - "6666:6666"
+      - "8888:8888"
+    command: ["config.ini"]
+    stdin_open: true
+    tty: true
