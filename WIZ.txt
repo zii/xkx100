@@ -12,6 +12,13 @@
  promote 用户名 (arch)
  promote 用户名 (admin)
 
+  (player)  → 0   普通玩家                                                                                            
+  (immortal) → 1  仙童     
+  (apprentice) → 2 见习巫师  
+  (wizard) → 3    神仙      
+  (arch) → 4      仙官       
+  (admin) → 5     天帝  
+
  方法二：直接编辑 wizlist 文件
 
  编辑 adm/etc/wizlist，添加一行：

@@ -102,5 +102,6 @@ set no_weather 1 - 不显示天气信息
 
 **添加新巫师指令:**
 
-sppasswd <id> NO      免密登陆
-roomid <房间名关键词>  按房间名查找房间档名
+sppasswd <id> NO - 免密登陆
+roomid <房间名关键词> - 按房间名查找房间档名
+npcid <关键词> - 按npc名字查找所在位置
