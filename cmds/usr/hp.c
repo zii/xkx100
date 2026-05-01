@@ -24,7 +24,8 @@ int main(object me, string arg)
 			ob = present(arg, environment(me));
 			if (!ob) ob = find_player(arg);
 			if (!ob) ob = find_living(arg);
-			if(wizardp(me))
+			//if(wizardp(me))
+			if (true)
 			{
 				if (!ob)
 				{

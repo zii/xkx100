@@ -26,7 +26,8 @@ int skill_rating(object sk) {
             if (sizeof(f)) for (int i = 0; i < sizeof(f); i++)
                 if (strsrch(f[i], ".c") >= 0) r += 3; }
     }
-    float pp = sk->power_point();
+    object _me = this_player();
+    float pp = _me ? sk->power_point(_me) : 1.0;
     if (pp > 1.0) r += (int)((pp - 1.0) * 50);
     return r;
 }
