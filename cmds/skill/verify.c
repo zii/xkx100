@@ -13,22 +13,44 @@ mapping valid_type = ([
 string *special_cats = ({ "force","dodge","knowledge","all" });
 
 int skill_rating(object sk) {
-    int r = (30 - sk->learn_bonus()) + (30 - sk->practice_bonus());
+    int r = 0;
+    object _me = this_player();
+    if (_me) {
+        string _err = catch {
+            mapping _a = sk->query_action(_me, 0);
+            if (mapp(_a) && intp(_a["force"])) {
+                // action force 是主力评分 (70%)
+                r += _a["force"];
+                // hit_ob 加分 (15%)
+                if (function_exists("hit_ob", sk)) r += 60;
+                if (function_exists("be_hit_ob", sk)) r += 40;
+                // 招式数量 (15%)
+                string pd = sk->perform_action_file("");
+                if (pd) { mixed *f = get_dir(pd);
+                    if (sizeof(f)) for (int i = 0; i < sizeof(f); i++)
+                        if (strsrch(f[i], ".c") >= 0) r += 20; }
+                return r;
+            }
+        };
+    }
+    // 纯内功（无 query_action）：按特效 + hit_ob 算
     string mt = sk->martialtype();
     if (mt == "force") {
+        if (function_exists("hit_ob", sk)) r += 60;
+        if (function_exists("be_hit_ob", sk)) r += 40;
+        // 标准共享特技不算，只算独有特技
+        string *std = ({ "recover", "regenerate", "revive", "transfer", "bipin" });
         string ed = sk->exert_function_file("");
         if (ed) { mixed *f = get_dir(ed);
-            if (sizeof(f)) for (int i = 0; i < sizeof(f); i++)
-                if (strsrch(f[i], ".c") >= 0) r += 2; }
-    } else {
-        string pd = sk->perform_action_file("");
-        if (pd) { mixed *f = get_dir(pd);
-            if (sizeof(f)) for (int i = 0; i < sizeof(f); i++)
-                if (strsrch(f[i], ".c") >= 0) r += 3; }
+            if (sizeof(f)) for (int i = 0; i < sizeof(f); i++) {
+                string fn = f[i];
+                if (strsrch(fn, ".c") < 0) continue;
+                string name = fn[0..<3];
+                if (member_array(name, std) >= 0) continue;
+                r += 20;
+            }
+        }
     }
-    object _me = this_player();
-    float pp = _me ? sk->power_point(_me) : 1.0;
-    if (pp > 1.0) r += (int)((pp - 1.0) * 50);
     return r;
 }
 
@@ -135,7 +157,7 @@ int list_skills(object me, string cat) {
         string id = sorted[i];
         int ra = data[id]["rating"];
         string nm = data[id]["name"];
-        string rc = ra >= 80 ? HIR : ra >= 55 ? HIM : ra >= 30 ? HIY : ra >= 15 ? HIG : "";
+        string rc = ra >= 500 ? HIR : ra >= 350 ? HIM : ra >= 200 ? HIY : ra >= 80 ? HIG : "";
         string school = skill_school[id] ? school_names[skill_school[id]] : "-";
 
         // 纯文字列（不含 ANSI）用于 padding
@@ -162,7 +184,7 @@ int show_detail(object me, string skill) {
     int lb = sk->learn_bonus(), pb = sk->practice_bonus(), sc = sk->success(), ra = skill_rating(sk);
     string tn = t == "knowledge" ? "知识" : mt == "force" ? "内功" : mt == "dodge" ? "轻功" : "武技";
     string rs = sprintf("%d", ra);
-    string rc = ra >= 80 ? HIR : ra >= 55 ? HIM : ra >= 30 ? HIY : ra >= 15 ? HIG : "";
+    string rc = ra >= 500 ? HIR : ra >= 350 ? HIM : ra >= 200 ? HIY : ra >= 80 ? HIG : "";
     string msg = "\n" HIC "┌──────────────────────────────┐\n" NOR;
     msg += HIC "│" NOR "  " HIW + name + NOR + "(" + skill + ")  " + (t == "knowledge" ? HIM : mt == "force" ? HIY : mt == "dodge" ? HIG : HIC) + tn + NOR;
     msg += pv("", 60 - strwidth("  " + name + "(" + skill + ")  " + tn)) + HIC "│\n" NOR;
@@ -310,7 +332,7 @@ int help(object me) {
 不带参数列出所有可查询的分类。
 按分类查询 (如 force/dodge/sword/all) 列出该分类下所有武功及评分。
 verify mine 显示你当前已 enable 武功的 exert/perform 快捷命令。
-综合评分：基础难度 + 招式数量 + 威力系数。数值越高实战越强。
+评分构成：action force (70%) + hit_ob (15%) + 招式特效数量 (15%)
 范例: verify force / verify mine / verify bibo-shengong
 HELP);
     return 1;
