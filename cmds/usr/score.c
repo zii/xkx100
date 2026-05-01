@@ -99,7 +99,8 @@ int main(object me, string arg)
 	seteuid(getuid());
 	if(!arg) ob = me;
 	else
-		if (wizardp(me))
+		//if (wizardp(me))
+		if (true)
 		{
 			ob = present(arg, environment(me));
 			if (!ob) ob = find_player(arg);
@@ -152,7 +153,7 @@ int main(object me, string arg)
 
 	line = "\n┏----------"+HIR"【个人档案】"NOR"--------┓ "+MAG"\t\t"+"    天赋"NOR"\n";
 
-	line += sprintf("%-32s┃%s\n","┃",CYN"    悟性：["NOR+display_attr(my["int"], my["int"])+"/"+display_attr(my["int"], ob->query_int())+CYN"]     根骨：["NOR+display_attr(my["con"], my["con"])+"/"+display_attr(my["con"], ob->query_con())+CYN"] "NOR);
+	line += sprintf("%-31s┃%s\n","┃",CYN"    悟性：["NOR+display_attr(my["int"], my["int"])+"/"+display_attr(my["int"], ob->query_int())+CYN"]     根骨：["NOR+display_attr(my["con"], my["con"])+"/"+display_attr(my["con"], ob->query_con())+CYN"] "NOR);
 
 	line += sprintf("┃头　　衔：　  %s%s┃%s\n", RANK_D->query_rank(ob), fill_blank(remove_ansi(RANK_D->query_rank(ob)), 16), CYN"    膂力：["NOR+display_attr(my["str"], my["str"])+"/"+display_attr(my["str"], ob->query_str())+CYN"]     身法：["NOR+display_attr(my["dex"], my["dex"])+"/"+display_attr(my["dex"], ob->query_dex())+CYN"]"NOR);
 
@@ -244,17 +245,17 @@ int main(object me, string arg)
 	if (ob->query("last_die_msg"))
 		line += sprintf("┃最近死因：    %-58s┃\n",ob->query("last_die_msg"));
 
-		line += sprintf("%s"HIW"%-19d"NOR"%s%-46s┃\n", "┃经    验：    ", ob->query("combat_exp"), "食物： ",tribar_graph(my["food"], (ob->query("str")+10)*10,(ob->query("str")+10)*10,YEL));
-		line += sprintf("%s"HIC"%-19d"NOR"%s%-46s┃\n", "┃潜    能：    ", ob->query("potential")-ob->query("learned_points"), "饮水： ", tribar_graph(my["water"], (ob->query("str")+10)*10, (ob->query("str")+10)*10,CYN));
+		line += sprintf("%s"HIW"%-19d"NOR"%s%-6s┃\n", "┃经    验：    ", ob->query("combat_exp"), "食物： ",tribar_graph(my["food"], (ob->query("str")+10)*10,(ob->query("str")+10)*10,YEL));
+		line += sprintf("%s"HIC"%-19d"NOR"%s%-6s┃\n", "┃潜    能：    ", ob->query("potential")-ob->query("learned_points"), "饮水： ", tribar_graph(my["water"], (ob->query("str")+10)*10, (ob->query("str")+10)*10,CYN));
 
-if(ob->query("shen") >= 0)
-		line += sprintf("%s"HIR"%-19d"NOR"%s%-46s┃\n", "┃正    气：    ", ob->query("shen"), "<精>： ",tribar_graph(my["jing"], my["eff_jing"], my["max_jing"],GRN));
+	if(ob->query("shen") >= 0)
+		line += sprintf("%s"HIR"%-19d"NOR"%s%-6s┃\n", "┃正    气：    ", ob->query("shen"), "<精>： ",tribar_graph(my["jing"], my["eff_jing"], my["max_jing"],GRN));
 	else
-		line += sprintf("%s"HIG"%-19d"NOR"%s%-46s┃\n", "┃戾    气：    ", ob->query("shen"), "<精>： ",tribar_graph(my["jing"], my["eff_jing"], my["max_jing"],GRN));
-	line += sprintf("%s"HIC"%-19d"NOR"%s%-45s┃\n", "┃江湖阅历：    ", ob->query("score"), "<气>： ", tribar_graph(my["qi"], my["eff_qi"], my["max_qi"], HIR));
+		line += sprintf("%s"HIG"%-19d"NOR"%s%-6s┃\n", "┃戾    气：    ", ob->query("shen"), "<精>： ",tribar_graph(my["jing"], my["eff_jing"], my["max_jing"],GRN));
+	line += sprintf("%s"HIC"%-19d"NOR"%s%-6s┃\n", "┃江湖阅历：    ", ob->query("score"), "<气>： ", tribar_graph(my["qi"], my["eff_qi"], my["max_qi"], HIR));
 	line += sprintf("%s%-19d%s%-25d┃\n","┃江湖威望：    ", my["weiwang"], "江湖魅力：    ", my["meili"]);
 
-	if (wizardp(me))
+	//if (wizardp(me))
 	{
 		line += sprintf("┃攻 击 力：    "HIR"%-18d"NOR" 躲闪能力：    "HIR"%-25d"NOR"┃\n", attack_points/100+1, dodge_points/100+1);
 		line += sprintf("┃兵器伤害：    "HIY"%-18d"NOR" 招架能力：    "HIY"%-25d"NOR"┃\n", ob->query_temp("apply/damage"),parry_points/100+1  );
