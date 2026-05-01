@@ -10,11 +10,11 @@ int exert(object me, object target)
 	object *ob;
 	int i, skill, damage;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/roar") &&
-  !me->query("can_perform/zhanzhuang-gong/roar") && 
+  !me->query("can_perform/zhanzhuang-gong/roar") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 	if( ((int)me->query("neili") < 600 ) ||
 		((int)me->query("max_neili") < 600 ) ||
 		((int)me->query_skill("zhanzhuang-gong",1) < 100) )
@@ -70,4 +70,3 @@ HELP
 	);
 	return 1;
 }
-

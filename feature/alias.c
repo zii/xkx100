@@ -11,6 +11,7 @@
 #include <ansi.h>
 
 mapping alias;
+nosave mapping skill_aliases;
 
 nosave string *history, last_input;
 nosave int last_cmd, repeat_cnt = 0;
@@ -157,4 +158,19 @@ int set_alias(string verb, string replace)
 mapping query_all_alias()
 {
 	return alias;
+}
+
+void set_skill_alias(string verb, string replace)
+{
+	if( !replace ) {
+		if( mapp(skill_aliases) ) map_delete(skill_aliases, verb);
+	} else {
+		if( !mapp(skill_aliases) ) skill_aliases = ([ verb:replace ]);
+		else skill_aliases[verb] = replace;
+	}
+}
+
+mapping query_skill_aliases()
+{
+	return skill_aliases;
 }

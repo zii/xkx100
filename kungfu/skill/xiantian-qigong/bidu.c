@@ -5,11 +5,11 @@
 int exert(object me, object target)
 {
 	int con1, con2, con3, con4, con5, con6;
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/bidu") &&
-  !me->query("can_perform/xiantian-qigong/bidu") && 
+  !me->query("can_perform/xiantian-qigong/bidu") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	con1 = me->query_condition("snake_poison");
 	con2 = me->query_condition("scorpion_poison");
@@ -32,7 +32,7 @@ int exert(object me, object target)
 	if ((int)me->query_skill("xiantian-qigong", 1) < 80)
 		return notify_fail("你的先天气功修为还不够。\n");
 
-	message("vision", 
+	message("vision",
 	HIY+me->name()+"盘膝坐下，缓引真气，运功逼毒。只见一团"HIW"白雾"HIY"渐渐笼住"+me->name()+"的面目。\n良久，一滴"HIM"紫血"HIY"从"+me->name()+"的右手小指尖缓缓滴了下来。\n" NOR,
 		environment(me));
 
@@ -65,4 +65,3 @@ HELP
 	);
 	return 1;
 }
-

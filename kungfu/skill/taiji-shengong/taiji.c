@@ -9,11 +9,11 @@ int exert(object me)
 	object weapon = me->query_temp("weapon");
 	string prepare;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/taiji") &&
-  !me->query("can_perform/taiji-shengong/taiji") && 
+  !me->query("can_perform/taiji-shengong/taiji") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( !objectp(weapon) &&
 		me->query_skill_mapped("unarmed") == "taiji-quan" &&
@@ -26,7 +26,7 @@ int exert(object me)
 			me->query_skill_mapped("sword") == "taiji-jian" &&
 			me->query_skill_mapped("parry") == "taiji-jian" &&
 			me->query_skill_mapped("force") == "taiji-shengong" )
-			prepare = "tjj"; // player is using tjj. 
+			prepare = "tjj"; // player is using tjj.
 		else prepare = "notj";
 	if( me->query_temp("taiji") )
 		return notify_fail("你已经将太极心法融会入武功之中。\n");
@@ -133,7 +133,7 @@ void checking(object me, string prepare)
 
 	if( !me->query_temp("taiji_fight") ) me->add_temp("taiji", -1);
 	call_out("checking", 1, me, prepare);
-} 
+}
 
 void remove_effect(object me)
 {
@@ -162,4 +162,3 @@ HELP
 	);
 	return 1;
 }
-

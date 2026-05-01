@@ -4,12 +4,12 @@
 void mess(object me);
 
 int exert(object me, object target)
-{		
-//  if ( userp(me) && !wizardp(me) && 
+{
+//  if ( userp(me) && !wizardp(me) &&
 //  !me->query("perform/sangong") &&
-//  !me->query("can_perform/xixing-dafa/sangong") && 
+//  !me->query("can_perform/xixing-dafa/sangong") &&
 //  !me->query_temp("murong/xingyi"))
-//   return notify_fail("你所使用的内功中没有这种功能。");
+//   return notify_fail("你所使用的内功中没有这种功能。\n");
 	if( me->is_fighting() ) return notify_fail("战斗中散功？找死吗？\n");
 	if(me->is_busy())
 		return notify_fail("你正忙着呢！\n");
@@ -46,4 +46,3 @@ HELP
 	);
 	return 1;
 }
-

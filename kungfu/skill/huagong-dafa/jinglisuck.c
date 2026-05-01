@@ -9,11 +9,11 @@ int exert(object me, object target)
 	int sp, dp;
 	int my_max, tg_max;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/jinglisuck") &&
-  !me->query("can_perform/huagong-dafa/jinglisuck") && 
+  !me->query("can_perform/huagong-dafa/jinglisuck") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 	if ( target == me ) target = offensive_target(me);
 
 
@@ -32,7 +32,7 @@ int exert(object me, object target)
 		return notify_fail("你要吸取谁的精力？\n");
 	notify_fail("不是你要抓的人，凑什么热闹！\n");
 	if (!userp(target) && !target->accept_hit(me)) return 0;
-	
+
 	if (target->query("race") != "人类")
 		return notify_fail("搞错了！只有人才能有精力！\n");
 
@@ -73,7 +73,7 @@ int exert(object me, object target)
 	sp = me->query_skill("force") + me->query_skill("dodge") + me->query_skill("zhaixinggong",1)/2;
 	dp = target->query_skill("force") + target->query_skill("dodge");
 
-	me->set_temp("sucked", 1);		
+	me->set_temp("sucked", 1);
 
 	if (( random(sp) > random(dp) ) ||
 		!living(target) || target->query_temp("noliving") )
@@ -90,7 +90,7 @@ int exert(object me, object target)
 		}
 		if( target->query("max_jingli") <1) target->set("max_jingli",0);
 
-//		if( (int)me->query("potential") - (int)me->query("learned_points") < 90 ) 
+//		if( (int)me->query("potential") - (int)me->query("learned_points") < 90 )
 		me->add("potential",  3);
 		me->add("combat_exp", 10);
 
@@ -101,7 +101,7 @@ int exert(object me, object target)
 		call_out("del_sucked", 10, me);
 	}
 	else
-	{	
+	{
 		message_combatd(HIY "可是$p看破了$P的企图，内力猛地一震，借势溜了开去。\n" NOR, me, target);
 		me->start_busy(7);
 		call_out("del_sucked", 20, me);
@@ -132,4 +132,3 @@ HELP
 	);
 	return 1;
 }
-

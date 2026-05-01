@@ -5,11 +5,11 @@
 
 int exert(object me, object target)
 {
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/lifeheal") &&
-  !me->query("can_perform/jiuyang-shengong/lifeheal") && 
+  !me->query("can_perform/jiuyang-shengong/lifeheal") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( !target || !target->is_character() || target == me )
 		return notify_fail("你要用真气为谁疗伤？\n");
@@ -70,4 +70,3 @@ HELP
 	);
 	return 1;
 }
-

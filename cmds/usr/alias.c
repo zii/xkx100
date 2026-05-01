@@ -17,7 +17,7 @@ int main(object me, string arg)
 			write("你目前设定的 alias 有：\n");
 			vrbs = keys(alias);
 			for(i=0; i<sizeof(vrbs); i++)
-				printf("%-15s = %s\n", vrbs[i], alias[vrbs[i]]);
+					printf("%-15s = %s\n", vrbs[i], alias[vrbs[i]]);
 			return 1;
 		}
 	}

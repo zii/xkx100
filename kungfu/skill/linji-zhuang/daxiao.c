@@ -8,11 +8,11 @@ int exert(object me)
 	int skill;
 	skill = (int)me->query_skill("linji-zhuang",1);
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/daxiao") &&
-  !me->query("can_perform/linji-zhuang/daxiao") && 
+  !me->query("can_perform/linji-zhuang/daxiao") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if (me->query_condition("linji_daxiao") || me->query("linji/jing")>0)
 		return notify_fail("你已经在运大小庄了！\n");
@@ -70,4 +70,3 @@ HELP
 	);
 	return 1;
 }
-

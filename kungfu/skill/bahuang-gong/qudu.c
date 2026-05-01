@@ -5,11 +5,11 @@
 
 int exert(object me, object target)
 {
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/qudu") &&
-  !me->query("can_perform/bahuang-gong/qudu") && 
+  !me->query("can_perform/bahuang-gong/qudu") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( (!target) )
 		return notify_fail("你要用真气为谁驱毒？\n");
@@ -28,7 +28,7 @@ int exert(object me, object target)
 
 	if( !target->query_condition("ss_poison"))
 		return notify_fail(target->name()+"并没有中生死符！\n");
-		
+
 	if( (int)me->query_skill("bahuang-gong",1) < 50 )
 		return notify_fail("你的八荒六合唯我独尊功修为不够。\n");
 
@@ -71,4 +71,3 @@ HELP
 	);
 	return 1;
 }
-

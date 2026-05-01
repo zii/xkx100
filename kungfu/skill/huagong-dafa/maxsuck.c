@@ -9,11 +9,11 @@ int exert(object me, object target)
 	int sp, dp;
 	int my_max, tg_max;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/maxsuck") &&
-  !me->query("can_perform/huagong-dafa/maxsuck") && 
+  !me->query("can_perform/huagong-dafa/maxsuck") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if ( target == me ) target = offensive_target(me);
 
@@ -79,7 +79,7 @@ int exert(object me, object target)
 	sp = me->query_skill("force") + me->query_skill("dodge") + me->query_skill("zhaixinggong",1)/2;
 	dp = target->query_skill("force") + target->query_skill("dodge");
 
-	me->set_temp("sucked", 1);		
+	me->set_temp("sucked", 1);
 
 	if (( random(sp) > random(dp) ) ||
 		!living(target) || target->query_temp("noliving") )
@@ -102,7 +102,7 @@ int exert(object me, object target)
 		call_out("del_sucked", 10, me);
 	}
 	else
-	{	
+	{
 		message_combatd(HIY "可是$p看破了$P的企图，内力猛地一震，借势溜了开去。\n" NOR, me, target);
 		me->start_busy(7);
 		call_out("del_sucked", 20, me);
@@ -133,4 +133,3 @@ HELP
 	);
 	return 1;
 }
-

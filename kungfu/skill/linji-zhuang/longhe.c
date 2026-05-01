@@ -8,11 +8,11 @@ int exert(object me)
 	int skill;
 	skill = (int)me->query_skill("linji-zhuang",1);
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/longhe") &&
-  !me->query("can_perform/linji-zhuang/longhe") && 
+  !me->query("can_perform/linji-zhuang/longhe") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if (me->query_temp("ljlonghe"))
 		return notify_fail("你已经在运龙鹤庄了！\n");
@@ -48,7 +48,7 @@ void remove_effect(object me, int count)
 {
 	me->add_temp("apply/constitution",-count);
 	me->delete_temp("ljlonghe");
-	tell_object(me, 
+	tell_object(me,
 HIB "忽然你觉得全身懒洋洋的，连个小指头也不想动了，原来你的
 龙鹤庄收功了！\n" NOR );
 }
@@ -69,4 +69,3 @@ HELP
 	);
 	return 1;
 }
-

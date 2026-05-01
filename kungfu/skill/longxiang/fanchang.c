@@ -8,18 +8,18 @@ int exert(object me, object target)
 {
 	int sp, dp;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/fanchang") &&
-  !me->query("can_perform/longxinag/fanchang") && 
+  !me->query("can_perform/longxinag/fanchang") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( environment(me)->query("no_fight") )
 		return notify_fail("这里不能攻击别人! \n");
-		
+
 	if( !objectp(target) ) target = offensive_target(me);
 
-	if( !target || !target->is_character() || target == me ) 
+	if( !target || !target->is_character() || target == me )
 		return notify_fail("你要对谁使用梵唱？\n");
 	notify_fail("不是你要抓的人，凑什么热闹！\n");
 	if (!userp(target) && !target->accept_hit(me)) return 0;
@@ -38,7 +38,7 @@ int exert(object me, object target)
 
 	sp = me->query_skill("force") + me->query_skill("lamaism") + me->query_skill("longxiang",1)/2;
 	dp = target->query_skill("force");
-	
+
 	if (( random(sp) > random(dp) ) ||
 		!living(target) || target->query_temp("noliving") )
 	{
@@ -46,7 +46,7 @@ int exert(object me, object target)
 		tell_object(me, HIB"你看到" + target->name() + "随着你的歌声手舞足蹈，十分可笑。\n" NOR);
 
 		target->receive_damage("jing", 10 + random((int)me->query_skill("longxiang", 1)) );
-		
+
 		if( target->query("combat_exp") >= me->query("combat_exp") )
 				me->add("potential", 1);
 
@@ -56,7 +56,7 @@ int exert(object me, object target)
 
 	}
 	else
-	{	
+	{
 		message_combatd(HIY "可是$p不为$P歌声所动，定力果然不同凡响！\n" NOR, me, target);
 		me->start_busy(4);
 	}
@@ -79,4 +79,3 @@ HELP
 	);
 	return 1;
 }
-

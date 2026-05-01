@@ -5,17 +5,17 @@ void remove_effect(object me, int amount);
 int exert(object me, object target)
 {
    int skill;
-   if ( userp(me) && !wizardp(me) && 
+   if ( userp(me) && !wizardp(me) &&
 //  !me->query("perform/taixuan") &&
-  !me->query("can_perform/taixuan-gong/taixuan") && 
+  !me->query("can_perform/taixuan-gong/taixuan") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
-   if( target != me ) 
+   if( target != me )
       return notify_fail("你只能对自己用["+HIW+"白首太玄"+NOR+"]\n"NOR,);
 	 if ((int)me->query_skill("taixuan-gong", 1) < 100)
 		  return notify_fail("你的太玄神功太差了。\n");
-   if( (int)me->query("neili") < 100 ) 
+   if( (int)me->query("neili") < 100 )
   	  return notify_fail("你的内力不够。\n");
    if( (int)me->query_temp("powerup") ) return
        notify_fail("你已经在运功中了。\n");

@@ -5,10 +5,10 @@
 
 int exert(object me, object target)
 {
-  if ( userp(me) && !wizardp(me) && 
-  !me->query("can_perform/shenzhao-jing/wakeup") && 
+  if ( userp(me) && !wizardp(me) &&
+  !me->query("can_perform/shenzhao-jing/wakeup") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if ( !target || !target->is_character() )
 		return notify_fail("你要用真气救醒谁？\n");
@@ -47,7 +47,7 @@ int exert(object me, object target)
 	target->remove_call_out("revive");
 	target->revive();
 	target->reincarnate();
- 
+
 	me->add("neili", -150);
 	me->set("jiali", 0);
 	me->start_busy(5);
@@ -69,4 +69,3 @@ HELP
 	);
 	return 1;
 }
-

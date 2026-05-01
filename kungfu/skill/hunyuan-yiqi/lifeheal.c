@@ -5,18 +5,18 @@
 
 int exert(object me, object target)
 {
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/lifeheal") &&
-  !me->query("can_perform/hunyuan-yiqi/lifeheal") && 
+  !me->query("can_perform/hunyuan-yiqi/lifeheal") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( !target || !target->is_character() || target == me )
 		return notify_fail("你要用真气为谁疗伤？\n");
 
 	notify_fail("不是你要抓的人，凑什么热闹！\n");
 	if (!userp(target) && !target->accept_hit(me)) return 0;
-	
+
 	if( me->is_fighting() || target->is_fighting())
 		return notify_fail("战斗中无法运功疗伤！\n");
 
@@ -52,7 +52,7 @@ int exert(object me, object target)
 	me->start_busy(1);
 
 //evil 注意了 在这里加上 userp(target)判断target（即疗伤对象）是不是玩家
-//如果是玩家 则加上busy 2秒 如果不是玩家 是npc npc不busy 
+//如果是玩家 则加上busy 2秒 如果不是玩家 是npc npc不busy
 
 	if ( userp(target)) target->start_busy(2);
 
@@ -73,4 +73,3 @@ HELP
 	);
 	return 1;
 }
-

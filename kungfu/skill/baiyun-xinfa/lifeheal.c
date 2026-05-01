@@ -5,17 +5,17 @@
 
 int exert(object me, object target)
 {
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/lifeheal") &&
-  !me->query("can_perform/baiyun-xinfa/lifeheal") && 
+  !me->query("can_perform/baiyun-xinfa/lifeheal") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 	if( (!target)||target->query("id")==me->query("id"))
 		return notify_fail("你要用真气为谁疗伤？\n");
 
 	if( me->is_fighting() || target->is_fighting())
 		return notify_fail("战斗中无法运功疗伤！\n");
-        
+
 	notify_fail("不是你要抓的人，凑什么热闹！\n");
 	if (!userp(target) && !target->accept_hit(me)) return 0;
 	if( me->is_busy() )
@@ -67,4 +67,3 @@ HELP
 	);
 	return 1;
 }
-

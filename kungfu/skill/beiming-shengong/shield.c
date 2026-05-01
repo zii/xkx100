@@ -9,22 +9,22 @@ int exert(object me, object target)
 {
 	int skill;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/shield") &&
-  !me->query("can_perform/beiming-shengong/shield") && 
+  !me->query("can_perform/beiming-shengong/shield") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
-	if( target != me ) 
+	if( target != me )
 		return notify_fail("你只能用北冥神功来提升自己的防御力。\n");
 
-	if( (int)me->query("neili") < 100  ) 
+	if( (int)me->query("neili") < 100  )
 		return notify_fail("你的内力不够。\n");
 
-	if( (int)me->query_skill("beiming-shengong",1) < 40 ) 
+	if( (int)me->query_skill("beiming-shengong",1) < 40 )
 		return notify_fail("你的北冥神功修为不够。\n");
 
-	if( (int)me->query_temp("shield") ) 
+	if( (int)me->query_temp("shield") )
 		return notify_fail("你已经在运功中了。\n");
 
 	skill = me->query_skill("force");
@@ -38,7 +38,7 @@ int exert(object me, object target)
 
 	me->start_call_out( (: call_other, __FILE__, "remove_effect", me, skill :), skill);
 
-	if( me->is_fighting() ) me->start_busy(2); 
+	if( me->is_fighting() ) me->start_busy(2);
 	return 1;
 }
 
@@ -64,4 +64,3 @@ HELP
 	);
 	return 1;
 }
-

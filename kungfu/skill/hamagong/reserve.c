@@ -13,22 +13,22 @@ int exert(object me, object target)
 	int skill;
 	string msg;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/reserve") &&
-  !me->query("can_perform/hamagong/reserve") && 
+  !me->query("can_perform/hamagong/reserve") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
         if ( me->query("family/master_id") != "ouyang feng" )
 		return notify_fail("你目前还没有这个功力，小心走火入魔。\n");
-		
+
 	if( (int)me->query_skill("hamagong", 1) < 160 )
 		return notify_fail("你的蛤蟆功不够娴熟，不会经脉倒转。\n");
 
-	if( (int)me->query("neili") < 200  ) 
+	if( (int)me->query("neili") < 200  )
 		return notify_fail("你的内力不够。\n");
 
-	if( (int)me->query_temp("hmg_dzjm") ) 
+	if( (int)me->query_temp("hmg_dzjm") )
 		return notify_fail("你已经倒转经脉了。\n");
 
 	skill = me->query_skill("hamagong",1);
@@ -69,5 +69,3 @@ HELP
 	);
 	return 1;
 }
-
-

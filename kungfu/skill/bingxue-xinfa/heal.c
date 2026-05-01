@@ -5,11 +5,11 @@
 
 int exert(object me, object target)
 {
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/heal") &&
-  !me->query("can_perform/bingxue-xinfa/heal") && 
+  !me->query("can_perform/bingxue-xinfa/heal") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( me->is_fighting() )
 		return notify_fail("战斗中运功疗伤？找死吗？\n");
@@ -17,7 +17,7 @@ int exert(object me, object target)
 		return notify_fail("你现在正忙着呢，哪有空运功？\n");
 	if ((int)me->query_skill("bingxue-xinfa", 1) < 20)
 		return notify_fail("你的冰雪心法修为还不够。\n");
-	if( (int)me->query("neili") < 50 ) 
+	if( (int)me->query("neili") < 50 )
 		return notify_fail("你的真气不够。\n");
 	if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2 )
 		return notify_fail("你已经受伤过重，只怕一运真气便有生命危险！\n");
@@ -46,4 +46,3 @@ HELP
 	);
 	return 1;
 }
-

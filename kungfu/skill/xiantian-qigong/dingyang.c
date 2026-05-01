@@ -4,12 +4,12 @@
 void mess(object me);
 
 int exert(object me, object target)
-{		
-  if ( userp(me) && !wizardp(me) && 
+{
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/dingyang") &&
-  !me->query("can_perform/xiantian-qigong/dingyang") && 
+  !me->query("can_perform/xiantian-qigong/dingyang") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 	if( me->is_fighting() ) return notify_fail("战斗中炼丹？找死吗？\n");
 
 	if(me->query("class") != "quanzhen")
@@ -20,7 +20,7 @@ int exert(object me, object target)
 		return notify_fail("你刚接触丹药不久，不宜再炼。\n");
 	if((int)me->query_skill("xiantian-qigong", 1) < 100)
 		return notify_fail("你的先天气功修为还不够。\n");
-	if((int)me->query("neili") < 400) 
+	if((int)me->query("neili") < 400)
 		return notify_fail("你的真气不够。\n");
 	if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2)
 		return notify_fail("你受伤过重，只怕一运真气便有生命危险！\n");
@@ -71,4 +71,3 @@ HELP
 	);
 	return 1;
 }
-

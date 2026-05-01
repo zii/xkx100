@@ -4,12 +4,12 @@
 #include <ansi.h>
 
 int exert(object me, object target)
-{  
-	if ( userp(me) && !wizardp(me) && 
-  !me->query("perform/lifeheal") &&
-  !me->query("can_perform/huntian-qigong/lifeheal") && 
-  !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+{
+// 	if ( userp(me) && !wizardp(me) &&
+//   !me->query("perform/lifeheal") &&
+//   !me->query("can_perform/huntian-qigong/lifeheal") &&
+//   !me->query_temp("murong/xingyi"))
+//    return notify_fail("你所使用的内功中没有这种功能。\n");
 
 
 	if( !target || !target->is_character() || target == me )
@@ -20,7 +20,7 @@ int exert(object me, object target)
 
 	notify_fail("不是你要抓的人，凑什么热闹！\n");
 	if (!userp(target) && !target->accept_hit(me)) return 0;
-	
+
 	if( me->is_busy() )
 		return notify_fail("你现在正忙着呢，哪有空运功？\n");
 
@@ -70,4 +70,3 @@ HELP
 	);
 	return 1;
 }
-

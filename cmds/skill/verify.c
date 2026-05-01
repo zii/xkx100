@@ -217,9 +217,86 @@ int show_detail(object me, string skill) {
     return 1;
 }
 
+// ─── 模式4: verify mine — 个人武功快捷命令 ───
+int show_mine(object me) {
+    mapping skill_map = me->query_skill_map();
+    if (!mapp(skill_map) || !sizeof(skill_map))
+        return notify_fail("你还没有 enable 任何武功。\n");
+
+    // 清理旧别名
+    for (int i = 1; i <= 99; i++) {
+        me->set_skill_alias("e" + i, 0);
+        me->set_skill_alias("p" + i, 0);
+    }
+
+    string msg = "\n";
+    int e_cnt = 0, p_cnt = 0;
+    string *excludes = ({ "dodge", "array", "magic", "parry" });
+    mapping shown = ([]);
+
+    // ── 内功 exert ──
+    string fs = me->query_skill_mapped("force");
+    if (fs) {
+        msg += HIW "内功部分" NOR "\n";
+        msg += "    " + to_chinese(fs) + "\n";
+        string dir = SKILL_D(fs)->exert_function_file("");
+        if (dir) {
+            mixed *files = get_dir(dir);
+            if (sizeof(files)) {
+                for (int i = 0; i < sizeof(files); i++) {
+                    string fn = files[i];
+                    if (strsrch(fn, ".c") < 0) continue;
+                    string f = replace_string(fn, ".c", "");
+                    e_cnt++;
+                    string a = "e" + e_cnt;
+                    me->set_skill_alias(a, "yun " + f);
+                    msg += sprintf("        " HIC "exert %-16s" NOR " => " HIY "%s" NOR "\n", f, a);
+                }
+            }
+        }
+        msg += "\n";
+    }
+
+    // ── 外功 perform ──
+    string *uks = keys(skill_map);
+    int has_perform = 0;
+    for (int i = 0; i < sizeof(uks); i++) {
+        string usage = uks[i];
+        if (member_array(usage, excludes) >= 0 || undefinedp(valid_type[usage])) continue;
+        string sid = skill_map[usage];
+        if (!sid || shown[sid]) continue;
+        shown[sid] = 1;
+
+        string dir = SKILL_D(sid)->perform_action_file("");
+        if (!dir) continue;
+        mixed *files = get_dir(dir);
+        if (!sizeof(files)) continue;
+
+        if (!has_perform) { msg += HIW "外功部分" NOR "\n"; has_perform = 1; }
+        msg += "    " + to_chinese(sid) + "  " + HIY + valid_type[usage] + NOR "\n";
+
+        for (int j = 0; j < sizeof(files); j++) {
+            string fn = files[j];
+            if (strsrch(fn, ".c") < 0) continue;
+            string f = replace_string(fn, ".c", "");
+            p_cnt++;
+            string a = "p" + p_cnt;
+            me->set_skill_alias(a, "perform " + usage + "." + f);
+            msg += sprintf("        " HIC "perform %s" NOR " => " HIY "%s" NOR "\n", sid + "." + f, a);
+        }
+    }
+
+    if (e_cnt == 0 && !has_perform)
+        return notify_fail("你的武功没有任何特殊功能。\n");
+
+    write(msg);
+    return 1;
+}
+
 int main(object me, string arg) {
     if (!arg || arg == "") return show_categories(me);
     arg = lower_case(trim(arg));
+    if (arg == "mine") return show_mine(me);
     if (is_category(arg)) return list_skills(me, arg);
     return show_detail(me, arg);
 }
@@ -227,10 +304,14 @@ int main(object me, string arg) {
 int help(object me) {
     write(@HELP
 指令格式: verify [<分类>|<武功英文ID>]
+       verify mine
+
 不带参数列出所有可查询的分类。
 按分类查询 (如 force/dodge/sword/all) 列出该分类下所有武功及评分。
+verify mine 显示你当前已 enable 武功的 exert/perform 快捷命令。
 综合评分：基础难度 + 招式数量 + 威力系数。数值越高实战越强。
-范例: verify force / verify dodge / verify sword / verify bibo-shengong
+范例: verify force / verify mine / verify bibo-shengong
 HELP);
     return 1;
 }
+

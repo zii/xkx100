@@ -8,11 +8,11 @@ int exert(object me, object target)
 {
 	int sp, dp;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/qisuck") &&
-  !me->query("can_perform/huagong-dafa/qisuck") && 
+  !me->query("can_perform/huagong-dafa/qisuck") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if ( target == me ) target = offensive_target(me);
 
@@ -29,7 +29,7 @@ int exert(object me, object target)
 		target->query("id") == "jin ren" ||
 		target->query("id") == "du jiangshi")
 		return notify_fail("你要吸取谁的气血？\n");
-	
+
 	notify_fail("不是你要抓的人，凑什么热闹！\n");
 	if (!userp(target) && !target->accept_hit(me)) return 0;
 
@@ -65,7 +65,7 @@ int exert(object me, object target)
 	sp = me->query_skill("force") + me->query_skill("dodge") + me->query_skill("zhaixinggong",1)/2;
 	dp = target->query_skill("force") + target->query_skill("dodge");
 
-	me->set_temp("sucked", 1);		
+	me->set_temp("sucked", 1);
 
 	if (( random(sp) > random(dp) ) ||
 		!living(target) || target->query_temp("noliving") )
@@ -119,4 +119,3 @@ HELP
 	);
 	return 1;
 }
-

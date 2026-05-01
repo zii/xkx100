@@ -11,11 +11,11 @@ int exert(object me, object target)
 	int skill;
 	int i,lx,num;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/powerup") &&
-  !me->query("can_perform/longxiang/powerup") && 
+  !me->query("can_perform/longxiang/powerup") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( target != me )
 		return notify_fail("你只能提升自己的战斗力。\n");
@@ -31,7 +31,7 @@ int exert(object me, object target)
 倍，需时三四年。第三层又比第二层加深一倍，需时七八年。如此
 成倍递增，越是往后，越难进展。待到第五层以后，欲再练深一层，
 往往便须三十年以上苦功。
-一层 2 
+一层 2
 二层 4
 三   8
 四   16
@@ -94,4 +94,3 @@ HELP
 	);
 	return 1;
 }
-

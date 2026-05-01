@@ -7,11 +7,11 @@ void remove_effect(object me, int amount);
 int exert(object me, object target)
 {
 	int skill;
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/powerup") &&
-  !me->query("can_perform/linji-zhuang/powerup") && 
+  !me->query("can_perform/linji-zhuang/powerup") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if(target!=me) return notify_fail("你只能用临济庄提升自己的战斗力。\n");
 	if((int)me->query("neili")<100) return notify_fail("你的内力不够。\n");
@@ -58,4 +58,3 @@ HELP
 	);
 	return 1;
 }
-

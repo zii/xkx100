@@ -7,14 +7,14 @@ int exert(object me)
 {
 	object obj;
 	int skill;
-	
+
 	seteuid(getuid());
 	skill = (int)me->query_skill("linji-zhuang",1);
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/youming") &&
-  !me->query("can_perform/linji-zhuang/youming") && 
+  !me->query("can_perform/linji-zhuang/youming") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if (!wizardp(me))
 	{
@@ -79,4 +79,3 @@ HELP
 	);
 	return 1;
 }
-

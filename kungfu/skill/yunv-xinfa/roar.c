@@ -10,11 +10,11 @@ int exert(object me, object target)
 	object *ob;
 	int i, skill, damage;
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/roar") &&
-  !me->query("can_perform/yunv-xinfa/roar") && 
+  !me->query("can_perform/yunv-xinfa/roar") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 	if( environment(me)->query("no_fight") )
 		return notify_fail("这里不能攻击别人! \n");
 
@@ -68,4 +68,3 @@ HELP
 	);
 	return 1;
 }
-

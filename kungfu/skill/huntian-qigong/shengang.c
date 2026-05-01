@@ -12,17 +12,17 @@ void remove_effect(object me, int amount);
 
 int exert(object me, object target)
 {
-	object weapon;	
+	object weapon;
   	string msg;
 	int d_count, count, qi, maxqi, skill;
 
-  if ( userp(me) && !wizardp(me) && 
-  !me->query("perform/shengang") &&
-  !me->query("can_perform/huntian-qigong/shengong") && 
-  !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+//   if ( userp(me) && !wizardp(me) &&
+//   !me->query("perform/shengang") &&
+//   !me->query("can_perform/huntian-qigong/shengong") &&
+//   !me->query_temp("murong/xingyi"))
+//    return notify_fail("你所使用的内功中没有这种功能。\n");
 
-	if( (int)me->query_temp("shengang") ) 
+	if( (int)me->query_temp("shengang") )
 		return notify_fail(HIG"你已经在运混天神罡了。\n"NOR);
 
 //	if( !me->is_fighting() )
@@ -43,7 +43,7 @@ int exert(object me, object target)
 	d_count = (int)me->query_dex() / 2;
 
 	if(qi > (maxqi * 0.4))
-	{	
+	{
 		message_combatd(msg, me, target);
 		me->add_temp("apply/damage", skill*2);
 		me->set_temp("shengang", 1);
@@ -62,7 +62,7 @@ int exert(object me, object target)
 
 void remove_effect(object me, int amount)
 {
-	if ( (int)me->query_temp("shengang") ) 
+	if ( (int)me->query_temp("shengang") )
 	{
 		me->add_temp("apply/damage", - amount);
 		me->delete_temp("shengang");
@@ -85,4 +85,3 @@ HELP
 	);
 	return 1;
 }
-

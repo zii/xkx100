@@ -8,13 +8,13 @@ inherit F_SSERVER;
 int exert(object me, object target)
 {
 	string msg;
-	int skill = me->query_skill("kuihua-xinfa",1); 
+	int skill = me->query_skill("kuihua-xinfa",1);
 
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/guimei") &&
-  !me->query("can_perform/kuihua-xinfa/guimei") && 
+  !me->query("can_perform/kuihua-xinfa/guimei") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( me->query_temp("bixie/guimei"))
 		return notify_fail("你已经在运用鬼魅身法了吧？\n");
@@ -65,4 +65,3 @@ HELP
 	);
 	return 1;
 }
-

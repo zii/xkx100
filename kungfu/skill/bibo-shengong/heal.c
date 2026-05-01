@@ -5,11 +5,11 @@
 
 int exert(object me, object target)
 {
-  if ( userp(me) && !wizardp(me) && 
+  if ( userp(me) && !wizardp(me) &&
   !me->query("perform/heal") &&
-  !me->query("can_perform/bibo-shengong/heal") && 
+  !me->query("can_perform/bibo-shengong/heal") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if( me->is_fighting() )
 		return notify_fail("战斗中运功疗伤？找死吗？\n");
@@ -54,4 +54,3 @@ HELP
 	);
 	return 1;
 }
-

@@ -9,10 +9,10 @@ int exert(object me, object target)
 	if ((!target) || target->query("id")!=me->query("id"))
 		return notify_fail("你要用真气为谁护精？\n");
 */
-  if ( userp(me) && !wizardp(me) && 
-  !me->query("can_perform/shenzhao-jing/jingheal") && 
+  if ( userp(me) && !wizardp(me) &&
+  !me->query("can_perform/shenzhao-jing/jingheal") &&
   !me->query_temp("murong/xingyi"))
-   return notify_fail("你所使用的内功中没有这种功能。");
+   return notify_fail("你所使用的内功中没有这种功能。\n");
 
 	if (!target) target = me;
 
@@ -42,10 +42,10 @@ int exert(object me, object target)
 
   if ( me != target)
 	message_combatd( HIC "$N坐了下来运起神照经内功，将左手掌贴在$n后背命门，右掌捂住$n丹田，缓缓地将运转真气....\n\n"HIY "过了不久，$n额头上冒出豆大的汗珠，脸上的疲惫模样也减轻多了。\n" NOR, me, target);
-  else 
+  else
  	message_combatd( HIC "$N坐了下来运起神照经内功，将左手掌贴在后背命门，右掌捂住丹田，缓缓地将运转真气....\n\n"HIY "过了不久，$N额头上冒出豆大的汗珠，脸上的疲惫模样也减轻多了。\n" NOR, me);
 
-  
+
 	target->receive_curing("jing", 10 + (int)me->query_skill("force")/2 );
 	if( (int)target->query("jing") > (int)target->query("eff_jing") )
 		target->set("jing", (int)me->query("eff_jing"));
@@ -71,4 +71,3 @@ HELP
 	);
 	return 1;
 }
-
