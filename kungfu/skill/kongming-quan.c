@@ -1,4 +1,4 @@
-// kongming.c 空明拳
+// kongming-quan.c 空明拳
 // Last Modified by sir 10.21.2001
 
 #include <ansi.h>
@@ -69,7 +69,7 @@ mapping query_action(object me, object weapon)
 	int p_e1 = -50;
 	int p_e2 = 30;
 	int f_e1 = 400;
-	int f_e2 = 500;	
+	int f_e2 = 500;
 	int i, lvl, seq, ttl = sizeof(action);
 
 	lvl = (int) me->query_skill("kongming-quan", 1);
@@ -84,7 +84,7 @@ mapping query_action(object me, object weapon)
 		"action"      : action[seq]["action"],
 		"dodge"       : d_e1 + (d_e2 - d_e1) * seq / ttl,
 		"parry"       : p_e1 + (p_e2 - p_e1) * seq / ttl,
-		"force"       : f_e1 + (f_e2 - f_e1) * seq / ttl,		
+		"force"       : f_e1 + (f_e2 - f_e1) * seq / ttl,
 		"damage_type" : random(2) ? "内伤" : "瘀伤",
 	]);
 }
@@ -120,4 +120,3 @@ HELP
 	);
 	return 1;
 }
-
