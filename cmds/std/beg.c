@@ -40,7 +40,7 @@ int main(object me, string arg)
 	if( victim->is_fighting() )
 		return notify_fail(victim->name() + "正在打架，没空理你！\n");
 	if( !living(victim) || victim->query_temp("noliving") )
-		return notify_fail(victim->name()+ "都已经这样了，你还用得着乞讨吗？\n"); 
+		return notify_fail(victim->name()+ "都已经这样了，你还用得着乞讨吗？\n");
 	if( userp(victim) && victim->query("kar") == me->query("kar") )
 		return notify_fail("这是那人的随身家伙，肯定不会给你。\n");
 
@@ -54,8 +54,8 @@ int main(object me, string arg)
 		ob = inv[random(sizeof(inv))];
 	}
 
-	if ( ob->query("equipped") || ob->query("no_drop") )
-		return notify_fail("这是那人的随身家伙，肯定不会给你。\n");
+	//if ( ob->query("equipped") || ob->query("no_drop") )
+	//	return notify_fail("这是那人的随身家伙，肯定不会给你。\n");
 	if ( ob->query_temp("is_rided_by") )
 		return notify_fail("这是那人的坐骑，肯定不会给你。\n");
 	if ((ob->query("id"))=="bao wu")

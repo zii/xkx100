@@ -88,9 +88,9 @@ int main(object me, string arg)
 	}
 	}
 
-	if( ob!=me && !wizardp(me) && !ob->is_apprentice_of(me) &&
-		!me->is_apprentice_of(ob) && parents!=1 && me->query("couple/couple_id")!=ob->query("id"))
-		return notify_fail("只有巫师或有师徒或亲情关系的人能察看他人的技能。\n");
+	//if( ob!=me && !wizardp(me) && !ob->is_apprentice_of(me) &&
+	//	!me->is_apprentice_of(ob) && parents!=1 && me->query("couple/couple_id")!=ob->query("id"))
+	//		return notify_fail("只有巫师或有师徒或亲情关系的人能察看他人的技能。\n");
 
 	skl = ob->query_skills();
 	if (skill1 && !ob->query_skill(skill1))
