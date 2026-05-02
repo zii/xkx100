@@ -11,12 +11,15 @@ services:
     command:
       - |
         cp -a /d-source/. /mudlib/d/
+        cp -a /kungfu-source/. /mudlib/kungfu/
         /fluffos/bin/driver /mudlib/config.ini &
         PID=$$!
         trap 'kill -TERM $$PID 2>/dev/null; sleep 2; kill -KILL $$PID 2>/dev/null; exit 0' TERM
         wait $$PID
     tmpfs:
       - /mudlib/d:rw,noexec,nosuid,size=64M
+      - /mudlib/kungfu:rw,noexec,nosuid,size=16M
     volumes:
       - ./:/mudlib:rw
       - ./d:/d-source:ro
+      - ./kungfu:/kungfu-source:ro

@@ -12,46 +12,82 @@ mapping valid_type = ([
 
 string *special_cats = ({ "force","dodge","knowledge","all" });
 
-int skill_rating(object sk) {
+// ─── 分项评估函数 ───
+
+// 战斗技能评分（有 query_action 的进攻技能）
+int combat_rating(object sk) {
     int r = 0;
-    object _me = this_player();
-    if (_me) {
-        string _err = catch {
-            mapping _a = sk->query_action(_me, 0);
-            if (mapp(_a) && intp(_a["force"])) {
-                // action force 是主力评分 (70%)
-                r += _a["force"];
-                // hit_ob 加分 (15%)
-                if (function_exists("hit_ob", sk)) r += 60;
-                if (function_exists("be_hit_ob", sk)) r += 40;
-                // 招式数量 (15%)
-                string pd = sk->perform_action_file("");
-                if (pd) { mixed *f = get_dir(pd);
-                    if (sizeof(f)) for (int i = 0; i < sizeof(f); i++)
-                        if (strsrch(f[i], ".c") >= 0) r += 20; }
-                return r;
-            }
+    if (function_exists("hit_ob", sk)) r += 100;
+    string pd = sk->perform_action_file("");
+    if (pd) { mixed *f = get_dir(pd);
+        if (sizeof(f)) for (int i = 0; i < sizeof(f); i++)
+            if (strsrch(f[i], ".c") >= 0) r += 30; }
+    return r;
+}
+
+// 招架评分（基于 action["parry"]）
+int parry_rating(object sk) {
+    object tp = this_player();
+    if (!tp) return 0;
+    string err = catch {
+        mapping a = sk->query_action(tp, 0);
+        if (mapp(a) && intp(a["parry"])) {
+            int r = -a["parry"] * 10;
+            if (function_exists("be_hit_ob", sk)) r += 100;
+            return r;
+        }
+    };
+    return 0;
+}
+
+// 轻功评分：power_point³ × (100+action["dodge"])/100
+int dodge_rating(object sk) {
+    object tp = this_player();
+    float pp = tp ? sk->power_point(tp) : 1.0;
+    int r = (int)(pp * pp * pp * 100);
+    // action dodge 修正（反映攻击时的闪避效果）
+    if (tp) {
+        string err = catch {
+            mapping a = sk->query_action(tp, 0);
+            if (mapp(a) && intp(a["dodge"]))
+                r = r * (100 + a["dodge"]) / 100;
         };
     }
-    // 纯内功（无 query_action）：按特效 + hit_ob 算
-    string mt = sk->martialtype();
-    if (mt == "force") {
-        if (function_exists("hit_ob", sk)) r += 60;
-        if (function_exists("be_hit_ob", sk)) r += 40;
-        // 标准共享特技不算，只算独有特技
-        string *std = ({ "recover", "regenerate", "revive", "transfer", "bipin" });
-        string ed = sk->exert_function_file("");
-        if (ed) { mixed *f = get_dir(ed);
-            if (sizeof(f)) for (int i = 0; i < sizeof(f); i++) {
-                string fn = f[i];
-                if (strsrch(fn, ".c") < 0) continue;
-                string name = fn[0..<3];
-                if (member_array(name, std) >= 0) continue;
-                r += 20;
-            }
+    return r;
+}
+
+// 内功评分（基于特效数量）
+int force_rating(object sk) {
+    int r = 0;
+    // 有 action force 的内功（太玄功等全能型）也算进来
+    object _tp = this_player();
+    if (_tp) {
+        string _err = catch {
+            mapping _a = sk->query_action(_tp, 0);
+            if (mapp(_a) && intp(_a["force"])) r += _a["force"];
+        };
+    }
+    if (function_exists("hit_ob", sk)) r += 60;
+    if (function_exists("be_hit_ob", sk)) r += 40;
+    string *std = ({ "recover","regenerate","revive","transfer","bipin" });
+    string ed = sk->exert_function_file("");
+    if (ed) { mixed *f = get_dir(ed);
+        if (sizeof(f)) for (int i = 0; i < sizeof(f); i++) {
+            string fn = f[i];
+            if (strsrch(fn, ".c") < 0) continue;
+            if (member_array(fn[0..<3], std) >= 0) continue;
+            r += 20;
         }
     }
     return r;
+}
+
+// 按分类路由到对应的评估函数
+int skill_rating(object sk, string cat) {
+    if (cat == "force") return force_rating(sk);
+    if (cat == "dodge") return dodge_rating(sk);
+    if (cat == "parry") return parry_rating(sk);
+    return combat_rating(sk);
 }
 
 int is_category(string arg) {
@@ -98,9 +134,10 @@ mapping build_school_map(string *skills) {
     return r;
 }
 
+// 评分缓存，避免排序时反复调用 skill_rating（含 get_dir）
+mapping _rating_cache;
 int sort_skill(string a, string b) {
-    object sa = load_object(SKILL_D(a)), sb = load_object(SKILL_D(b));
-    int ra = sa ? skill_rating(sa) : 0, rb = sb ? skill_rating(sb) : 0;
+    int ra = _rating_cache[a], rb = _rating_cache[b];
     if (ra != rb) return ra > rb ? -1 : 1;
     return a > b ? 1 : a < b ? -1 : 0;
 }
@@ -141,10 +178,13 @@ int list_skills(object me, string cat) {
         object sk = load_object(SKILL_D(ids[i]));
         if (!sk || !match_category(sk, cat)) continue;
         total++;
-        data[ids[i]] = ([ "rating": skill_rating(sk), "name": to_chinese(ids[i]) ]);
+        data[ids[i]] = ([ "rating": skill_rating(sk, cat), "name": to_chinese(ids[i]) ]);
     }
     string *sorted = keys(data);
+    _rating_cache = ([]);
+    for (int i = 0; i < sizeof(sorted); i++) _rating_cache[sorted[i]] = data[sorted[i]]["rating"];
     sorted = sort_array(sorted, (: sort_skill :));
+    _rating_cache = ([]);
     mapping skill_school = build_school_map(sorted);
     string cat_cn = cat == "all" ? "全部" : cat == "knowledge" ? "知识" : cat == "force" ? "内功" : cat == "dodge" ? "轻功" : valid_type[cat];
 
@@ -181,7 +221,7 @@ int show_detail(object me, string skill) {
     string t = sk ? sk->type() : 0;
     if (!t) return notify_fail("没有「" + skill + "」这项武功。\n");
     string name = to_chinese(skill), mt = sk->martialtype();
-    int lb = sk->learn_bonus(), pb = sk->practice_bonus(), sc = sk->success(), ra = skill_rating(sk);
+    int lb = sk->learn_bonus(), pb = sk->practice_bonus(), sc = sk->success(), ra = skill_rating(sk, "");
     string tn = t == "knowledge" ? "知识" : mt == "force" ? "内功" : mt == "dodge" ? "轻功" : "武技";
     string rs = sprintf("%d", ra);
     string rc = ra >= 500 ? HIR : ra >= 350 ? HIM : ra >= 200 ? HIY : ra >= 80 ? HIG : "";
@@ -337,4 +377,3 @@ verify mine 显示你当前已 enable 武功的 exert/perform 快捷命令。
 HELP);
     return 1;
 }
-

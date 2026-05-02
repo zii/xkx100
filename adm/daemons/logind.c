@@ -1000,47 +1000,7 @@ private init_new_player(object user)
 
     user->set("channels", ({ "chat", "rumor", "party", "xkx", "sing" , "es" , "snow" }) );
 
-    // 给新玩家发初始衣鞋（仅一次）
-    {
-        object cloth, shoe;
-        if (wizhood(user) != "(player)") {
-            shoe = new("/clone/cloth/wiz-shoe.c");
-        } else if (user->query("class")=="bonze") {
-            if (user->query("gender")=="女性") {
-                cloth = new("/clone/cloth/ni-cloth");
-                shoe = new("/clone/cloth/ni-shoe");
-            } else {
-                cloth = new("/clone/cloth/seng-cloth");
-                shoe = new("/clone/cloth/seng-shoe");
-            }
-        } else if (user->query("class")=="taoist") {
-            if (user->query("gender")=="女性") {
-                cloth = new("/clone/cloth/daogu-cloth");
-                shoe = new("/clone/cloth/dao-shoe");
-            } else {
-                cloth = new("/clone/cloth/dao-cloth");
-                shoe = new("/clone/cloth/dao-shoe");
-            }
-        } else {
-            if (user->query("gender")=="女性") {
-                cloth = new("/clone/cloth/female-cloth");
-                shoe = new("/clone/cloth/female-shoe");
-            } else {
-                cloth = new("/clone/cloth/male-cloth");
-                shoe = new("/clone/cloth/male-shoe");
-            }
-        }
-        if (cloth) {
-            cloth->move(user);
-            cloth->wear();
-        }
-        if (shoe) {
-            shoe->move(user);
-            shoe->wear();
-        }
-    }
 }
-
 
 varargs void enter_world(object ob, object user, int silent)
 {
