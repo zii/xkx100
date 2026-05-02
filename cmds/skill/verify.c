@@ -345,7 +345,7 @@ int show_mine(object me) {
             p_cnt++;
             string a = "p" + p_cnt;
             me->set_skill_alias(a, "perform " + usage + "." + f);
-            msg += sprintf("        " HIC "perform %s" NOR " => " HIY "%s" NOR "\n", sid + "." + f, a);
+            msg += sprintf("        " HIC "perform %s" NOR " => " HIY "%s" NOR "\n", usage + "." + f, a);
         }
     }
 

@@ -103,5 +103,18 @@ string process_global_alias(string arg)
 		return implode(word, " ");
 	}
 
+	// skill_aliases（由 verify mine 设定）
+	if( this_player() ) {
+		mapping sa = this_player()->query_skill_aliases();
+		if( mapp(sa) ) {
+			if( !undefinedp(sa[arg]) )
+				return sa[arg];
+			if( sizeof(word) > 1 && !undefinedp(sa[word[0]]) ) {
+				sa[word[0]] += " " + implode(word[1..], " ");
+				return sa[word[0]];
+			}
+		}
+	}
+
 	return arg;
 }
