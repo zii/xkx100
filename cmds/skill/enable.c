@@ -118,6 +118,8 @@ write(HIY"你从现在起用"HIR+CHINESE_D->chinese(map_to)+HIY"作为"HIG+CHINE
 //              me->receive_damage("sen", 0);
         }
 
+        // enable 后自动重建 skill_aliases
+        catch("/cmds/skill/verify"->build_skill_aliases(me));
         return 1;
 }
 int help(object me)

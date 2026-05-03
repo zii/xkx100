@@ -281,10 +281,11 @@ int show_detail(object me, string skill) {
 }
 
 // ─── 模式4: verify mine — 个人武功快捷命令 ───
-int show_mine(object me) {
+
+// 纯构建别名（无输出），供 show_mine 和自动登录使用
+int build_skill_aliases(object me) {
     mapping skill_map = me->query_skill_map();
-    if (!mapp(skill_map) || !sizeof(skill_map))
-        return notify_fail("你还没有 enable 任何武功。\n");
+    if (!mapp(skill_map) || !sizeof(skill_map)) return 0;
 
     // 清理旧别名
     for (int i = 1; i <= 99; i++) {
@@ -292,6 +293,58 @@ int show_mine(object me) {
         me->set_skill_alias("p" + i, 0);
     }
 
+    int e_cnt = 0, p_cnt = 0;
+    string *excludes = ({ "dodge", "array", "magic", "parry" });
+    mapping shown = ([]);
+
+    // ── 内功 exert ──
+    string fs = me->query_skill_mapped("force");
+    if (fs) {
+        string dir = SKILL_D(fs)->exert_function_file("");
+        if (dir) {
+            mixed *files = get_dir(dir);
+            if (sizeof(files)) {
+                for (int i = 0; i < sizeof(files); i++) {
+                    string fn = files[i];
+                    if (strsrch(fn, ".c") < 0) continue;
+                    string f = replace_string(fn, ".c", "");
+                    e_cnt++;
+                    me->set_skill_alias("e" + e_cnt, "yun " + f);
+                }
+            }
+        }
+    }
+
+    // ── 外功 perform ──
+    string *uks = keys(skill_map);
+    for (int i = 0; i < sizeof(uks); i++) {
+        string usage = uks[i];
+        if (member_array(usage, excludes) >= 0 || undefinedp(valid_type[usage])) continue;
+        string sid = skill_map[usage];
+        if (!sid || shown[sid]) continue;
+        shown[sid] = 1;
+
+        string dir = SKILL_D(sid)->perform_action_file("");
+        if (!dir) continue;
+        mixed *files = get_dir(dir);
+        if (!sizeof(files)) continue;
+
+        for (int j = 0; j < sizeof(files); j++) {
+            string fn = files[j];
+            if (strsrch(fn, ".c") < 0) continue;
+            string f = replace_string(fn, ".c", "");
+            p_cnt++;
+            me->set_skill_alias("p" + p_cnt, "perform " + usage + "." + f);
+        }
+    }
+
+    return (e_cnt + p_cnt) > 0 ? 1 : 0;
+}
+
+int show_mine(object me) {
+    build_skill_aliases(me);
+
+    mapping skill_map = me->query_skill_map();
     string msg = "\n";
     int e_cnt = 0, p_cnt = 0;
     string *excludes = ({ "dodge", "array", "magic", "parry" });
@@ -311,9 +364,7 @@ int show_mine(object me) {
                     if (strsrch(fn, ".c") < 0) continue;
                     string f = replace_string(fn, ".c", "");
                     e_cnt++;
-                    string a = "e" + e_cnt;
-                    me->set_skill_alias(a, "yun " + f);
-                    msg += sprintf("        " HIC "exert %-16s" NOR " => " HIY "%s" NOR "\n", f, a);
+                    msg += sprintf("        " HIC "exert %-16s" NOR " => " HIY "e%d" NOR "\n", f, e_cnt);
                 }
             }
         }
@@ -343,9 +394,7 @@ int show_mine(object me) {
             if (strsrch(fn, ".c") < 0) continue;
             string f = replace_string(fn, ".c", "");
             p_cnt++;
-            string a = "p" + p_cnt;
-            me->set_skill_alias(a, "perform " + usage + "." + f);
-            msg += sprintf("        " HIC "perform %s" NOR " => " HIY "%s" NOR "\n", usage + "." + f, a);
+            msg += sprintf("        " HIC "perform %s" NOR " => " HIY "p%d" NOR "\n", usage + "." + f, p_cnt);
         }
     }
 

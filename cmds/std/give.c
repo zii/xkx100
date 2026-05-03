@@ -88,16 +88,20 @@ int do_give(object me, object obj, object who)
 		return notify_fail("任务必须自己完成。\n");
 	if (obj->query("dynamic_quest") && TASK_D->quest_reward(me, who, obj))
 		return 1;
-	if ((strsrch(obj->query("name"), me->query("quest/betrayer/name")) >= 0)
+	if (me->query("quest/betrayer/name")
+		&& (strsrch(obj->query("name"), me->query("quest/betrayer/name")) >= 0)
 		&& who->accept_quest_betrayer(me, obj))
 		return 1;
-	if ((strsrch(obj->query("name"), me->query("quest/book/book")) >= 0)
+	if (me->query("quest/book/book")
+		&& (strsrch(obj->query("name"), me->query("quest/book/book")) >= 0)
 		&& who->accept_quest_book(me, obj))
 		return 1;
-	if ((strsrch(obj->query("name"), me->query("quest/thief/name")) >= 0)
+	if (me->query("quest/thief/name")
+		&& (strsrch(obj->query("name"), me->query("quest/thief/name")) >= 0)
 		&& who->accept_quest_thief(me, obj))
 		return 1;
-	if ((strsrch(obj->query("name"), me->query("quest/kill/name")) >= 0)
+	if (me->query("quest/kill/name")
+		&& (strsrch(obj->query("name"), me->query("quest/kill/name")) >= 0)
 		&& who->accept_quest_kill(me, obj))
 		return 1;
 	if( !interactive(who) && !who->accept_object(me, obj) )
