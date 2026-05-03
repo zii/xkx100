@@ -110,8 +110,8 @@ string process_global_alias(string arg)
 			if( !undefinedp(sa[arg]) )
 				return sa[arg];
 			if( sizeof(word) > 1 && !undefinedp(sa[word[0]]) ) {
-				sa[word[0]] += " " + implode(word[1..], " ");
-				return sa[word[0]];
+					string _r = sa[word[0]] + " " + implode(word[1..], " ");
+					return _r;
 			}
 		}
 	}

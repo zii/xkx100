@@ -3,25 +3,23 @@ inherit F_CLEAN_UP;
 
 #include <skill.h>
 
-
-
 int exercising(object me);
-//int halt_exercise(object me, object who, string why);
 int halt_exercise(object me);
 
 int main(object me, string arg)
 {
-	int exercise_cost;
+	int exercise_cost, neili_gain, max_neili_gain;
+	int taixuan;
 	object where;
 
 	seteuid(getuid());
 	where = environment(me);
-	
+
 	if (where->query("pigging"))
 		return notify_fail("你还是专心拱猪吧！\n");
-		
+
 	if (where->is_chat_room() && where->query("no_fight"))
-	  return notify_fail("这里禁止打坐。\n");
+		return notify_fail("这里禁止打坐。\n");
 
 	if (me->is_busy() || me->query_temp("pending/exercising"))
 		return notify_fail("你现在正忙着呢。\n");
@@ -45,37 +43,23 @@ int main(object me, string arg)
 
 	write("你坐下来运气用功，一股内息开始在体内流动。\n");
 
-	me->set_temp("pending/exercise", 1);
-	me->set_temp("exercise_cost", exercise_cost);
 	message_vision("$N盘膝坐下，开始修炼内力。\n", me);
-	me->start_busy((: exercising :), (:halt_exercise:));
 
-	return 1;
-}
-
-int exercising(object me)
-{
-	int exercise_cost = (int)me->query_temp("exercise_cost");
-	int neili_gain = 1 + (int)me->query_skill("force") / 10;
-	int max_neili_gain = (int) random(me->query("max_neili") /500);
-
-	int taixuan;
-	object where=environment(me);
-	if (exercise_cost < 1)
-		return 0;
+	// 一次完成全部转换
+	neili_gain = exercise_cost;
 	me->add("neili", neili_gain);
-	me->set_temp("exercise_cost", exercise_cost -= neili_gain);
-// 灵鹫玄冰室
+
+	// 灵鹫玄冰室
 	if(where->query("xuanbing"))
 		me->add("qi", (int)neili_gain/3);
-// 太玄功
+	// 太玄功
 	if ((int)me->query_skill("taixuan-gong",1))
 	{
 		taixuan = (int)me->query_skill("taixuan-gong",1);
 		if(taixuan > 10)
 			me->add("qi", (int)neili_gain * taixuan / 400);
 	}
-// 神照经
+	// 神照经
 	if ((int)me->query_skill("shenzhao-jing",1))
 	{
 		taixuan = (int)me->query_skill("shenzhao-jing",1);
@@ -84,29 +68,24 @@ int exercising(object me)
 	}
 
 	if(living(me) && !me->query_temp("noliving") )
-		me->add("qi", -neili_gain);
-	
-	if (exercise_cost > 0)
-		return 1;
+		me->add("qi", -exercise_cost);
 
-	me->set_temp("pending/exercise", 0);
 	message_vision("$N运功完毕，深深吸了口气，站了起来。\n", me);
-	if ((int)me->query("neili") < (int)me->query("max_neili") * 2)
-		return 0;
-	else {
-		if ((int)me->query("max_neili") > (int)me->query_skill("force") * 10) {
-			write("你的内力修为似乎已经达到了瓶颈。\n");
-			me->set("neili", (int)me->query("max_neili"));
-			return 0;
-		}
-		else {
-			if (max_neili_gain>2) max_neili_gain=2;
-			me->add("max_neili", 1+max_neili_gain);
-			me->set("neili", (int)me->query("max_neili"));
-			write("你的内力增加了！！\n");
-			return 0;
-		}
+
+	if ((int)me->query("neili") > (int)me->query("max_neili") * 2)
+		me->set("neili", (int)me->query("max_neili") * 2);
+
+	if ((int)me->query("neili") >= (int)me->query("max_neili") * 2
+		&& (int)me->query("max_neili") <= (int)me->query_skill("force") * 10)
+	{
+		max_neili_gain = random(me->query("max_neili") / 500);
+		if (max_neili_gain > 2) max_neili_gain = 2;
+		me->add("max_neili", 1 + max_neili_gain);
+		me->set("neili", (int)me->query("max_neili"));
+		write("你的内力增加了！！\n");
 	}
+
+	return 1;
 }
 
 int halt_exercise(object me)
