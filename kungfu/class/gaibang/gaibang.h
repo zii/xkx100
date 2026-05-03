@@ -86,7 +86,7 @@ int accept_fight(object ob)
 	if ( ob->query("family/family_name") != "丐帮") return 0;
 	if ( ob->query_temp("fight_ok") != me->query("beggarlvl") )
 	{
-		command("say 你是本帮"+chinese_number(ob->query("beggarlvlk"))+"，不能向我挑战！\n");
+		command("say 你是本帮"+chinese_number(ob->query("beggarlvl"))+"，不能向我挑战！\n");
 		return 0;
 	}
 
