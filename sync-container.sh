@@ -5,7 +5,7 @@
 # 依赖: brew install fswatch
 
 CONTAINER=${1:-xkx100}
-WATCH_DIR="/Users/cat/code/vib/xkx100"
+WATCH_DIR=${2:-$(cd "$(dirname "$0")" && pwd)}
 
 echo "监控目录: $WATCH_DIR/{kungfu,d,clone}"
 echo "目标容器: $CONTAINER"
