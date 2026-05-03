@@ -1130,6 +1130,13 @@ varargs void enter_world(object ob, object user, int silent)
         sprintf("%s(%s)由%s连线进入。共清除 " + reclaim_objects() + " 个变数。\n", user->name(),user->query("id"), query_ip_name(user)) );
     UPDATE_D->check_user(user);
     //  user->start_call_out( (: call_other,"/cmds/usr/news","check_me",user :),5);
+    call_out("skill_alias_login", 1, user);
+}
+
+void skill_alias_login(object user)
+{
+    if( userp(user) )
+        catch("/cmds/skill/verify"->build_skill_aliases(user));
 }
 
 varargs void reconnect(object ob, object user, int silent)

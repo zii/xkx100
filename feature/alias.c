@@ -124,12 +124,6 @@ string process_input(string str)
 		history[last_cmd] = str;
 	}
 
-	// Lazy init skill_aliases：第一次输入命令时自动绑定
-	if( !mapp(skill_aliases) && userp(me) ) {
-		mapping _skm = me->query_skill_map();
-		if( mapp(_skm) && sizeof(_skm) )
-			catch(call_other("/cmds/skill/verify", "build_skill_aliases", me));
-	}
 
 	if( mapp(alias) )
 	{
