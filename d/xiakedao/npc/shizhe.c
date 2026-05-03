@@ -207,9 +207,9 @@ int ask_for_xkd()
 		
 	command("smile "+(string)who->query("id"));
 	tell_object( who, HIG"原来是侠客岛的贵宾，这就随我上岛去吧。\n"NOR );
-	myenv = environment (who) ;	
-	who->move("/d/xiakedao/duchuan");
-	tell_room(myenv, "黄衣使者招了招手，一只小舟靠岸，"+who->query("name")+"跨步上船。\n");
+		myenv = environment(who);
+		if (myenv) tell_room(myenv, "黄衣使者招了招手，一只小舟靠岸，" + who->query("name") + "跨步上船。\n");
+		who->move("/d/xiakedao/duchuan");
 	call_out("goto_xiake",10,who) ;	
 	return 1;
 }

@@ -16,7 +16,6 @@ void create()
 		set("unit", "把");
 		set("value", 10000);
 		set("material", "steel");
-		set("no_drop", "1");
 		set("long", "这是一柄两尺来长的黑牌，非金非铁。质地坚硬无比，\n"
 			    "似透明，令中隐隐似有火焰飞腾，实则是令质映光，颜\n"
 			    "色变幻。令上刻得有不少波斯文字。 \n");
