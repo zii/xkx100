@@ -24,7 +24,7 @@ void create()
 		"discard <信件编号>        丢弃一封信件。\n"
 	);
 	set("unit", "个");
-	set("no_drop", 1);
+	//set("no_drop", 1);
 	set("no_steal", 1);
 	set("no_put", 1);
 	set("no_beg", 1);
@@ -79,7 +79,7 @@ void receive_mail(string rcvr,mapping mail)
 	if (!ppl) obj = ob;
 	else obj = ppl;
 	if(sizeof(mails) >=MAX_MAIL && !wizardp(this_player()) && !wizardp(ppl))
-	{ 
+	{
 		if (obj->query("id")==this_player()->query("id"))
 			write("你信箱已经满了！\n");
 		else
@@ -97,7 +97,7 @@ void receive_mail(string rcvr,mapping mail)
 		save();
 		if (obj->query("id")==this_player()->query("id"))
 			write("你已经成功备份了！\n");
-		else 
+		else
 		{
 			tell_object(obj,HIG"绿林邮差跑步过来递给你一封信，然后转身疾步离去。\n"NOR);
 			write(HIG"信已发送成功。\n"NOR);
@@ -110,15 +110,15 @@ void send_mail(string rcvr, mapping mail)
 	object ppl, ob, mbx, obj;
 	int i;
 
-	for (i = 0; i < sizeof(rcvr); i++) 
-	if (rcvr[i]<'a' || rcvr[i]>'z') 
+	for (i = 0; i < sizeof(rcvr); i++)
+	if (rcvr[i]<'a' || rcvr[i]>'z')
 	{
 		 write("没有这个人存在。\n");
 		 return;
 	}
 	// Acquire the login object of receiver and mark the arrival of newmail.
 	ob = FINGER_D->acquire_login_ob(rcvr);
-	if( !ob ) 
+	if( !ob )
 	{
 		write("没有这个人存在。\n");
 		return;

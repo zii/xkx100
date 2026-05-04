@@ -28,7 +28,7 @@ int main(object me, string arg)
 	{
 			 what="name";
 	}
-	else if (arg=="cancel") 
+	else if (arg=="cancel")
 	{
 			what="cancel";
 	}
@@ -86,14 +86,14 @@ int main(object me, string arg)
 	id = replace_string(id, "$HIW$", HIW);
 	id = replace_string(id, "$NOR$", NOR);
 
-	write("你把 "+obj->query("name")+"("+obj->query("id")+") ");	
+	write("你把 "+obj->query("name")+"("+obj->query("id")+") ");
 	obj->set("old_name",obj->query("name"));
 	obj->set("old_id",obj->query("id"));
 	obj->set("name", name);
 	obj->set("id", id);
 	write("改名为 "+obj->query("name")+"("+obj->query("id")+") 。\n");
 	}
-	else 
+	else
 	{
 		write("你可以考虑向青云要些bug奖励。\n");
 	}
@@ -106,12 +106,12 @@ int help(object me)
            name cancel
            name dami 大米(dummy)
            name dami cancel
-					 
- 
+
+
 你如果希望在名字中使用ansi的控制字元改变颜色，可以用以下的控制
 字串：
 
-        $ＢＬＫ$：[30m黑色[0m          
+        $ＢＬＫ$：[30m黑色[0m
         $ＲＥＤ$：[31m红色[0m          $ＨＩＲ$：[1;31m亮红色[0m
         $ＧＲＮ$：[32m绿色[0m          $ＨＩＧ$：[1;32m亮绿色[0m
         $ＹＥＬ$：[33m土黄色[0m        $ＨＩＹ$：[1;33m黄色[0m

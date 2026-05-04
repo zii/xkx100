@@ -103,6 +103,7 @@
   克隆金币
   spclone clone/money/gold 100
   give <玩家id> gold
+  /alias setsk call $A1->set_skill("$A2", $A3)
 
  其他常用命令
 
