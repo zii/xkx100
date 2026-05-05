@@ -79,7 +79,7 @@ void logon(object ob)
         destruct(ob);
         return;
     }
-    //cat(WELCOME);
+    cat(WELCOME);
     "/cmds/usr/time"->main();
 
     usr = users();
@@ -119,20 +119,20 @@ void logon(object ob)
         destruct(ob);
         return;
     }
-// 计数 Start
+    // 计数 Start
     //user_num=howmany_visitor();
     //write("您是侠客行一百自二千零一年一月十四日以来的第"+HIY+chinese_number(user_num+1)+NOR"位访问者。\n");
     // set_visitor(user_num+1);	// 注释掉访问计数器递增
     if (iplimit>1)
     write("您所在的地址已有"HIY+chinese_number(iplimit-1)+NOR"位玩家在线上。\n");
-/*	if (iplimit>8)
-    {
-        write("对不起，您所在的地址无法登录更多的角色。\n");
-        destruct(ob);
-        return;
-    }
-*/
-// 计数 End
+    /*	if (iplimit>8)
+        {
+            write("对不起，您所在的地址无法登录更多的角色。\n");
+            destruct(ob);
+            return;
+        }
+    */
+    // 计数 End
     log_file( "PLAYERNUM", sprintf("At %s: %d %s\n", ctime(time()), ppl_cnt , query_ip_name(ob)) );
     printf( "目前共有 %s 位世外高人、%s 位江湖儿女在线上，以及 %s 位使用者尝试连线中。\n",
         chinese_number(wiz_cnt),
@@ -1033,7 +1033,7 @@ varargs void enter_world(object ob, object user, int silent)
     });
 
     user->set_temp("link_ob", ob);
-// 登录时记录经验和潜能, 以及登录时间, 为离线信息预留
+    // 登录时记录经验和潜能, 以及登录时间, 为离线信息预留
     user->set_temp("nowexp", user->query("combat_exp"));
     user->set_temp("nowpot", user->query("potential"));
     user->set_temp("nowtime", time());

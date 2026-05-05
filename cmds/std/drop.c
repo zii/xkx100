@@ -23,10 +23,10 @@ int main(object me, string arg)
 	{
 		if( !objectp(obj = present(item, me)) )
 			return notify_fail("你身上没有这样东西。\n");
-		if( stringp(obj->query("no_drop")) )
-			return notify_fail( (string)obj->query("no_drop") );
-		if( !obj->query_amount() )
-			return notify_fail( obj->name() + "不能被分开丢弃。\n");
+		//if( stringp(obj->query("no_drop")) )
+		//	return notify_fail( (string)obj->query("no_drop") );
+		//if( !obj->query_amount() )
+		//	return notify_fail( obj->name() + "不能被分开丢弃。\n");
 		if( amount < 1 )
 			return notify_fail("东西的数量至少是一个。\n");
 		if( amount > obj->query_amount() )
@@ -50,7 +50,7 @@ int main(object me, string arg)
 		if (all!=1)
 		  write("Ok.\n");
     else
-      message_vision("$N把身上的东西都丢了下来。\n",me); 
+      message_vision("$N把身上的东西都丢了下来。\n",me);
 	return 1;
 	}
 
@@ -65,8 +65,8 @@ int do_drop(object me, object obj)
 
 	if( obj->query_temp("is_rided_by") == me)
 		return notify_fail( obj->name() + "不是正被你骑着。\n");
-	if( no_drop = obj->query("no_drop") )
-		return notify_fail( stringp(no_drop) ? no_drop : "这样东西不能随意丢弃。\n");
+	//if( no_drop = obj->query("no_drop") )
+	//	return notify_fail( stringp(no_drop) ? no_drop : "这样东西不能随意丢弃。\n");
 	if( no_drop = environment(me)->query("no_drop") )
 		return notify_fail( stringp(no_drop) ? no_drop : "这里东西丢弃下去也看不见。\n");
   if ( !me->visible(obj))
@@ -82,9 +82,9 @@ int do_drop(object me, object obj)
 		if( !obj->query("value") && !obj->value() )
 				write( "因为这样东西并不值钱，所以人们并不会注意到它的存在。\n");
       }
-    }		
+    }
 	if( !obj->query("value") && !obj->value() && !obj->is_character() )
-      		destruct(obj);    
+      		destruct(obj);
 		return 1;
 	}
 	return 0;
@@ -98,9 +98,8 @@ int help(object me)
 
     这个指令可以让你丢下你所携带的物品。ａｌｌ参数将会把能丢掉
 的东西全丢掉。
- 
+
 HELP
     );
     return 1;
 }
- 
