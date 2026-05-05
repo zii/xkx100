@@ -23,6 +23,10 @@ mapping global_alias = ([
 	"d":		"go down",
 	"i":		"inventory",
 	"tt":		"team talk",
+	"lm":		"map",
+	"sk":		"skills",
+	"map":		"map all",
+	"sc": 		"score",
 //	"bai":		"apprentice",
 /////add some/////////
 //	"dating":	"check",
