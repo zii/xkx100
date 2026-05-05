@@ -94,13 +94,24 @@ tmpfs:
 
 roomid 原来要走 macOS → VirtioFS → VM 读 8965 个文件，现在全在 Docker 内存里。同样的原理，update 房间、goto 去新区域、look 第一次进房间，都会快。
 
-**添加新指令:**
+**添加玩家指令:**
 
-set no_more 1 - map 不分页
-set no_hunger 1 - 不饥渴
+home [+<数字>|<数字>|-<数字>] - 记录/移动到/删除回城点（1-9），共可设 9 个
+localcmds (lc)     - 查看当前房间所有可用指令
+deposit all        - 将身上所有现金一次性存入钱庄
+withdraw/qu <数量>[g|s|c] - 取款，不跟单位默认白银（例: 100=100银, 100g=100金, 100c=100文）
+verify <武功名称>  - 查询此项技能的功能和数据
+
+**新增全局别名:**
+
+lm  → map　　　　sk → skills　　　　map → map all
+sc  → score　　　lc → localcmds
+
+**新增环境变量:**
+
+set no_more 1    - map 不分页
+set no_hunger 1  - 不饥渴
 set no_weather 1 - 不显示天气信息
-
-verify <武功名称> - 这个指令可以让你查询此项技能的功能和数据
 
 **添加新巫师指令:**
 
