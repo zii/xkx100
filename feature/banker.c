@@ -121,22 +121,55 @@ int do_convert(string arg)
         return 1;
 }                                                                               
 
-int do_deposit(string arg)                                                      
+int do_deposit(string arg)
 {
         string what;
         int amount;
-//        int money_limit;
         object what_ob, me;
 
-        if (query_temp("busy"))
-                return notify_fail("哟，抱歉啊，我这儿正忙着呢……您请稍候。\n");
         me = this_player();
-	if( me->is_busy() )
-		return notify_fail("哟，抱歉，我这儿正忙着呢……您请稍候。\n");
 
+        // deposit all: 存入身上所有钱
+        if (arg == "all")
+        {
+                string *money_types = ({ "gold", "silver", "coin" });
+                string *labels = ({ "黄金", "白银", "铜钱" });
+                string *units = ({ "两", "两", "文" });
+                // base_value: gold=10000, silver=100, coin=1
+                int *values = ({ 10000, 100, 1 });
+                object ob;
+                int i, cnt, total_value, has_any;
+                string msg, *parts;
+
+                parts = ({});
+                has_any = 0;
+                total_value = 0;
+
+                for (i = 0; i < sizeof(money_types); i++)
+                {
+                        ob = present(money_types[i] + "_money", me);
+                        if (ob && (cnt = ob->query_amount()) > 0)
+                        {
+                                ob->add_amount(-cnt);
+                                me->add("balance", values[i] * cnt);
+                                total_value += values[i] * cnt;
+                                has_any = 1;
+                                parts += ({ sprintf("%d%s%s", cnt, units[i], labels[i]) });
+                        }
+                }
+
+                if (!has_any)
+                        return notify_fail("你身上没有带钱。\n");
+
+                msg = implode(parts, "、");
+                message_vision(sprintf("$N拿出%s，存进了银号。\n", msg), me);
+                return 1;
+        }
+
+        // 原逻辑: deposit <数量> <货币单位>
         if (!arg || sscanf(arg, "%d %s", amount, what) != 2)
         {
-                return notify_fail("命令格式：deposit:cun <数量> <货币单位>\n");
+                return notify_fail("命令格式：deposit:cun <数量> <货币单位> | deposit all\n");
         }
 
         what_ob = present(what + "_money", me);
@@ -147,50 +180,27 @@ int do_deposit(string arg)
         if (amount < 1)
         {
                 return notify_fail("你想存多少" + what_ob->query("name") + "？\n");
-        }                                                                       
+        }
         if ((int)what_ob->query_amount() < amount)
         {
                 return notify_fail("你带的" + what_ob->query("name") + "不够。\n");
         }
 
-        // deposit it
-        set_temp("busy", 1);
-/*
-	if (me->query("age")==14) money_limit = 100;
-	if (me->query("age")>14) money_limit = 100 + (me->query("age")-15) * 20;
-	if (me->query("age")>20) money_limit = 200 + (me->query("age")-20) * 20;
-	if (me->query("age")>30) money_limit = 400 + (me->query("age")-30) * 30;
-	if (me->query("age")>40) money_limit = 800 + (me->query("age")-40) * 40;
-	money_limit = money_limit*10000;
-
-	if (me->query("balance") + what_ob->query("base_value") * amount > money_limit)
-	{
-                return notify_fail("你的存款额度已经用满了。\n");
-	}
-*/
         message_vision(sprintf("$N拿出%s%s%s，存进了银号。\n",
                 chinese_number(amount), what_ob->query("base_unit"),
                 what_ob->query("name")), me);
         what_ob->add_amount(-amount);
         me->add("balance", call_other("/clone/money/" + what, "query", "base_value") * amount);
-        
-        // Added by zeratul 2001-1-1
-        if ( me->query( "balance" ) > me->query( "max_balance" ) )
-        {
-        	tell_object( me, "你的存款额度已经用满了。\n");
-        	me->set( "balance", me->query( "max_balance" ) );
-        }
 
         remove_call_out("enough_rest");
         call_out("enough_rest", 5);
-	me->start_busy(1);
         return 1;
 }
 
 int do_withdraw(string arg)
 {
         int amount, v;
-        string what;
+        string what, unit;
         object me;
 
         if (query_temp("busy"))
@@ -199,28 +209,63 @@ int do_withdraw(string arg)
 	if( me->is_busy() )
 		return notify_fail("哟，抱歉，我这儿正忙着呢……您请稍候。\n");
 
-        if (!arg || sscanf(arg, "%d %s", amount, what) != 2)
+        if (!arg)
+                return notify_fail("命令格式：withdraw|qu <数量>[g|s|c]\n"
+                                   "  数字后不跟单位默认为白银\n"
+                                   "  例: withdraw 100  → 100 silver\n"
+                                   "      withdraw 100g → 100 gold\n"
+                                   "      withdraw 100 s → 100 silver\n"
+                                   "      withdraw 100c  → 100 coin\n");
+
+        // 解析参数
+        // 1) "100 g" / "100 gold" 等带空格格式
+        if (sscanf(arg, "%d %s", amount, unit) == 2)
         {
-                return notify_fail("命令格式：withdraw|qu <数量> <货币单位>\n");
+                switch (unit)
+                {
+                case "g":  case "gold":   what = "gold";   break;
+                case "s":  case "silver": what = "silver"; break;
+                case "c":  case "coin":   what = "coin";   break;
+                default:   what = unit;                     break;
+                }
         }
-        if (amount < 1)
+        // 2) 纯数字（整个字符串全是数字），默认 silver
+        else if (sscanf(arg, "%d", amount) == 1 &&
+                 sprintf("%d", amount) == arg)
+        {
+                what = "silver";
+        }
+        // 3) "100g" / "100s" / "100c" 末尾单字母（只在末字符是 g/s/c 时匹配）
+        else if (strlen(arg) >= 2 &&
+                 (arg[<1] == 'g' || arg[<1] == 's' || arg[<1] == 'c') &&
+                 sscanf(arg[0..strlen(arg)-2], "%d", amount) == 1)
+        {
+                switch (arg[<1])
+                {
+                case 'g':  what = "gold";   break;
+                case 's':  what = "silver"; break;
+                case 'c':  what = "coin";   break;
+                }
+        }
+        else
+        {
+                return notify_fail("命令格式：withdraw|qu <数量>[g|s|c]\n");
+        }
+
+        if(amount < 1)
         {
                 return notify_fail("你想取出多少钱？\n");
-        }
-        if(amount >= 100)
-        {
-                return notify_fail("这么大的数目。本店没这么多零散现金。\n");
         }
         if (file_size("/clone/money/" + what + ".c") < 0)
         {
                 return notify_fail("你想取出什么钱？\n");
         }
         what = "/clone/money/" + what;
-        
+
         // Added by zeratul 2001-1-1
         if ( me->query( "balance" ) > me->query( "max_balance" ) )
         	me->set( "balance", me->query( "max_balance" ) );
-        
+
         if ((v = amount * what->query("base_value")) > me->query("balance"))
         {
                return notify_fail("你存的钱不够取。\n");

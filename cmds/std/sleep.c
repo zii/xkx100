@@ -20,12 +20,12 @@ int main(object me, string arg)
 
 	seteuid(getuid());
 
-	if ( (!(fam = me->query("family")) ||
-		fam["family_name"] != "丐帮") &&
-		!(where->query("sleep_room")) ||
-		(where->query("no_sleep_room")) ||
-                (where->query_temp("no_sleep")))
-		return notify_fail("这里不是你能睡的地方！\n");
+	// if ( (!(fam = me->query("family")) ||
+	// 	fam["family_name"] != "丐帮") &&
+	// 	!(where->query("sleep_room")) ||
+	// 	(where->query("no_sleep_room")) ||
+    //             (where->query_temp("no_sleep")))
+	// 	return notify_fail("这里不是你能睡的地方！\n");
 	if( me->query_temp("no_sleep") ) return notify_fail("你现在睡不着觉。\n");
 	if( me->query_temp("noliving") ) return notify_fail("");   // 非活动玩家
 	if( me->is_busy()) return notify_fail("你正忙着呢！\n");
@@ -201,7 +201,8 @@ void wakeup(object me,object where)
 	me->delete("no_get");
 	me->delete("no_get_from");
 	if (!me->query_temp("block_msg/all"))	return;// 已经能看到东西了 就无所谓醒过来
-	if ((me->query("mud_age")-me->query("last_slp"))<120 && me->query("max_jing")>160)
+	//if ((me->query("mud_age")-me->query("last_slp"))<120 && me->query("max_jing")>160)
+	if (0)
 	{
 		//在时间限制内  恢复一半的精气和四分一内力
 		//精气短的比如新手也让恢复一半

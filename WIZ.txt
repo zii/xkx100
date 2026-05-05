@@ -134,7 +134,7 @@
 查看转生次数：
 call <玩家ID> query("scborn/times")
 设置转生次数：
-call <玩家ID> set("scborn/times", 0)
+call <玩家ID> set("scborn/times", 5)
 设置免密
 sppasswd <id> NO
 按房间名查找房间档名：
