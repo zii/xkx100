@@ -27,6 +27,7 @@ mapping global_alias = ([
 	"sk":		"skills",
 	"map":		"map all",
 	"sc": 		"score",
+	"lc": 		"localcmds",
 //	"bai":		"apprentice",
 /////add some/////////
 //	"dating":	"check",
