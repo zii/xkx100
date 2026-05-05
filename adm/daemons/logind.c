@@ -79,7 +79,7 @@ void logon(object ob)
         destruct(ob);
         return;
     }
-    cat(WELCOME);
+    //cat(WELCOME);
     "/cmds/usr/time"->main();
 
     usr = users();
@@ -120,8 +120,8 @@ void logon(object ob)
         return;
     }
 // 计数 Start
-    user_num=howmany_visitor();
-    write("您是侠客行一百自二千零一年一月十四日以来的第"+HIY+chinese_number(user_num+1)+NOR"位访问者。\n");
+    //user_num=howmany_visitor();
+    //write("您是侠客行一百自二千零一年一月十四日以来的第"+HIY+chinese_number(user_num+1)+NOR"位访问者。\n");
     // set_visitor(user_num+1);	// 注释掉访问计数器递增
     if (iplimit>1)
     write("您所在的地址已有"HIY+chinese_number(iplimit-1)+NOR"位玩家在线上。\n");
