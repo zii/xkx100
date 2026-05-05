@@ -14,8 +14,15 @@ int main(object me, string arg)
 
 	if( !arg ) return notify_fail("你要装备什么武器？\n");
 
-	if(this_player()->query_temp("weapon"))
-		return notify_fail("你已经装备武器了。\n");
+	if(this_player()->query_temp("weapon")) {
+		object old = this_player()->query_temp("weapon");
+		string str;
+		if (old->unequip()) {
+			if( !stringp(str = old->query("unwield_msg")) )
+				str = "$N放下手中的$n。\n";
+			message_vision(str, me, old);
+		}
+	}
 
 	if(arg=="all")
 	{
