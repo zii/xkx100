@@ -31,8 +31,25 @@ int main(object me, string arg)
 		return notify_fail("人家现在不想要什么东西。\n");
 	if(sscanf(item, "%d %s", amount, item)==2)
 	{
-	//	if( !objectp(obj = present(item, me)) )	
-		if( !objectp(obj = i_have( me,item )) ) // me have item	
+		// 金钱自动找零：身上没有零钱时从大面额兑换
+		if( !objectp(obj = i_have(me, item)) ||
+		    (obj->query("money_id") && (int)obj->query_amount() < amount) )
+		{
+			string money_file = "/clone/money/" + item;
+			if (file_size(money_file + ".c") > 0)
+			{
+				int base_val = money_file->query("base_value");
+				int total = amount * base_val;
+				if (MONEY_D->player_pay(me, total) == 1)
+				{
+					obj2 = new(money_file);
+					obj2->set_amount(amount);
+					return do_give(me, obj2, who);
+				}
+				return notify_fail("你身上没带够这么多钱。\n");
+			}
+		}
+		if( !objectp(obj = i_have( me,item )) ) // me have item
 			return notify_fail("你身上没有这样东西。\n");
 		if( obj->query("no_drop") )
 			return notify_fail("这样东西不能随便给人。\n");
