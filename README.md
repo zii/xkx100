@@ -40,15 +40,70 @@
     git clone https://github.com/zii/xkx100.git
 
 
-请使用 fluffos 最新版驱动
+请使用 fluffos 最新版驱动：
 
-    driver config.ini
+```bash
+fluffos config.ini
+```
 
-## Docker 运行
+## 运行方式
 
-两种方式：
+优先本地运行（性能最好），如果编译环境受限再使用 Docker。
 
-### 方式一：docker-compose（推荐）
+### macOS 本地运行（推荐）
+
+macOS 上可以直接编译 FluffOS 本地运行，彻底避免容器化的文件系统开销。
+**启动 < 1s，CPU ~0.3%，内存 ~10MB，零延迟。**
+
+#### 安装依赖
+
+```bash
+brew install cmake pkg-config pcre openssl jemalloc icu4c sqlite3 googletest
+```
+
+#### 编译 FluffOS
+
+```bash
+git clone https://github.com/fluffos/fluffos.git
+cd fluffos
+mkdir build && cd build
+ICU_ROOT="/usr/local/opt/icu4c" OPENSSL_ROOT_DIR="/usr/local/opt/openssl" \
+  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPACKAGE_DB_SQLITE=2 -DPACKAGE_DB_MYSQL="" ..
+make -j$(sysctl -n hw.logicalcpu) install
+```
+
+编译后 driver 在 `build/bin/driver`，可拷贝到系统路径：
+
+```bash
+cp build/bin/driver /usr/local/bin/fluffos
+```
+
+> **💡 消除 LPC 编译警告：** 默认编译会启用大量 LPC 编译警告（unused variable 等），这些警告
+> 无害但刷屏。如需清静，编辑 `src/local_options`, 去掉 `PRAGMA_WARNINGS`，然后重新编译即可。
+
+#### 启动
+
+```bash
+cd /path/to/xkx100
+fluffos config.ini
+```
+
+#### 连接
+
+```bash
+telnet localhost 5555   # GBK 编码
+telnet localhost 6666   # UTF-8 编码
+```
+
+#### 预编译二进制
+
+从 GitHub Releases 下载 `fluffos` 二进制文件，`chmod +x` 后即可直接使用，无需自行编译。
+
+### Docker 运行（备选）
+
+本地无法编译 FluffOS 时使用（如 Windows 或环境受限的 macOS）。
+
+#### docker-compose（推荐）
 
 项目已包含 `docker-compose.yml` 配置，默认使用最新版 FluffOS master：
 
@@ -73,9 +128,7 @@ image: ghcr.io/fluffos/fluffos:master    # 最新开发版
 image: ghcr.io/fluffos/fluffos:v2019.20220507  # 稳定版
 ```
 
-### 方式二：直接 docker run
-
-使用 Docker 镜像 `ghcr.io/fluffos/fluffos:v2019.20220507`：
+#### 直接 docker run
 
 ```bash
 cd /path/to/xkx100
@@ -190,3 +243,22 @@ cp -a /clone-source/. /mudlib/clone/
 | 开发改代码 | 直接编辑，实时生效 | 正常，改在宿主机上，重启容器拉新 |
 
 **优势：** 热数据（LPC 源码）在 tmpfs 中读写，冷数据（玩家存档、日志）走 sshfs bind mount，既保证了开发体验（改代码即改即生效），又让高频 I/O 路径达到纯内存速度，甚至优于 FluffOS 直接在原生 ext4 上运行的效果。
+
+## 本地 vs 容器性能对比
+
+macOS 本地直接运行 FluffOS 与通过 Colima/Docker 容器的实测对比：
+
+| 指标 | Colima (sshfs) | Docker (tmpfs) | **本地 fluffos** |
+|------|----------------|----------------|------------------|
+| CPU 占用 | 中（IO wait） | 低 | **~0.3%** |
+| 内存占用 | ~500MB（VM） | ~50MB（容器） | **~10MB** |
+| 进程数 | VM + Docker + 同步脚本 | Docker + driver | **driver 1 个** |
+| 文件 I/O | 网络延迟 10-50ms | 内存级 | **内存级** |
+| 启动时间 | ~30s | ~5s | **< 1s** |
+| 移动卡顿 | 明显 | 轻微 | **无** |
+| 代码热更新 | 需同步脚本 | 直接编辑 | **直接编辑** |
+| 依赖 | Colima + Docker | Docker | **无** |
+
+**结论：** FluffOS 是一个单进程事件循环的古典程序，3MB 二进制跑起来只要 10MB 内存。
+容器化对 Web 应用有意义，对 MUD 这种直接跑在文件系统上的程序属于纯开销。
+macOS 上开发推荐本地编译运行，部署再考虑容器化。

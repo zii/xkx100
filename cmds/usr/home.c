@@ -7,6 +7,40 @@
 
 inherit F_CLEAN_UP;
 
+// 目录 → 地名映射
+mapping area_names = ([
+    "city":"扬州", "shaolin":"少林寺", "wudang":"武当山", "emei":"峨嵋山",
+    "huashan":"华山", "gaibang":"丐帮", "gumu":"古墓", "mingjiao":"明教",
+    "dali":"大理", "xingxiu":"星宿海", "taohua":"桃花岛", "quanzhen":"全真教",
+    "shenlong":"神龙岛", "baituo":"白驼山", "lingjiu":"灵鹫宫", "tiezhang":"铁掌帮",
+    "xueshan":"雪山", "wudujiao":"五毒教", "xiaoyao":"逍遥", "kunlun":"昆仑山",
+    "taishan":"泰山", "henshan":"衡山", "hengshan":"恒山", "songshan":"嵩山",
+    "heimuya":"黑木崖", "lingxiao":"凌霄城", "yunlong":"天地会", "honghua":"红花会",
+    "murong":"姑苏", "nanshaolin":"南少林", "qingcheng":"青城山", "xiakedao":"侠客岛",
+    "jiaxing":"嘉兴", "suzhou":"苏州", "hangzhou":"杭州", "chengdu":"成都",
+    "beijing":"北京", "kaifeng":"开封", "luoyang":"洛阳", "yangzhou":"扬州",
+    "changan":"长安", "fuzhou":"福州", "quanzhou":"泉州", "nanyang":"南阳",
+    "lanzhou":"兰州", "guangzhou":"广州", "xiangyang":"襄阳", "yueyang":"岳阳",
+    "jinshe":"金蛇洞", "meizhuang":"梅庄", "yanziwu":"燕子坞",
+    "liangzhu":"梁祝", "guiyun":"归云庄", "wanjiegu":"万劫谷",
+    "tianlongsi":"天龙寺", "xuedao":"血刀门", "yubifeng":"玉笔峰", "mingyu":"明玉", "bibo":"碧波",
+    "liangshan":"梁山", "nanling":"南岭", "xihu":"西湖", "penglai":"蓬莱",
+]);
+
+string get_area(string room_file)
+{
+    // 从 /d/xxx/... 中提取目录名
+    string *parts = explode(room_file, "/");
+    for (int i = 0; i < sizeof(parts) - 1; i++)
+        if (parts[i] == "d" && sizeof(parts) > i + 1)
+        {
+            string dir = parts[i + 1];
+            string area = area_names[dir];
+            return stringp(area) ? area : dir;
+        }
+    return "";
+}
+
 int main(object me, string arg)
 {
         mapping points;
@@ -88,7 +122,6 @@ int main(object me, string arg)
         }
 
         write("当前回城点：\n");
-        write("━━━━━━━━━━━━━━━━━━━━\n");
         foreach (int n in sort_array(keys(points), 1))
         {
                 room_file = points[n];
@@ -97,9 +130,15 @@ int main(object me, string arg)
                         write(sprintf("  %d. (已不存在)\n", n));
                         continue;
                 }
-                write(sprintf("  %d. %s\n", n, room_file));
+                object room = load_object(room_file);
+                string name = room ? room->query("short") : 0;
+                if (!name || name == "") name = room_file;
+                else {
+                    string area = get_area(room_file);
+                    if (area != "") name = area + name;
+                }
+                write(sprintf("  %d. %-16s %s\n", n, name, room_file));
         }
-        write("━━━━━━━━━━━━━━━━━━━━\n");
         return 1;
 }
 
