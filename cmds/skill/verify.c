@@ -29,14 +29,14 @@ int combat_rating(object sk) {
 int parry_rating(object sk) {
     object tp = this_player();
     if (!tp) return 0;
-    string err = catch {
+    catch {
         mapping a = sk->query_action(tp, 0);
         if (mapp(a) && intp(a["parry"])) {
             int r = -a["parry"] * 10;
             if (function_exists("be_hit_ob", sk)) r += 100;
             return r;
         }
-    };
+    }
     return 0;
 }
 
@@ -47,11 +47,11 @@ int dodge_rating(object sk) {
     int r = (int)(pp * pp * pp * 100);
     // action dodge 修正（反映攻击时的闪避效果）
     if (tp) {
-        string err = catch {
+        catch {
             mapping a = sk->query_action(tp, 0);
             if (mapp(a) && intp(a["dodge"]))
                 r = r * (100 + a["dodge"]) / 100;
-        };
+        }
     }
     return r;
 }
@@ -62,10 +62,10 @@ int force_rating(object sk) {
     // 有 action force 的内功（太玄功等全能型）也算进来
     object _tp = this_player();
     if (_tp) {
-        string _err = catch {
+        catch {
             mapping _a = sk->query_action(_tp, 0);
             if (mapp(_a) && intp(_a["force"])) r += _a["force"];
-        };
+        }
     }
     if (function_exists("hit_ob", sk)) r += 60;
     if (function_exists("be_hit_ob", sk)) r += 40;

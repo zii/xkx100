@@ -93,7 +93,6 @@ void init()
 void greeting(object ob)
 {
         mapping fam;
-        int i ;
         object me;
 
         me = this_object();

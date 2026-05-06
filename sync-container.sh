@@ -11,9 +11,14 @@ echo "监控目录: $WATCH_DIR/{kungfu,d,clone}"
 echo "目标容器: $CONTAINER"
 echo "按 Ctrl+C 停止"
 
+export DOCKER_API_VERSION=1.44
 fswatch -0 "$WATCH_DIR/kungfu" "$WATCH_DIR/d" "$WATCH_DIR/clone" | while IFS= read -r -d '' file; do
   rel="${file#$WATCH_DIR/}"
+  # 跳过编辑器临时文件（vim 原子保存产生的 .tmp. 文件）
+  case "$rel" in
+    *.tmp.*|*~|*.swp) continue ;;
+  esac
   # base64 管道方式（docker cp 在 tmpfs 上建新文件不可靠）
-  base64 "$file" | docker exec -i "$CONTAINER" sh -c 'base64 -d > "/mudlib/'"$rel"'"'
-  echo "[$(date '+%H:%M:%S')] synced: $rel"
+  base64 "$file" 2>/dev/null | docker exec -i "$CONTAINER" sh -c 'base64 -d > "/mudlib/'"$rel"'"' 2>/dev/null && \
+    echo "[$(date '+%H:%M:%S')] synced: $rel"
 done
