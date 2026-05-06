@@ -34,6 +34,7 @@ mapping *action = ({
 });
 
 int valid_enable(string usage) { return usage=="unarmed" || usage=="parry"; }
+int valid_combine(string combo) { return 1; }
 
 int valid_learn(object me)
 {

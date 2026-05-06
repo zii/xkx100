@@ -23,9 +23,9 @@ int perform(object me, object target)
 
 	if( !objectp(target) ) {flag =1;target = offensive_target(me);}
 	
-	if( !target || !target->is_character() || target == me ||	
-//	  	!me->is_fighting(target) ||
-  	!living(target) || target->query_temp("noliving") )
+	if( !target || !target->is_character() || target == me ||
+		!living(target) || target->query_temp("noliving") )
+		return notify_fail("你不能攻击这个人。\n");
 
 	if( environment(me)->query("no_fight") )
 		return notify_fail("这里不能攻击别人! \n");

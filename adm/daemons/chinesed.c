@@ -26,8 +26,28 @@ void remove_translate(string key);
 
 void create()
 {
+	string *lines, line, key, val;
+	int i, p;
+
 	seteuid(getuid());
 	restore();
+	if (!mapp(dict)) dict = ([]);
+	// 从文本文件补全缺失的技能中文名
+	lines = explode(read_file("/data/e2c_fix.txt"), "\n");
+	if (sizeof(lines))
+	{
+		for (i = 0; i < sizeof(lines); i++)
+		{
+			line = lines[i];
+			if (!line || line == "") continue;
+			p = strsrch(line, " ");
+			if (p < 0) continue;
+			key = line[0..p-1];
+			val = line[p+1..strwidth(line)-1];
+			if (undefinedp(dict[key]))
+				dict[key] = val;
+		}
+	}
 }
 
 void remove()
