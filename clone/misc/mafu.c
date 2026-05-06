@@ -338,20 +338,8 @@ int do_ride(string arg)
 	int roomi, roomttl, roadi, roadttl, thistmp, direct;
 	object ob = this_player(), here = environment(ob);
 
-	if (ob->query_temp("marks/horserent")!=1 && ob->query("age")>14 &&
-		!wizardp(ob))
-	{
-		if(ob->query_temp("shout"))
-		{
-			message_vision("马夫对$N说：这位"+RANK_D->query_respect(ob) + "，驿马需要付钱的。\n", ob);
-			return 0;
-		}
-		command("chat 来人啦！"+ob->query("name")+"这个"+RANK_D->query_rude(ob)+"想偷马！\n");
-		ob->set_temp("shout", 1);
-		return 1;
-	}
-	roadttl = sizeof(road);
 	direct = 0;
+		roadttl = sizeof(road);
 // direct = 1 正向走, direct = 2 反向走, direct = 3 马夫位置不对, 无效
 	for (roadi = 0; roadi < roadttl; roadi++)
 	{
@@ -373,6 +361,20 @@ int do_ride(string arg)
 		message_vision("马夫对$N说：这位" +RANK_D->query_respect(ob)+"，看看牌子吧，这里没有去那儿的直达驿马。\n", ob);
 		return 0;
 	}
+		// 自动付钱
+		if (ob->query_temp("marks/horserent") != 1 && ob->query("age") > 14 && !wizardp(ob))
+		{
+			int fee = road[thistmp]["value"];
+			if (ob->can_afford(fee))
+		{
+				ob->pay_money(fee);
+				message_vision("马夫对$N说：好！这位"+RANK_D->query_respect(ob) + "现在就出发吗？那就上马吧。\n", ob);
+				ob->set_temp("marks/horserent", 1);
+			} else {
+				message_vision("马夫对$N说：这位"+RANK_D->query_respect(ob) + "，驿马需要付钱的。\n", ob);
+				return 0;
+			}
+		}
 	horse = hname[random(sizeof(hname))];
 	message_vision("马夫随手给$N牵来一匹" +horse+"。$N翻身跃上马背。动作潇洒利索。\n路边行人一阵起哄：喔噢喔噢。\n"NOR , ob);
 	roomttl = sizeof(road[thistmp]["room"]);

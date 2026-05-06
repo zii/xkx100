@@ -18,7 +18,7 @@ int perform(object me, object target)
    !me->query("can_perform/"+sskill+"/"+pfname) &&
    !me->query_temp("murong/xingyi") &&
    !SCBORN_D->valid_perform(me,sskill,pfname))
-   return notify_fail("你所使用的外功中没有这种功能。\n");
+   return notify_fail("你尚未掌握"+to_chinese(sskill)+"的「"+PNAME+"」，必须先向师父请教。\n");
 
 	if( !objectp(target) ) {flag =1;target = offensive_target(me);}
 	

@@ -288,7 +288,7 @@ int build_skill_aliases(object me) {
     }
 
     int e_cnt = 0, p_cnt = 0;
-    string *excludes = ({ "dodge", "array", "magic", "parry" });
+    string *excludes = ({ "array", "magic", "parry" });
     mapping shown = ([]);
 
     // ── 内功 exert ──
@@ -341,7 +341,7 @@ int show_mine(object me) {
     mapping skill_map = me->query_skill_map();
     string msg = "\n";
     int e_cnt = 0, p_cnt = 0;
-    string *excludes = ({ "dodge", "array", "magic", "parry" });
+    string *excludes = ({ "array", "magic", "parry" });
     mapping shown = ([]);
 
     // ── 内功 exert ──
