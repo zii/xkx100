@@ -46,10 +46,9 @@ int ask_me()
 //              return notify_fail("这个么...,在下不知也。\n");
 
         command("say 苗疆桃花峪瘴气险恶异常，但若带有我先祖所创之《诸葛行军散》当可无恙。\n");
- command("say 这包药要随身携带，切末离身啊，切记，切记！");
+        command("say 这包药要随身携带，切末离身啊，切记，切记！");
         ob = new(__DIR__"obj/xingjunsan");
         ob->move(this_player());
 //        return "拿去吧。";
         return 1;
 }
-

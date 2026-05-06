@@ -50,7 +50,7 @@ void create()
 	set_skill("strike", 150);
 	set_skill("parry", 150);
 	set_skill("blade", 150);
-        set_skill("force", 150);
+    set_skill("force", 150);
 	set_skill("lingboweibu", 220);
 	set_skill("beiming-shengong", 150);
 	set_skill("ruyi-dao", 220);
@@ -78,11 +78,11 @@ void create()
 	set("chat_msg_combat", ({
 		(: perform_action, "dodge.lingbo" :),
 		(: perform_action, "strike.zhong" :),
-		(: perform_action, "hand.duo" :),		
+		(: perform_action, "hand.duo" :),
 		(: exert_function, "shield" :),
 		(: exert_function, "regenerate" :),
 		(: exert_function, "recover" :),
-	}) );	
+	}) );
 
 	create_family("逍遥派", 2, "掌门");
 	set("title","逍遥派第二代大弟子");
@@ -103,8 +103,8 @@ void attempt_apprentice(object ob)
 {
 
 	if (ob->query_int() < 30) {
-		command("shake"+ ob->query("id")); 
-		command("say " + RANK_D->query_respect(ob) + 
+		command("shake"+ ob->query("id"));
+		command("say " + RANK_D->query_respect(ob) +
 			"是否还应该在学问上多下点功夫？");
 		return;
 	}
@@ -116,9 +116,9 @@ void attempt_apprentice(object ob)
 string ask_book()
 {
  object ob;
-	mapping fam; 
+	mapping fam;
 	ob=this_player();
-	if (!(fam = ob->query("family")) 
+	if (!(fam = ob->query("family"))
 		|| fam["family_name"] != "逍遥派")
 	{
 		return"想要秘籍就得加入逍遥派。";
@@ -129,9 +129,9 @@ string ask_book()
 string ask_me()
 {
  object ob;
-	mapping fam; 
+	mapping fam;
 	ob=this_player();
-	if (!(fam = ob->query("family")) 
+	if (!(fam = ob->query("family"))
 		|| fam["family_name"] != "逍遥派")
 	{
 		return"想要知道密道就得加入逍遥派。";

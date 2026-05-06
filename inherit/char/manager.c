@@ -65,12 +65,12 @@ int party_quest_book(object me)
 		file[j][sizeof(file[j])-2..sizeof(file[j])-1] != ".c" ||
 		dir[i]=="gaibang" ||
 		dir[i]=="gaochang" ||
-    dir[i]=="gumu"	||
-    dir[i]=="taohua" ||
-    dir[i]=="heizhao" ||
-    dir[i]=="shenlong" ||
-    dir[i]=="wanjiegu" ||
-    dir[i]=="yanziwu" ||
+		dir[i]=="gumu"	||
+		dir[i]=="taohua" ||
+		dir[i]=="heizhao" ||
+		dir[i]=="shenlong" ||
+		dir[i]=="wanjiegu" ||
+		dir[i]=="yanziwu" ||
 		dir[i]=="death" ||
 		dir[i]=="wizard" ||
 		dir[i]=="working" ||
@@ -97,7 +97,8 @@ int party_quest_book(object me)
 	book->move(room);
 	command("qst "+book->query("name")+"在"+room->query("short")+"(/d/"+dir[i]+"/"+file[j]+")。\n");
 
-	message_vision("$N对着$n说：本门秘籍流落江湖，听说最近在" + to_chinese(dir[i]) + "一带出现。你去把它取回来吧？\n", master, me);
+	message_vision("$N对着$n说：本门秘籍「"+book->query("name")+"」流落江湖，听说最近在" + to_chinese(dir[i]) + "的" + room->query("short") + "(/d/" + dir[i] + "/" + file[j] + ")一带出现。你去把它取回来吧？\n", master, me);
+	//message_vision(book->query("name") + "在" + room->query("short") + "(/d/" + dir[i] + "/" + file[j] + ")。\n");
 	me->set("quest/book/book", book->query("name"));
 	me->set("quest/book/family", me->query("family/family_name"));
 	me->set("quest/book/time", time() + 500 );
@@ -913,7 +914,7 @@ int party_quest_kill(object me)
 {
 	object killer, room, master = this_object();
 	string place;
- 
+
 	int level;
 	int t;
 
@@ -1501,7 +1502,7 @@ int xkd(object me)
 	string first_dir;
 	string *dir;
 	string c_player;
- 
+
 
   if (!me->query("family/family_name"))
    {
@@ -1557,12 +1558,12 @@ int do_qiecuo(string arg)
 {
 	object master = this_object();
 	object me = this_player();
- 
+
 	string special;
- string pfskill,pfmartial,pfarg,pfmsg;
- 
+	string pfskill,pfmartial,pfarg,pfmsg;
+
 	mixed perform_actions = ({});
- int bl,sl,j,num,learn_b,fealty_b;
+ 	int bl,sl,j,num,learn_b,fealty_b;
 
 	fealty_b=(int)me->query("family/fealty");
 

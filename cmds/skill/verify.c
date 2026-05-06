@@ -372,6 +372,11 @@ int show_mine(object me) {
     }
 
     // ── 外功 perform ──
+    if (!mapp(skill_map)) {
+        msg += "你还没有启用任何武功。\n";
+        write(msg);
+        return 1;
+    }
     string *uks = keys(skill_map);
     int has_perform = 0;
     for (int i = 0; i < sizeof(uks); i++) {

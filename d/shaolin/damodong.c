@@ -30,17 +30,17 @@ void init()
 {
 	object me = this_player();
 
-	if ((int)me->query_temp("bamboo/count") == 14 
-	&&  (int)me->query_skill("dodge", 1) >= 30 
-	&&  (int)me->query_skill("dodge", 1) <= 100 
+	if ((int)me->query_temp("bamboo/count") == 14
+	&&  (int)me->query_skill("dodge", 1) >= 30
+	&&  (int)me->query_skill("dodge", 1) <= 100
 	&&  present("bamboo", me) )
 	{
 		me->receive_damage("jing", 20);
 		me->improve_skill("dodge", me->query("int"));
 	}
 
-        add_action("do_mianbi","面壁");	
-        add_action("do_mianbi","mianbi");	
+	add_action("do_mianbi","面壁");
+	add_action("do_mianbi","mianbi");
 }
 
 int do_mianbi()
@@ -48,7 +48,7 @@ int do_mianbi()
 	object me = this_player();
 
 	message_vision("$N面对着达摩洞後半边的石壁跌坐静思，良久，似有所悟。\n", me);
-	
+
 	me->set_busy(10);
 	me->set("shen",0);
 
