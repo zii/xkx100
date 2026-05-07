@@ -85,14 +85,14 @@ int main(object me, string arg)
 			write("你往床上一躺，开始睡觉。\n");
 			write("不一会儿，你就进入了梦乡。\n");
 			me->set_temp("block_msg/all",1);
-			message_vision("$N一歪身，倒在床上，不一会便鼾声大作，进入了梦乡。\n",me);
+			//message_vision("$N一歪身，倒在床上，不一会便鼾声大作，进入了梦乡。\n",me);
 		}
 		else
 		{
 			write("你往地下角落一躺，开始睡觉。\n");
 			write("不一会儿，你就进入了梦乡。\n");
 			me->set_temp("block_msg/all",1);
-			message_vision("$N往地下角落屈身一躺，不一会便鼾声大作，做起梦来。\n",me);
+			//message_vision("$N往地下角落屈身一躺，不一会便鼾声大作，做起梦来。\n",me);
 		}
 		where->add("no_fight", 1);
 		where->add_temp("sleeping_person", 1);
@@ -223,7 +223,7 @@ void wakeup(object me,object where)
 		me->add("neili", me->query("max_neili")/2 - me->query("neili")/2 );
 		me->set("tili", me->query("max_tili") );
 		me->set("last_slp",me->query("mud_age"));//记录最近一次完全睡眠的时间
-		message_vision("$N一觉醒来，精力充沛地活动了一下筋骨。\n",me);
+		//message_vision("$N一觉醒来，精力充沛地活动了一下筋骨。\n",me);
 		me->set_temp("block_msg/all", 0);
 		tell_object(me, "你一觉醒来，只觉精力充沛。该活动一下了。\n");
 	}

@@ -43,7 +43,7 @@ int main(object me, string arg)
 
 	write("你坐下来运气用功，一股内息开始在体内流动。\n");
 
-	message_vision("$N盘膝坐下，开始修炼内力。\n", me);
+	//message_vision("$N盘膝坐下，开始修炼内力。\n", me);
 
 	// 一次完成全部转换
 	neili_gain = exercise_cost;
@@ -70,7 +70,8 @@ int main(object me, string arg)
 	if(living(me) && !me->query_temp("noliving") )
 		me->add("qi", -exercise_cost);
 
-	message_vision("$N运功完毕，深深吸了口气，站了起来。\n", me);
+	//message_vision("$N运功完毕，深深吸了口气，站了起来。\n", me);
+	write("你运功完毕，深深吸了口气，站了起来。\n");
 
 	if ((int)me->query("neili") > (int)me->query("max_neili") * 2)
 		me->set("neili", (int)me->query("max_neili") * 2);
