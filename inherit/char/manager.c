@@ -329,7 +329,9 @@ int party_quest_betrayer(object me)
 	dir = get_dir("/d/");
 	i = random(sizeof(dir));
 	file = get_dir("/d/"+dir[i]+"/");
+	if (!sizeof(file)) { message_vision("$N对着$n说：等等吧，等下山弟子回山后你再来看看。\n", master, me); return 1; }
 	j = random(sizeof(file));
+	if (!file[j] || sizeof(file[j]) < 2) { message_vision("$N对着$n说：等等吧，等下山弟子回山后你再来看看。\n", master, me); return 1; }
 
 	if (//strsrch(file[j], ".c") == -1 ||
 		file[j][sizeof(file[j])-2..sizeof(file[j])-1] != ".c" ||
@@ -432,13 +434,12 @@ int accept_quest_betrayer(object me, object obj)
 
 	cost = time() - ((int)me->query("quest/betrayer/time")-500); //花了多少时间完成
 
-//  e_bonus = 200 + random( 200 );
-		e_bonus = 200 + random( 100 );
+	e_bonus = 200 + random( 100 );
     e_bonus += 50*me->query_temp("mebetrayernum");
     e_bonus += e_bonus * cost / 1200; // 叛徒1200秒就会自动跑走
 //	p_bonus = (int)random(e_bonus/4)+35;
     p_bonus = (int)random(e_bonus/2)+35;
-  	s_bonus = random(10)+ 15* times;
+  	s_bonus = random(200)+ 15* times;
     me->add("combat_exp",e_bonus);
     me->add("potential",p_bonus);
     me->add("family/fealty",s_bonus);
@@ -1568,8 +1569,8 @@ int do_qiecuo(string arg)
 	fealty_b=(int)me->query("family/fealty");
 
 	num=(int)me->query("perform/number")+1;
-	if (num<4) learn_b= num * num * 100;
-	else learn_b=1600;
+	if (num<4) learn_b= num * 100;
+	else learn_b=400;
 
 	if (!living(me)||!living(master)) return 0;
 	if (me->query("family/family_name") !=master->query("family/family_name"))
@@ -1658,15 +1659,15 @@ int do_qiecuo(string arg)
 	}
 	else
 	{
-      		if (!arg)
+      	if (!arg)
 		{
 			message_vision("$N对着$n说：你要切磋什么？\n", master, me);
 	     		return 1;
 		}
-      		if (!(special=me->query_skill_mapped(arg)))
+      	if (!(special=me->query_skill_mapped(arg)))
 		{
 			message_vision("$N对着$n说：你只能从基本技能中请教特殊技能。\n", master, me);
-	     		return 1;
+	     	return 1;
 		}
 	  	if(arg=="force")
 		{

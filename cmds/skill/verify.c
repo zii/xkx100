@@ -358,7 +358,7 @@ int show_mine(object me) {
                     if (strsrch(fn, ".c") < 0) continue;
                     string f = replace_string(fn, ".c", "");
                     e_cnt++;
-                    msg += sprintf("        " HIC "exert %-16s" NOR " => " HIY "e%d" NOR "\n", f, e_cnt);
+                    msg += sprintf("        " HIC "exert %-10s" NOR " => " HIY "e%d" NOR "\n", f, e_cnt);
                 }
             }
         }

@@ -9,7 +9,7 @@ inherit F_UNIQUE;
 void create()
 {
 	set_name(BLU"屠龙刀"NOR, ({ "dragon blade", "blade", "dao" }));
-	set_weight(30000);
+	set_weight(10000);
 	if (clonep())
 		set_default_object(__FILE__);
 	else {
