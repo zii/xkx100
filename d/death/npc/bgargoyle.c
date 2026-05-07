@@ -72,10 +72,10 @@ void death_stage(object ob, int stage)
 	inv = all_inventory(ob);
 	for (i = 0; i < sizeof(inv); i++)
 		DROP_CMD->do_drop(ob, inv[i]);
-	
-	if (!mailbox=present("mailbox",ob))
-	mailbox = new("/clone/misc/mailbox");
-	mailbox->move(ob);
+
+	// if (!mailbox=present("mailbox",ob))
+	// mailbox = new("/clone/misc/mailbox");
+	// mailbox->move(ob);
   if (time()-ob->query_temp("LAST_PKER_TIME")<7200)
        ob->move("/d/city/shilijie4");
    else
@@ -84,5 +84,3 @@ void death_stage(object ob, int stage)
 		"你忽然发现前面多了一个人影，不过那人影又好像已经在那里\n"
 		"很久了，只是你一直没发觉。\n", environment(ob), ob);
 }
-
-
