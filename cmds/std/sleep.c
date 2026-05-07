@@ -114,7 +114,9 @@ int main(object me, string arg)
 		// 	sleeptime=sleeptime*1/2;
 		// }
 		// if (sleeptime < 10) sleeptime=10;
-		me->start_call_out((:call_other,__FILE__,"wakeup",me,where:),sleeptime);
+		//me->start_call_out((:call_other,__FILE__,"wakeup",me,where:),sleeptime);
+		// 瞬醒
+		wakeup(me, where);
 		return 1;
 	}
 	if(!objectp(obj = present(arg, where)))

@@ -40,11 +40,13 @@ int main(object me, string arg)
 		return notify_fail("那不是活物。\n");
 
 	my = ob->query_entire_dbase();
-	printf("{jing:%d,max_jing:%d,jingli:%d,max_jingli:%d,"
-		"qi:%d,max_qi:%d,neili:%d,max_neili:%d}\n",
-		my["jing"], my["max_jing"],
+	printf("{jing:%d,max_jing:%d,eff_jing:%d,"
+		"jingli:%d,max_jingli:%d,"
+		"qi:%d,max_qi:%d,eff_qi:%d,"
+		"neili:%d,max_neili:%d}\n",
+		my["jing"], my["max_jing"], my["eff_jing"],
 		my["jingli"], my["max_jingli"],
-		my["qi"], my["max_qi"],
+		my["qi"], my["max_qi"], my["eff_qi"],
 		my["neili"], my["max_neili"]);
 
 	return 1;
