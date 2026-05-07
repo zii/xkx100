@@ -285,19 +285,19 @@ void check_user(object ob)
 	if( my["qi"] > my["eff_qi"] ) my["qi"] = my["eff_qi"];
 	if( my["neili"] > my["max_neili"] ) my["neili"] = my["max_neili"];
 
-	exper = to_float(ob->query("combat_exp"));
-	if ( !(skill_status = ob->query_skills()) ) return;
-	sname  = keys(skill_status);
-
-	for(i=0; i<sizeof(skill_status); i++)
-	{
-		level = skill_status[sname[i]];
-		if( pow(to_float(level), 3.0) / 10.0 > exper &&
-			exper > 100.0 && SKILL_D(sname[i])->type()!="knowledge" &&
-			sname[i] != "qiankun-danuoyi" )
-		{
-			level = ceil( pow( exper*10.0, 0.333333) );
-			ob->set_skill(sname[i], level);
-		}
-	}
+// 	exper = to_float(ob->query("combat_exp"));
+// 	if ( !(skill_status = ob->query_skills()) ) return;
+// 	sname  = keys(skill_status);
+// 
+// 	for(i=0; i<sizeof(skill_status); i++)
+// 	{
+// 		level = skill_status[sname[i]];
+// 		if( pow(to_float(level), 3.0) / 10.0 > exper &&
+// 			exper > 100.0 && SKILL_D(sname[i])->type()!="knowledge" &&
+// 			sname[i] != "qiankun-danuoyi" )
+// 		{
+// 			level = ceil( pow( exper*10.0, 0.333333) );
+// 			ob->set_skill(sname[i], level);
+// 		}
+// 	}
 }
