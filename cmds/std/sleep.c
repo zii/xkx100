@@ -222,7 +222,7 @@ void wakeup(object me,object where)
 		me->set("qi", me->query("eff_qi"));
 		me->set("jing", me->query("eff_jing"));
 //		if (me->query("neili") < me->query("max_neili"))
-		me->add("neili", me->query("max_neili")/2 - me->query("neili")/2 );
+		//me->add("neili", me->query("max_neili")/2 - me->query("neili")/2 );
 		me->set("tili", me->query("max_tili") );
 		me->set("last_slp",me->query("mud_age"));//记录最近一次完全睡眠的时间
 		//message_vision("$N一觉醒来，精力充沛地活动了一下筋骨。\n",me);

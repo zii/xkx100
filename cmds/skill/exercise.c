@@ -1,6 +1,7 @@
 // exercise.c
 inherit F_CLEAN_UP;
 
+#include <ansi.h>
 #include <skill.h>
 
 int exercising(object me);
@@ -83,7 +84,7 @@ int main(object me, string arg)
 		if (max_neili_gain > 2) max_neili_gain = 2;
 		me->add("max_neili", 1 + max_neili_gain);
 		me->set("neili", (int)me->query("max_neili"));
-		write("你的内力增加了！！\n");
+		write(HIC"你的内力增加了！！\n"NOR);
 	}
 
 	return 1;

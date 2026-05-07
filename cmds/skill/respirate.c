@@ -1,6 +1,7 @@
 // respirate.c
 inherit F_CLEAN_UP;
 
+#include <ansi.h>
 #include <skill.h>
 
 
@@ -85,7 +86,7 @@ int respirating(object me)
 		{
 			me->add("max_jingli", 1);
 			me->set("jingli", (int)me->query("max_jingli"));
-			write("你的精力增加了！！\n");
+			write(HIC "你的精力增加了！！\n" NOR);
 			return 0;
 		}
 	}
