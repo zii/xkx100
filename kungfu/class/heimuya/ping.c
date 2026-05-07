@@ -261,7 +261,7 @@ int ask_heal()
 {
 	object ob = this_player();
 	object me = this_object();
- 
+
 
         if(me->is_fighting() || me->query_temp("busy"))
         {
@@ -331,7 +331,7 @@ int ask_poison()
 {
 	object ob = this_player();
 	object me = this_object();
- 
+
 
         if(me->is_fighting() || me->query_temp("busy"))
 	{
@@ -469,7 +469,7 @@ int ask_over()
 	mon = new("/clone/money/silver");
 	mon->set_amount(exp/10);
 	mon->move(me);
-	me->start_busy(3);
+	//me->start_busy(3);
 	tell_object(me,"你被奖励了："HIR+chinese_number(exp)+NOR"点经验，"HIR+chinese_number(pot)+NOR"点潜能和"HIW+chinese_number(exp)+NOR"两白银。\n");
 	bonus=(int) me->query("potential");
 	if (me->query("combat_exp")>=MAX_EXP)

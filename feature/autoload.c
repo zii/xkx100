@@ -11,6 +11,7 @@ void save_autoload()
 	object *inv;
 	int i, j;
 	mixed param;
+	string *wielded = ({});
 
 	inv = all_inventory();
 	autoload = allocate(sizeof(inv));
@@ -18,9 +19,12 @@ void save_autoload()
 		param = inv[i]->query_autoload();
 		autoload[j] = base_name(inv[i]);
 		if( stringp(param) ) autoload[j] += ":" + param;
+		if( inv[i]->query("equipped") == "wielded" )
+			wielded += ({ base_name(inv[i]) });
 		j++;
 	}
 	autoload = autoload[0..j-1];
+	this_object()->set("autoload_wielded", wielded);
 }
 
 void restore_autoload()
@@ -28,6 +32,7 @@ void restore_autoload()
 	int i;
 	object ob;
 	string file, param, err;
+	string *wielded = this_object()->query("autoload_wielded");
 
 	if( !pointerp(autoload) ) return;
 
@@ -52,12 +57,16 @@ void restore_autoload()
 				file, this_object()->query("name"), err));
 		// 自动穿上护甲类物品
 		catch(ob->wear());
+		// 仅当退出时拿着此武器才自动 wield
+		if( pointerp(wielded) && member_array(file, wielded) != -1 )
+			ob->wield();
 	}
 	else {
-	        write("你觉得似乎失落了什么重要的东西，最好通知一下巫师。\n"); 
-                log_file("AUTOLOAD", sprintf("Fail to autoload %s of %s, error %s\n",
-                         autoload[i], this_object()->query("name"), err));
+		write("你觉得似乎失落了什么重要的东西，最好通知一下巫师。\n");
+		log_file("AUTOLOAD", sprintf("Fail to autoload %s of %s, error %s\n",
+			autoload[i], this_object()->query("name"), err));
 	}
 	}
 	clean_up_autoload();		// To save memory.
+	this_object()->delete("autoload_wielded");
 }

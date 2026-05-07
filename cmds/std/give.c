@@ -108,25 +108,26 @@ int do_give(object me, object obj, object who)
 	if (me->query("quest/betrayer/name")
 		&& (strsrch(obj->query("name"), me->query("quest/betrayer/name")) >= 0)
 		&& who->accept_quest_betrayer(me, obj))
-		return 1;
+		{ me->recalc_encumbrance(); return 1; }
 	if (me->query("quest/book/book")
 		&& (strsrch(obj->query("name"), me->query("quest/book/book")) >= 0)
 		&& who->accept_quest_book(me, obj))
-		return 1;
+		{ me->recalc_encumbrance(); return 1; }
 	if (me->query("quest/thief/name")
 		&& (strsrch(obj->query("name"), me->query("quest/thief/name")) >= 0)
 		&& who->accept_quest_thief(me, obj))
-		return 1;
+		{ me->recalc_encumbrance(); return 1; }
 	if (me->query("quest/kill/name")
 		&& (strsrch(obj->query("name"), me->query("quest/kill/name")) >= 0)
 		&& who->accept_quest_kill(me, obj))
-		return 1;
+		{ me->recalc_encumbrance(); return 1; }
 	if( !interactive(who) && !who->accept_object(me, obj) )
 		return notify_fail("对方不想接受这样东西。\n");
-	if (!objectp(obj)) return 1;
+	if (!objectp(obj)) { me->recalc_encumbrance(); return 1; }
 	if (obj->query("id") == "bao wu")
 	{
 		destruct(obj);
+		me->recalc_encumbrance();
 		return 1;
 	}
 // 入帮会的投名状
@@ -136,8 +137,9 @@ int do_give(object me, object obj, object who)
 	{
 		message_vision("$N拿出" + obj->short() + "给$n。\n", me, who);
 		destruct(obj);
-        	me->save();
-	        if (userp(who)) who->save();
+		me->recalc_encumbrance();
+		me->save();
+		if (userp(who)) who->save();
 		return 1;
 	}
 	else if( obj->move(who) )

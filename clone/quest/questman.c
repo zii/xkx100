@@ -12,7 +12,7 @@ void create()
 	set_name("  ", ({ "betrayer" }));
 	set("attitude", "friendly");
 
-	set("chat_chance", 40);
+	set("chat_chance", 4);
 	set("chat_msg", ({
                 (:call_out,"random_move",0:),
 	}) );
@@ -35,12 +35,14 @@ int random_move()
 {
         mapping exits;
         string *dirs, dir, dest;
+	object dest_room;
 
         if( !exits=environment(this_object())->query("exits") ) return 0;
         dirs = keys(exits);
         dir = dirs[random(sizeof(dirs))];
         dest = exits[dir];
-        if( find_object(dest)->query("no_fight")) return 0;
+	if( !(dest_room = find_object(dest)) ) return 0;
+	if( dest_room->query("no_fight")) return 0;
         if( this_object()->is_fighting() ) return 0;
         command("go " + dir);
         return 1;

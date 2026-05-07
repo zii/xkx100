@@ -376,7 +376,7 @@ int party_quest_betrayer(object me)
   	 return 1;
 	}
 	command("qst "+obj->query("name")+"("+obj->query("id")+")"+"在"+room->query("short")+"(/d/"+dir[i]+"/"+file[j]+")。\n");
-	message_vision("$N对着$n说：本门归山弟子回报，本门叛徒" + obj->query("name") + "在" + to_chinese(dir[i]) + "一带出没。你敢去把这叛徒的人头给我取回来么？\n", master, me);
+	message_vision("$N对着$n说：本门归山弟子回报，本门叛徒" + obj->query("name") + "在" + to_chinese(dir[i]) + "(/d/"+dir[i]+"/"+file[j]+")一带出没。你敢去把这叛徒的人头给我取回来么？\n", master, me);
 	me->set("quest/betrayer/name", obj->query("name"));
 	me->set("quest/betrayer/family", obj->query("family/family_name"));
 	me->set("quest/betrayer/time", time() + 500);

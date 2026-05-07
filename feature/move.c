@@ -44,6 +44,18 @@ nomask void set_weight(int w)
 // checking in move().
 nomask int weight() { return weight + encumb; }
 
+// 遍历背包物品重算负重，用于修复 destruct 等路径导致的负重偏差
+nomask void recalc_encumbrance()
+{
+	object *inv;
+	int i, total = 0;
+
+	inv = all_inventory(this_object());
+	for (i = 0; i < sizeof(inv); i++)
+		total += inv[i]->weight();
+	encumb = total;
+}
+
 varargs int move(mixed dest, int silently)
 {
  object ob, env, *inv, me = this_object();

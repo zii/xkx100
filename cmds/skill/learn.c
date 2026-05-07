@@ -24,7 +24,7 @@ int main(object me, string arg)
 	int improve_points;
 	 mixed flag;
 	 int i;
-	 
+
 	if (me->is_busy())
 		return notify_fail("你现在正忙着呢。\n");
 	if (environment(me)->is_chat_room())
@@ -43,7 +43,7 @@ int main(object me, string arg)
   notify_fail( ob ->name() + reject_msg[random(sizeof(reject_msg))] );
 	if( !me->is_apprentice_of(ob) && !(ob->recognize_apprentice(me,skill)) )
 	{
-		return	0;	
+		return	0;
 	}
 	if( !master_skill = ob->query_skill(skill, 1) )
 		return notify_fail("这项技能你恐怕必须找别人学了。\n");
@@ -75,7 +75,7 @@ int main(object me, string arg)
 	if ((SKILL_D(skill)->type())!="knowledge" && my_skill >= 250)
 	  return notify_fail(ob->name() + "说道：你" + to_chinese(skill) +"的功力已经是非同凡响了，我就不再教你，你自己多研究吧。\n");
 	notify_fail("依你目前的能力，没有办法学习这种技能。\n");
-	if( !SKILL_D(skill)->valid_learn(me) ) 
+	if( !SKILL_D(skill)->valid_learn(me) )
 	return 0;
 
 	jing_cost = 150 / (int)me->query("int");
@@ -87,7 +87,7 @@ int main(object me, string arg)
 
 	if( (me->query("potential") - me->query("learned_points")) < times )
 		return notify_fail("你的潜能不够学习这么多次了。\n");
-	printf(HIC"你向%s请教了"+chinese_number(times)+"句有关「%s」的疑问。\n"NOR, ob->name(), to_chinese(skill));
+	printf("你向%s请教了"+chinese_number(times)+"句有关「%s」的疑问。\n", ob->name(), to_chinese(skill));
 	if( ob->query("env/no_teach") )
 		return notify_fail("但是" + ob->name() + "现在并不准备回答你的问题。\n");
 	tell_object(ob, sprintf("%s向你请教有关「%s」的问题。\n",
@@ -108,7 +108,7 @@ int main(object me, string arg)
 		{
 			return notify_fail("也许是缺乏实战经验，你对"+ob->name()+"的回答总是无法领会。\n");
 		}
-    if (!me->query("env/auto_regenerate") && 
+    if (!me->query("env/auto_regenerate") &&
         				me->query("jing")< jing_cost * times)
 							return notify_fail("你今天太累了，结果什么也没有学到。\n");
 //	if( (int)me->query("jing") > jing_cost * times )
@@ -129,7 +129,7 @@ int main(object me, string arg)
              break;
               }
         }
- 				me->receive_damage("jing", jing_cost );    
+ 				me->receive_damage("jing", jing_cost );
 				me->add("learned_points", 1);
 
 			}

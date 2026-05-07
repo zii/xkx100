@@ -1089,22 +1089,22 @@ void killer_reward(object killer, object victim)
 			else if(student_num == 2) temp = "2";
 			write_file("/data/FENG", temp, 1);
 */
-// Give the death penalty to the dying user.
-		victim->add("shen", -(int)victim->query("shen") / 10);
-		if (victim->query("max_neili")>2)
-		{
-			victim->add("max_neili", -2);
-		}
-		victim->add("combat_exp", -(int)victim->query("combat_exp")/50);
-		victim->delete("vendetta");
+// 取消死亡惩罚：不掉技能不扣经验不掉内力
+// 		victim->add("shen", -(int)victim->query("shen") / 10);
+// 		if (victim->query("max_neili")>2)
+// 		{
+// 			victim->add("max_neili", -2);
+// 		}
+// 		victim->add("combat_exp", -(int)victim->query("combat_exp")/50);
+// 		victim->delete("vendetta");
 		if( victim->query("thief") )
 			victim->set("thief", (int)victim->query("thief") / 2);
-		if( (int)victim->query("potential") > (int)victim->query("learned_points"))
-			victim->add("potential",((int)victim->query("learned_points") - (int)victim->query("potential"))/2 );
-		victim->skill_death_penalty();
-		if(victim->query_temp("LAST_PKER_TIME"))
-			victim->delete_temp("LAST_PKER_TIME");
-		victim->save();
+// 		if( (int)victim->query("potential") > (int)victim->query("learned_points"))
+// 			victim->add("potential",((int)victim->query("learned_points") - (int)victim->query("potential"))/2 );
+// 		victim->skill_death_penalty();
+// 		if(victim->query_temp("LAST_PKER_TIME"))
+// 			victim->delete_temp("LAST_PKER_TIME");
+// 		victim->save();
 
 		bls = 10;
 

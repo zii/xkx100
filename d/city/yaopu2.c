@@ -47,8 +47,8 @@ int do_fenyao()
 	int bonus,exp,pot;
 
 	if((int)me->query_temp("fengyaoover"))
-		return notify_fail("你的药已经分完了，快去找老板要报酬吧。\n");	
-	if( (int)me->query_temp("fengyao") ) 
+		return notify_fail("你的药已经分完了，快去找老板要报酬吧。\n");
+	if( (int)me->query_temp("fengyao") )
 		return notify_fail("你已经在工作了。\n");
 	if (!(int)(me->query_temp("fengyaobegin")))
 		return notify_fail("外间有人在喊：里面的人在做什么？快走快走。\n");
@@ -72,33 +72,32 @@ void del_fengyao(object me, object mon, int bonus, int exp, int pot)
 		{
 			message_vision( HIY"哎呀，$N累的满头大汗，一不小心分错了药。\n"NOR,me);
 			me->add("qi",-5);
-			me->start_busy(1);
+			//me->start_busy(1);
 			me->set_temp("fengyaow",1);
 		}
 		else
 		{
 			switch(random(5))
 			{
-				case 0: 
-					message_vision("只见$N随手一扔，药居然刚好扔进药箱，好运气呀。\n",me); 
+				case 0:
+					message_vision("只见$N随手一扔，药居然刚好扔进药箱，好运气呀。\n",me);
 					me->add("qi",-1);
 					break;
-				case 1: 
+				case 1:
 					message_vision("$N分的好仔细呀，还要检查一次。\n",me);
 					me->add("qi",-3);
 					break;
 				default:
-					message_vision("$N看着手上的药材，想了半天终于还是没有找到该放的地方。\n",me); 
+					message_vision("$N看着手上的药材，想了半天终于还是没有找到该放的地方。\n",me);
 					me->add("qi",-4);
 					break;
 			}
-			me->start_busy(1);
+			//me->start_busy(1);
 		}
 		xunhuan--;
-	} 
+	}
 	write(HIW"\n 终于完成了，累死人了，好了终于可以去休息一下了.\n对了我还要去拿报酬呢，可不能白干。\n"NOR);
 	me->set_temp("fengyaoover", 1);
-	me->start_busy(3);
+	//me->start_busy(3);
 	return ;
 }
-
