@@ -48,7 +48,8 @@ int main(object me, string arg)
 	me->set_temp("respirate_cost", respirate_cost);
 	//message_vision("$N盘膝坐下，开始吐纳炼精。\n", me);
 	write("你盘膝坐下，开始吐纳炼精。\n");
-	me->start_busy(( : respirating:), ( : halt_respirate:));
+	//me->start_busy(( : respirating:), ( : halt_respirate:));
+	respirating(me);
 
 	return 1;
 }
@@ -76,7 +77,7 @@ int respirating(object me)
 		return 0;
 	else {
 		if ((int)me->query("max_jingli") >
-                    ((int)me->query_skill("force",1) * 10))
+                    ((int)me->query_skill("force") * 10))
 		{
 			write("你的精力修为似乎已经达到了瓶颈。\n");
 			me->set("jingli", (int)me->query("max_jingli"));

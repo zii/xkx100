@@ -40,7 +40,14 @@ void continue_action()
 		busy--;
 		return;
 	} else if( functionp(busy) ) {
-		if( !evaluate(busy, this_object()) ) {
+		mixed result;
+	if( catch(result = evaluate(busy, this_object())) ) {
+		busy = 0;
+		old_busy = 0;
+		interrupt = 0;
+		return;
+	}
+	if( !result ) {
 //			busy = 0;
 			busy = old_busy;
 			old_busy = 0;

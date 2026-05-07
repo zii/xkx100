@@ -115,8 +115,9 @@ private void net_dead()
 	// Stop fighting, we'll be back soon.
 	remove_all_enemy();
 
-	set_temp("netdead", 1);
-	if( userp(this_object()) )
+		set_temp("netdead", 1);
+		save();
+		if( userp(this_object()) )
 	{
 		call_out("user_dump", NET_DEAD_TIMEOUT, DUMP_NET_DEAD);
 		if (!wizardp(this_object()) || !this_object()->query("env/invisibility"))
