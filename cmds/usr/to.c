@@ -1,4 +1,4 @@
-// go.c
+// to.c
 
 inherit F_CLEAN_UP;
 
@@ -29,7 +29,7 @@ int main(object me, string arg)
 	if(!goto_inventory && environment(obj))
 		obj = environment(obj);
 
-	if( !obj ) return notify_fail("这个物件没有环境可以 go。\n");
+	if( !obj ) return notify_fail("这个物件没有环境可以 to。\n");
 
 	if( stringp(msg = me->query("env/msg_mout")) )
 	{
@@ -51,7 +51,7 @@ int main(object me, string arg)
 int help(object me)
 {
 write(@HELP
-指令格式 : go [-i] <目标>
+指令格式 : to [-i] <目标>
  
 这个指令会将你传送到指定的目标. 目标可以是一个living 或房间
 的档名. 如果目标是living , 你会被移到跟那个人同样的环境.
