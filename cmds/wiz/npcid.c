@@ -15,15 +15,18 @@ string extract_npc_name(string content)
     for (int i = 0; i < sizeof(lines); i++)
     {
         string line = lines[i];
-        int pos, q2;
 
-        pos = strsrch(line, "set_name(\"");
+        int pos = strsrch(line, "set_name(");
         if (pos < 0) continue;
 
-        q2 = strsrch(line[pos + 10..], "\"");
+        // 跳过 set_name( 后的空格再找 "
+        int q1 = strsrch(line[pos + 9..], "\"");
+        if (q1 < 0) continue;
+
+        int q2 = strsrch(line[pos + 9 + q1 + 1..], "\"");
         if (q2 < 1) continue;
 
-        return line[pos + 10..pos + 10 + q2 - 1];
+        return line[pos + 9 + q1 + 1..pos + 9 + q1 + q2];
     }
     return 0;
 }
@@ -35,15 +38,18 @@ string extract_npc_id(string content)
     for (int i = 0; i < sizeof(lines); i++)
     {
         string line = lines[i];
-        int pos, q2;
 
-        pos = strsrch(line, "({ \"");
+        int pos = strsrch(line, "({");
         if (pos < 0) continue;
 
-        q2 = strsrch(line[pos + 4..], "\"");
+        // 跳过 ({ 后的空格再找 "
+        int q1 = strsrch(line[pos + 2..], "\"");
+        if (q1 < 0) continue;
+
+        int q2 = strsrch(line[pos + 2 + q1 + 1..], "\"");
         if (q2 < 1) continue;
 
-        return lower_case(line[pos + 4..pos + 4 + q2 - 1]);
+        return lower_case(line[pos + 2 + q1 + 1..pos + 2 + q1 + q2]);
     }
     return 0;
 }
@@ -77,6 +83,54 @@ string *extract_npc_refs(string content, string room_dir)
         if (col < 0) continue;
 
         string left = line[0..col - 1];
+
+        // 处理 MACRO("arg")+"/file" 宏路径 (如 CLASS_D("songshan")+"/bo")
+        // 检测 left 中是否包含 [A-Z_]+("...") 模式
+        int cd = -1;
+        for (int ci = 1; ci < sizeof(left); ci++)
+            if (left[ci] == '(' && left[ci - 1] >= 'A' && left[ci - 1] <= 'Z')
+                { cd = ci; break; }
+        if (cd >= 0)
+        {
+            // 回溯到宏名起点
+            int ms = cd - 1;
+            while (ms >= 1 && (left[ms - 1] == '_' ||
+                   (left[ms - 1] >= 'A' && left[ms - 1] <= 'Z')))
+                ms--;
+            string macro = left[ms..cd - 1];
+
+            // 提取宏参: ("...")
+            int cd_q1 = strsrch(left[cd..], "\"");
+            if (cd_q1 < 0) continue;
+            int cd_q2 = strsrch(left[cd + cd_q1 + 1..], "\"");
+            if (cd_q2 < 0) continue;
+            string m_arg = left[cd + cd_q1 + 1..cd + cd_q1 + cd_q2];
+
+            // 在 ) 后面找文件名引号
+            int paren = strsrch(left, ")");
+            int fn_q1 = strsrch(left[paren..], "\"");
+            if (fn_q1 < 0) continue;
+            int fn_q2 = strsrch(left[paren + fn_q1 + 1..], "\"");
+            if (fn_q2 < 0) continue;
+            string file_part = left[paren + fn_q1 + 1..paren + fn_q1 + fn_q2];
+            // 去掉 file_part 前导 /
+            if (sizeof(file_part) && file_part[0] == '/')
+                file_part = file_part[1..];
+
+            // 宏展开规则
+            string prefix = 0;
+            if (macro == "CLASS_D")     prefix = "/kungfu/class/";
+            else if (macro == "SKILL_D")    prefix = "/kungfu/skill/";
+            else if (macro == "CONDITION_D") prefix = "/kungfu/condition/";
+            if (!prefix) continue;  // 未知宏，跳过
+
+            string path = prefix + m_arg + "/" + file_part;
+            if (strsrch(path, ".") < 0)
+                path += ".c";
+            result += ({ path });
+            continue;
+        }
+
         int q1 = strsrch(left, "\"");
         if (q1 < 0) continue;
 
@@ -280,11 +334,14 @@ int main(object me, string arg)
                     location_name = get_room_short(location_file);
                     if (!location_name) location_name = location_file;
 
-                    // 有更多房间则额外显示
+                    // 有更多房间则全格式输出
                     for (int k = 1; k < sizeof(rooms); k++)
                     {
                         string rn = get_room_short(rooms[k]);
-                        write(sprintf("  ← %s  %s\n", rooms[k], rn ? "(" + rn + ")" : ""));
+                        write(sprintf("%-30s  %-10s %-10s  %s\n",
+                            file_path, name,
+                            rn ? rn : "-",
+                            rooms[k]));
                     }
                 }
             }
