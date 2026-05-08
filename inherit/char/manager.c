@@ -797,7 +797,7 @@ int party_quest_thief(object me)
 	me->set("quest/thief/name", obj->query("fname"));
 	me->set("quest/thief/family", obj->query("family/family_name"));
 	me->set("quest/thief/time", time() + 300 );
-	message_vision("$N对着$n说：本门弟子回报，我派周围有陌生人出现。你去查看一下是不是别派的奸细？\n", master, me);
+	message_vision("$N对着$n说：本门弟子回报，我派周围有陌生人出现。你去查看一下是不是别派的奸细？在"+room->query("short")+"(/d/"+dir[k]+"/"+file[j]+")\n", master, me);
 	me->set( "quest/thief/obj", obj );
 	me->delete( "quest/thief/finished" );
 	command("qst "+obj->query("name")+"在"+room->query("short")+"(/d/"+dir[k]+"/"+file[j]+")。\n");
@@ -854,14 +854,12 @@ int accept_quest_thief(object me, object obj)
 	cost = time() - ((int)me->query("quest/thief/time")-300); //花了多少时间完成
 
 	e_bonus = (int)me->query_temp("methiefnum");
-	e_bonus = e_bonus*100 + 200 + random(50);
-	if (e_bonus > 1500)
-		e_bonus = 1250+random(250);
-  e_bonus += e_bonus* cost / 1200;
-  e_bonus -= e_bonus/3;
+	e_bonus = e_bonus*100 + 20000 + random(50);
+	e_bonus += e_bonus* cost / 1200;
+	e_bonus -= e_bonus/3;
 
-	p_bonus = (int)random(e_bonus/10)+100;
-	s_bonus = random(10) + 15 * times;
+	p_bonus = (int)random(e_bonus/10)+10000;
+	s_bonus = random(100) + 15 * times;
 
 	me->add("combat_exp", e_bonus);
 	me->add("potential", p_bonus);

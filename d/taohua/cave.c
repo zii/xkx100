@@ -26,7 +26,7 @@ LONG
 	]) );
 	set("objects",([
 		__DIR__"npc/zhou" : 1,
-	]) ); 
+	]) );
 	set("coor/x", 9210);
 	set("coor/y", -3050);
 	set("coor/z", 0);
@@ -69,7 +69,6 @@ int do_pick(string arg)
 	me = this_player();
 	if( !arg || arg!="book" ) return notify_fail("你要拿什么？\n");
 	if ( present("zhou botong",environment(me)))
-	
 	{
 		message_vision(YEL "周伯通两眼一瞪，哼了一声道：别在我这里偷偷摸摸！我周伯通还没死哪！\n" NOR,me) ;
 		return 1 ;
@@ -91,4 +90,3 @@ message("channel:rumor", MAG"【谣言】某人："+this_player()->query("name")
 		return notify_fail("你要拿起那本书，却发现你看花了眼，其实那里什么都没有。\n");
 	return 1;
 }
-

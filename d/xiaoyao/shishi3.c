@@ -39,26 +39,26 @@ void init()
 
 int do_strike(string arg)
 {
-        object me;
+	object me;
 
-        me=this_player();
-        if(!arg || arg!="shelf") return 0;
-        message_vision("$N看着看着，忽然猛的一掌向书架打去！震得书架“克拉，克拉”的响了几声。\n",me);
+	me=this_player();
+	if(!arg || arg!="shelf") return 0;
+	message_vision("$N看着看着，忽然猛的一掌向书架打去！震得书架“克拉，克拉”的响了几声。\n",me);
 	if ( random(100) > 94)
 	{
-message_vision("忽然，$N听到一个声音嘿嘿地奸笑起来：“你上当啦！”\n",me);
-message_vision("接着，不知道哪里射出一支毒箭，射中了$N！\n",me);
+		message_vision("忽然，$N听到一个声音嘿嘿地奸笑起来：“你上当啦！”\n",me);
+		message_vision("接着，不知道哪里射出一支毒箭，射中了$N！\n",me);
 		me->die();
 	}
-	if (random(100)==50 && !present("miji1",me) && query("book1_count")>=1)
+	if (random(100)>=50 && !present("miji1",me) && query("book1_count")>=1)
 	{
-     		add("book1_count", -1);
+     	add("book1_count", -1);
 		me=new("/clone/book/strike_book");
 		me->move(__DIR__"shishi3");
 		message("channel:rumor", MAG"【谣言】某人："+this_player()->query("name")+"得到了掌法总谱啦。\n"NOR, users());
 		tell_object(me, "突然啪地一声，有一件东西从书架上掉了下来！\n");
 	}
-        return 1; 
+    return 1;
 }
 
 int do_move(string arg)
@@ -71,5 +71,5 @@ int do_move(string arg)
 	message_vision("$N用力把小床移开，发现里面竟然有一条秘密通道！\n",me);
 	me->move(__DIR__"midao1");
 	tell_object(me,"接着是一阵轰隆隆的响声，你定神一看，自己已经处身在秘密通道中了。\n");
-	return 1; 
+	return 1;
 }

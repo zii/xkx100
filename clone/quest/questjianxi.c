@@ -48,7 +48,7 @@ void create()
 	set_name(name_msg[i], ({ long_id[i]}) );
 	set("gender", random(2)>0 ? "女性" : "男性" );
 	set("attitude", "friendly");
-	set("chat_chance", 30);
+	set("chat_chance", 3);
         set("chat_msg", ({
 	  (:call_out,"random_move",0:),
         	}) );
@@ -79,10 +79,10 @@ int ask_me(object who)
 
 	if( this_object()->query("owner") == me->query("id"))
 	{
-		message_vision(HIY"$N眼中突然闪过惊惧的目光，双眼冒火般瞪着$n，大声喊道："+RANK_D->query_self_rude(ob)+"就是"+ob->query("fname")+"！"+RANK_D->query_rude(me)+"！纳命来吧！\n"NOR, ob, me);		
-		me->start_busy(1);	
-    ob->fight_ob(me); 	
-//		me->fight_ob(ob);	
+		message_vision(HIY"$N眼中突然闪过惊惧的目光，双眼冒火般瞪着$n，大声喊道："+RANK_D->query_self_rude(ob)+"就是"+ob->query("fname")+"！"+RANK_D->query_rude(me)+"！纳命来吧！\n"NOR, ob, me);
+		me->start_busy(1);
+    ob->fight_ob(me);
+//		me->fight_ob(ob);
 		if (ob->query_temp("asked")) return 1;
 		if (me->query("combat_exp")>10000000)
 			ob->add_temp("apply/dodge",250);
@@ -92,13 +92,13 @@ int ask_me(object who)
       ob->add_temp("apply/dodge",150);
     else if (me->query("combat_exp")>1000000)
       ob->add_temp("apply/dodge",100);
-    else 
+    else
       ob->add_temp("apply/dodge",50);
 		ob->set("title", ob->query("family_name") + "奸细");
 		ob->set("name", ob->query("fname"));
 		if ( mapp(map_status = ob->query_skill_map()) ) {
 			mname  = keys(map_status);
-	
+
 			for(i=0; i<sizeof(map_status); i++) {
 				perform_actions = get_dir( SKILL_D(map_status[mname[i]]) + "/" );
 				for ( j = 0; j < sizeof( perform_actions ); j++ )
@@ -112,8 +112,8 @@ int ask_me(object who)
 				}
 			}
 		}
-		set( "chat_chance_combat", 60);		
-		set( "chat_msg_combat", combat_actions );		
+		set( "chat_chance_combat", 60);
+		set( "chat_msg_combat", combat_actions );
     ob->set_temp("asked",1);
 	}
 	else
@@ -145,8 +145,8 @@ void init()
 int accept_hit(object me)
 {
 	notify_fail(HIW"不是你要抓的人，凑什么热闹！\n"NOR);
-	if( this_object()->query("owner") == me->query("id") 
-	&& this_object()->query_temp("asked")) 
+	if( this_object()->query("owner") == me->query("id")
+	&& this_object()->query_temp("asked"))
 	{
 		me->kill_ob(this_object());
 		return 1;
@@ -162,7 +162,7 @@ int do_halt()
 {
 	object me = this_player();
 	object ob = this_object();
-	
+
 	if ( me->is_fighting(ob)  )
 	{
 		tell_object( me, HIR"奸细未除，怎能临阵退缩？\n"NOR );

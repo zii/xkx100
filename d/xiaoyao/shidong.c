@@ -49,7 +49,7 @@ int do_push(string arg)
 	if(random((int)me->query("kar")) < 10 ||
 		me->query_skill("beiming-shengong",1) <= 40 )
 	{
-                write("那石壁推不动的。\n");
+        write("那石壁推不动的。\n");
 		return 1;
 	};
 	write("果然是一道门，缓缓移开，露出一洞来。\n");
