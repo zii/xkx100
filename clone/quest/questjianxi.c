@@ -80,20 +80,20 @@ int ask_me(object who)
 	if( this_object()->query("owner") == me->query("id"))
 	{
 		message_vision(HIY"$N眼中突然闪过惊惧的目光，双眼冒火般瞪着$n，大声喊道："+RANK_D->query_self_rude(ob)+"就是"+ob->query("fname")+"！"+RANK_D->query_rude(me)+"！纳命来吧！\n"NOR, ob, me);
-		me->start_busy(1);
-    ob->fight_ob(me);
+		//me->start_busy(1);
+    	ob->fight_ob(me);
 //		me->fight_ob(ob);
 		if (ob->query_temp("asked")) return 1;
 		if (me->query("combat_exp")>10000000)
 			ob->add_temp("apply/dodge",250);
-    else if (me->query("combat_exp")>5000000)
-      ob->add_temp("apply/dodge",200);
-    else if (me->query("combat_exp")>3000000)
-      ob->add_temp("apply/dodge",150);
-    else if (me->query("combat_exp")>1000000)
-      ob->add_temp("apply/dodge",100);
-    else
-      ob->add_temp("apply/dodge",50);
+		else if (me->query("combat_exp")>5000000)
+			ob->add_temp("apply/dodge",200);
+		else if (me->query("combat_exp")>3000000)
+			ob->add_temp("apply/dodge",150);
+		else if (me->query("combat_exp")>1000000)
+			ob->add_temp("apply/dodge",100);
+		else
+			ob->add_temp("apply/dodge",50);
 		ob->set("title", ob->query("family_name") + "奸细");
 		ob->set("name", ob->query("fname"));
 		if ( mapp(map_status = ob->query_skill_map()) ) {
@@ -114,7 +114,7 @@ int ask_me(object who)
 		}
 		set( "chat_chance_combat", 60);
 		set( "chat_msg_combat", combat_actions );
-    ob->set_temp("asked",1);
+    	ob->set_temp("asked",1);
 	}
 	else
 		message_vision(HIY"$N眼中寒光一闪，马上又变得漠然了，只是奇怪地看着$n。\n"NOR, ob, me);

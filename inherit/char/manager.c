@@ -497,9 +497,9 @@ object create_thief( object me )
 	mapping skl;
 	string *skillname;
 	int skilllvl,topexp;
- int inc_exp,inc_lvl,i,j;
+ 	int inc_exp,inc_lvl,i,j;
 	object *inv;
- string  weapon_type;
+ 	string  weapon_type;
 	string *masters = ({
 	"baituo/ouyangfeng",	//lingshe-zhangfa	shexing-diaoshou hamagong
 	"dali/duanzc",	//duanyun-fu		sun-finger
@@ -745,10 +745,10 @@ int party_quest_thief(object me)
 		}
 	}
 
-/* Move to dest place */
+	/* Move to dest place */
 	dir = get_dir("/d/");
-//	for (i = 0; i < sizeof(dir); i++)
-// 为了照顾南少林(shaolin是nanshaolin字符串的子集)，所以从后读起
+	//	for (i = 0; i < sizeof(dir); i++)
+	// 为了照顾南少林(shaolin是nanshaolin字符串的子集)，所以从后读起
 	for (i = sizeof(dir)-1; i >= 0; i--)
 	{
 		if (strsrch(master->query("startroom"), dir[i]) >= 0)
@@ -780,14 +780,14 @@ int party_quest_thief(object me)
 		// tell_object(find_player("qingyun"),"出错。\nerr="+err);
 		return 1;
 	}
-  if (!obj ||
-   obj->query("family_name") == me->query("family/family_name") ||
-  !obj->move(room))
-   {
-   	if (objectp(obj)) destruct(obj);
-   	message_vision("$N对着$n说：我这里有点事要忙，等会儿我再看看吧。\n", master, me);
-    return 1;
-   }
+	if (!obj ||
+		obj->query("family_name") == me->query("family/family_name") ||
+		!obj->move(room))
+	{
+		if (objectp(obj)) destruct(obj);
+		message_vision("$N对着$n说：我这里有点事要忙，等会儿我再看看吧。\n", master, me);
+		return 1;
+	}
 	if (!master->query_temp("thiefs")) master->set_temp("thiefs", 1);
 	else master->add_temp("thiefs", 1);
 	if (!me->query_temp("methiefnum"))
@@ -858,7 +858,7 @@ int accept_quest_thief(object me, object obj)
 	e_bonus += e_bonus* cost / 1200;
 	e_bonus -= e_bonus/3;
 
-	p_bonus = (int)random(e_bonus/10)+10000;
+	p_bonus = (int)random(e_bonus/10)+20000;
 	s_bonus = random(100) + 15 * times;
 
 	me->add("combat_exp", e_bonus);

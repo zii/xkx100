@@ -24,12 +24,12 @@ int perform(object me, object target)
    return notify_fail("你所使用的外功中没有这种功能。\n");
 
 	if( !objectp(target) ) {flag =1;target = offensive_target(me);}
-	
-	if( !target || !target->is_character() || target == me ||	
+
+	if( !target || !target->is_character() || target == me ||
 	  	!me->is_fighting(target) ||
   	!living(target) || target->query_temp("noliving") )
 		return notify_fail(PNAME"只能对战斗中的对手使用。\n");
-		
+
 	if (!objectp(weapon = me->query_temp("weapon")) ||
 		(string)weapon->query("skill_type") != "blade")
 		return notify_fail(HIY "你必须用刀才能施展。\n" NOR);
@@ -53,10 +53,10 @@ int perform(object me, object target)
 
 	extra = me->query_skill("ruyi-dao",1)/6;
 	if (fam_type(me)=="xiaoyao")	extra *= 2;
-	me->add_temp("apply/attack", extra);	
+	me->add_temp("apply/attack", extra);
 	me->add_temp("apply/damage", extra);
         me->add("neili", -200);
-        
+
         msg = HIY "$N一声长笑，只觉世事如意，豪气满胸，哪管什么是非荣辱，反手一刀砍出！"NOR;
        	COMBAT_D->do_attack(me,target, me->query_temp("weapon"),TYPE_REGULAR,msg);
 
@@ -70,8 +70,8 @@ int perform(object me, object target)
       	COMBAT_D->do_attack(me,target, me->query_temp("weapon"),TYPE_REGULAR,msg);
 
         me->start_busy(1);
-	me->add_temp("apply/attack", -extra);
-	me->add_temp("apply/damage", -extra);
+		me->add_temp("apply/attack", -extra);
+		me->add_temp("apply/damage", -extra);
         return 1;
 }
 string name() {return replace_string(replace_string(PNAME,"「",""),"」","");}
@@ -92,4 +92,3 @@ HELP
 	);
 	return 1;
 }
-
