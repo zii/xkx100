@@ -238,11 +238,11 @@ void wakeup(object me,object where)
 //	call_out("del_sleeped", 1, me);//两次睡觉不管怎样都限制 这里限制1s
 	me->start_call_out((:call_other,__FILE__,"del_sleeped",me:),1);
 
-	if (where->query("no_fight") >= 2)
+	if (to_int(where->query("no_fight")) >= 2)
 		where->add("no_fight", -1);
 	else
 		if ((!where->query("sleep_room") && !where->query("hotel")) ||
-			where->query("no_fight")==1 )
+			to_int(where->query("no_fight"))==1 )
 			where->delete("no_fight");
 
 	where->add_temp("sleeping_person", -1);
