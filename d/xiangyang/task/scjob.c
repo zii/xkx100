@@ -23,8 +23,15 @@ int ask_shoucheng()
 	}
 	if((int)me->query_temp("guosc_mis_flag") > 0 )
 	{
-		tell_object(me,"郭靖说道：“你不是已有任务了吗？”\n");
-		return 1;
+		if ((int)me->query_condition("guosc_mis") > 0)
+		{
+			tell_object(me,"郭靖说道：“你不是已有任务了吗？”\n");
+			return 1;
+		}
+		// condition 已过期（死亡被清除），清理卡死的任务
+		me->delete_temp("guosc_mis_flag");
+		me->delete_temp("guosc_mis_num");
+		me->delete_temp("guosc_mis_where");
 	}
 	if ((int)me->query("combat_exp")<100000)
 	{
