@@ -20,16 +20,17 @@ void create()
 	set("vendor_goods", ({
 		__DIR__"obj/piqiu",
 	}));
-	set("chat_chance", 20);
+	set("chat_chance", 3);
 	set("chat_msg", ({
 		(: random_move :)
 	}) );
 	setup();
 	carry_object(__DIR__"obj/piqiu")->wear();
+		carry_object(__DIR__"obj/piqiu");
 }
 void init()
-{	
-  
+{
+
 
 	add_action("do_buy", "buy");
 	add_action("do_list", "list");
