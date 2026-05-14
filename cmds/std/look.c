@@ -178,7 +178,7 @@ string build_minimap(object env)
 	mapping exits;
 	string current, _n, _s, _e, _w, _nw, _ne, _sw, _se;
 	string line1, line2, line3, line4, line5, pad_left, result;
-	string n_conn, s_conn;
+	string n_conn, s_conn, we_conn, ew_conn;
 	int i, cw, ww, ew, center, right_edge, nw_center, ne_center, pad_n;
 
 	if (!mapp(exits = env->query("exits")))
@@ -193,27 +193,29 @@ string build_minimap(object env)
 	current = HIG + clean_color(env->query("short")) + NOR;
 
 	n_conn = "│";
-	s_conn = "↓";
+	s_conn = "│";
+	we_conn = "────";
+	ew_conn = "────";
 
-	if (exits["north"]) { LOAD_ROOM(_n, "north"); }
-	else if (exits["northup"]) { LOAD_ROOM(_n, "northup"); }
-	else if (exits["northdown"]) { LOAD_ROOM(_n, "northdown"); }
+	if (exits["north"]) { LOAD_ROOM(_n, "north"); n_conn = "│"; }
+	else if (exits["northup"]) { LOAD_ROOM(_n, "northup"); n_conn = "↑"; }
+	else if (exits["northdown"]) { LOAD_ROOM(_n, "northdown"); n_conn = "↓"; }
 	else if (exits["enter"]) { LOAD_ROOM(_n, "enter"); n_conn = HIR"∧"NOR; }
 	else if (exits["up"]) { LOAD_ROOM(_n, "up"); n_conn = HIR"↑"NOR; }
 
 	if (exits["south"]) { LOAD_ROOM(_s, "south"); }
-	else if (exits["southup"]) { LOAD_ROOM(_s, "southup"); }
-	else if (exits["southdown"]) { LOAD_ROOM(_s, "southdown"); }
+	else if (exits["southup"]) { LOAD_ROOM(_s, "southup"); s_conn = "↑"; }
+	else if (exits["southdown"]) { LOAD_ROOM(_s, "southdown"); s_conn = "↓"; }
 	else if (exits["down"]) { LOAD_ROOM(_s, "down"); s_conn = HIR"↓"NOR; }
 	else if (exits["out"]) { LOAD_ROOM(_s, "out"); s_conn = HIR"∨"NOR; }
 
 	if (exits["east"]) { LOAD_ROOM(_e, "east"); }
-	else if (exits["eastup"]) { LOAD_ROOM(_e, "eastup"); }
-	else if (exits["eastdown"]) { LOAD_ROOM(_e, "eastdown"); }
+	else if (exits["eastup"]) { LOAD_ROOM(_e, "eastup"); ew_conn = "───→"; }
+	else if (exits["eastdown"]) { LOAD_ROOM(_e, "eastdown"); ew_conn = "───→"; }
 
 	if (exits["west"]) { LOAD_ROOM(_w, "west"); }
-	else if (exits["westup"]) { LOAD_ROOM(_w, "westup"); }
-	else if (exits["westdown"]) { LOAD_ROOM(_w, "westdown"); }
+	else if (exits["westup"]) { LOAD_ROOM(_w, "westup"); we_conn = "←───"; }
+	else if (exits["westdown"]) { LOAD_ROOM(_w, "westdown"); we_conn = "←───"; }
 
 	LOAD_ROOM(_nw, "northwest");
 	LOAD_ROOM(_ne, "northeast");
@@ -249,9 +251,9 @@ string build_minimap(object env)
 	line2 = result;
 
 	result = line3;
-	if (_w) result += _w + "────";
+	if (_w) result += _w + we_conn;
 	result += current;
-	if (_e) result += "────" + _e;
+	if (_e) result += ew_conn + _e;
 	line3 = result;
 
 	result = line4;

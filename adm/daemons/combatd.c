@@ -246,6 +246,25 @@ varargs int skill_power(object ob, string skill, int usage)
 		return (power+exp)/80*(dex+ob->query("dex"));
 }
 
+// 整数平方根（用于战斗奖励计算）
+int int_sqrt(int x)
+{
+    int r;
+    if (x <= 0) return 0;
+    r = x;
+    while (r * r > x)
+        r = (r + x / r) / 2;
+    return r;
+}
+
+// 根据经验计算奖励基数
+int reward_base(int exp)
+{
+    int r = int_sqrt(exp) / 5;
+    if (r < 5) r = 5;
+    return r;
+}
+
 // do_attack()
 //
 // Perform an attack action. This function is called by fight() or as an
@@ -384,7 +403,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 
 		if (dp < ap && (!userp(victim) || !userp(me)) && random(your["jing"] * 100 / your["max_jing"] + your["int"]) > 50)
 		{
-			your["combat_exp"] += 1;
+			your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
 			// 限制基本功夫上限
 			if (victim->query_skill("dodge", 1) < 300)
 				victim->improve_skill("dodge", 1);
@@ -394,7 +413,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 		if ((ap < dp) && !userp(me))
 		{
 			if (random(my["int"]) > 15)
-				my["combat_exp"] += 1;
+				my["combat_exp"] += reward_base(my["combat_exp"]);
 			me->improve_skill(attack_skill, random(my["int"]));
 		}
 		damage = RESULT_DODGE;
@@ -455,7 +474,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 			// 若按pp算奖励 那么恢复上面两行 注释下一行
 			if (dp < ap && (!userp(victim) || !userp(me)) && random(your["jing"] * 100 / your["max_jing"] + your["int"]) > 50)
 			{
-				your["combat_exp"] += 1;
+				your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
 				// 限制基本功夫上限
 				if (victim->query_skill("parry", 1) < 300)
 					victim->improve_skill("parry", 1);
@@ -644,18 +663,18 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 				// 修改乘系数，降低增加潜能的几率。 Modified by Constant Jan 16 2001
 				if ((ap < dp) && (random(my["jing"] * 30 / my["max_jing"] + my["int"]) > 30))
 				{
-					my["combat_exp"] += 1;
+					my["combat_exp"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]);
 					if (my["potential"] - my["learned_points"] < 100000)
-						my["potential"] += 1;
+						my["potential"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]);
 					// 限制基本功夫上限
 					if (me->query_skill(attack_skill, 1) < 300)
 						me->improve_skill(attack_skill, 1);
 				}
-				if (random(your["max_qi"] + your["qi"]) < damage)
+				if (random(2))
 				{
-					your["combat_exp"] += 1;
+					your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
 					if (your["potential"] - your["learned_points"] < 100000)
-						your["potential"] += 1;
+						your["potential"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
 				}
 			}
 		}
@@ -1147,6 +1166,13 @@ void killer_reward(object killer, object victim)
 		killer->add("MKS", 1);
 		bls = 1;
 	}
+			// 战斗击杀小额奖励（仅意思一下，鼓励 fight 不鼓励 kill）
+			if (interactive(killer))
+			{
+				int kb = reward_base(victim->query("combat_exp")) / 4;
+				if (kb < 1) kb = 1;
+				killer->add("combat_exp", kb);
+			}
    if (victim->query("id")==killer->query("last_die_by_id"))
       {
 			tell_object(killer,sprintf("你历尽千辛万苦，终于杀死了%s，报了血海深仇。\n", victim->name(1)));
