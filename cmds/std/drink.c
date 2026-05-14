@@ -18,18 +18,30 @@ int main(object me, string arg)
 		return notify_fail("你已经喝太多了，再也灌不下一滴水了。\n");
 	if(!arg)
 	{
-		obj = environment(me);
-		if(!obj->query("resource/water"))
-			return notify_fail("这地方可没水。\n");
-	
-		if((string)obj->query("drink_msg"))
-			message_vision(obj->query("drink_msg"), me);
-		else message_vision("$N捧起一些清水，慢慢喝了下去。\n", me);
-		me->add("water", 20);
-		if( obj->query("liquid/drink_func") ) return 1;
-		return 1;
+		foreach(object ob in all_inventory(me))
+		{
+			if (ob->query("liquid") && ob->query("liquid/remaining") > 0)
+			{
+				obj = ob;
+				break;
+			}
+		}
+
+		if (!obj)
+		{
+			obj = environment(me);
+			if(!obj->query("resource/water"))
+				return notify_fail("你身上没有能喝的东西，这里也没有水源。\n");
+
+			if((string)obj->query("drink_msg"))
+				message_vision(obj->query("drink_msg"), me);
+			else message_vision("$N捧起一些清水，慢慢喝了下去。\n", me);
+			me->add("water", 20);
+			if( obj->query("liquid/drink_func") ) return 1;
+			return 1;
+		}
 	}
-	
+
 	else if(!objectp(obj = present(arg, me)) )
 		return notify_fail("你身上没有这样东西。\n");
 	if(!obj->query("liquid") )
@@ -77,6 +89,7 @@ int help(object me)
     这个指令就是喝，补充消耗的水分。但要注意有些饮料可能是带毒的。
     如果你身上带着器皿且里面还有水，可以drink <器皿>
     如果你所在的地方有水源的话，可以直接用drink来喝水。
+    不带参数时会自动从背包中找能喝的东西，找不到再尝试水源。
 	
 HELP
 	);
