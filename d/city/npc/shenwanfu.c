@@ -19,7 +19,7 @@ void create()
 	set("long", "沈万福是一个白胖子，脸上总是笑呵呵的，象一尊弥勒佛。看他的样子
 不象是个买卖人，然而如果你仔细看看他那双眯缝的笑眼，就会发现里
 面同样闪动着一丝狡黠的光芒。他就是这家白衣铺的老板。\n");
-	set("chat_chance", 50);
+	set("chat_chance", 5);
 	set("chat_msg", ({
 		"沈万福道：这里就是扬州城啦，您家没有来过么？\n",
 		"沈万福道：啊，这位客官，听您的口音是……北方……南方……西边……到底是哪儿的人啊？\n",
@@ -42,7 +42,7 @@ void create()
 		CLOTH_DIR+"cloth/mabukuanshan",
 		CLOTH_DIR+"cloth/shabuzhizhui",
 		CLOTH_DIR+"cloth/zhifengkuanshan",
-		CLOTH_DIR+"cloth/nenlvchoushan", 
+		CLOTH_DIR+"cloth/nenlvchoushan",
 		CLOTH_DIR+"cloth/danhuangshayi",
 		CLOTH_DIR+"cloth/yinhongshanzi",
 		CLOTH_DIR+"cloth/sahuaao",
@@ -59,15 +59,15 @@ void create()
 
 int do_gongzuo()
 {
-	object me;	
-	me = this_player(); 
-	
+	object me;
+	me = this_player();
+
 	if (me->query("combat_exp")<MIN_EXP)
 	{
 		command("say 这里都是精细活，你现在还干不了。\n");
 		return 1;
 	}
-	
+
 	if (me->query("combat_exp")>=MAX_EXP)
 	{
 		command("say 这种小事不敢劳您大驾。\n");
@@ -78,7 +78,7 @@ int do_gongzuo()
 		tell_object(me,"快去把布匹熨好后交给我吧。\n");
 		return 1;
 	}
-	message_vision(CYN"沈万福对$N说道：现在熨好的布匹不够用了，你就到后面的库房里去熨些布来。\n"NOR,me); 
+	message_vision(CYN"沈万福对$N说道：现在熨好的布匹不够用了，你就到后面的库房里去熨些布来。\n"NOR,me);
 	me->set_temp("gongzuo/yunbu", 1);
 	return 1;
 }
@@ -86,7 +86,7 @@ int accept_object(object me, object ob)
 {
 	object ob1;
 	int add_exp,add_pot,add_score;
-	if (strsrch(ob->query("name"), "熨好的布") < 0) 
+	if (strsrch(ob->query("name"), "熨好的布") < 0)
 	{
 		command("say 你别来蒙我啦，这是熨好的布吗？\n");
 	}
@@ -114,11 +114,11 @@ int accept_object(object me, object ob)
 		me->add("score",add_score);
 		ob1 = new("/clone/money/silver");
 		ob1->set_amount(add_score);
-		ob1->move(me);	
+		ob1->move(me);
 		tell_object(me,HIW"你得到了:"
 			+ chinese_number(add_exp) + "点实战经验，"
 			+ chinese_number(add_pot) + "点潜能，"
-			+ chinese_number(add_score) + "点江湖阅历。\n"NOR);				
+			+ chinese_number(add_score) + "点江湖阅历。\n"NOR);
 		call_out("destroying", 1, this_object(), ob);
 		return 1;
 	}
