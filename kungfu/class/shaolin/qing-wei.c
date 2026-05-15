@@ -74,6 +74,7 @@ void attempt_apprentice(object ob)
 		command ("say 阿弥陀佛！贫僧就收下你做『俗家弟子』了。");
 	}
 	command("say 阿弥陀佛，善哉！善哉！");
-	command("recruit " + ob->query("id"));
+	ob->delete_temp("pending/apprentice");
+	this_object()->set_temp("pending/recruit", ob);
 }
 

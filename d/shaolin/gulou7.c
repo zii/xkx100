@@ -54,7 +54,6 @@ int do_hit(string arg)
 		message_vision("$N一不小心敲到自己头上了。\n", me);
 		me->unconcious();
 	}
-
 	else
 	{
 		mapping mine;
@@ -78,8 +77,7 @@ int do_out(string arg)
 {
         object me;
 
-
-int i, ging_cost, qi_cost;
+		int i, ging_cost, qi_cost;
 
         me = this_player();
         if (me->is_busy()) return notify_fail("你正忙着呢。\n");

@@ -14,8 +14,20 @@ int main(object me, string arg)
 		return notify_fail("你太累了，实在没力气吃什么了。\n");
 	if(me->is_busy() || me->is_fighting())
 		return notify_fail("你正忙着呢。\n");
-	if(!arg) return notify_fail("你要吃什么东西？\n");
-	if(!objectp(obj = present(arg, me)) )
+	if(!arg)
+	{
+		foreach(object ob in all_inventory(me))
+		{
+			if (ob->query("food_supply") && ob->query("food_remaining") > 0)
+			{
+				obj = ob;
+				break;
+			}
+		}
+		if (!obj)
+			return notify_fail("你身上没有能吃的东西。\n");
+	}
+	else if(!objectp(obj = present(arg, me)) )
 	{
 		if(objectp(obj = present(arg, environment(me))) &&
 			!obj->is_character())
@@ -61,6 +73,7 @@ int help(object me)
 指令格式 : eat | chi <物品名称>
  
     这个指令就是吃，补充消耗的食物。但要注意有些食物可能是带毒的。
+    不带参数时会自动从背包中找能吃的东西。
  
 HELP
 	);

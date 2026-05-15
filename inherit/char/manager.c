@@ -147,8 +147,10 @@ int accept_quest_book(object me, object obj)
 	cost = time() - ((int)me->query("quest/book/time")-500); //花了多少时间完成
 
 	e_bonus += e_bonus * cost /250; // cost 最高1500  也就是四倍
-	p_bonus = 12 + random( e_bonus / 8 );
-	s_bonus = random(10)+ 10 * times;
+	//p_bonus = 12 + random( e_bonus / 8 );
+	p_bonus = 12 + random( e_bonus  );
+	//s_bonus = random(10)+ 10 * times;
+	s_bonus = random(400)+ 10 * times;
 
 	me->add("combat_exp",e_bonus);
 	me->add("potential",p_bonus);

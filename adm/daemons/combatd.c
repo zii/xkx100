@@ -665,7 +665,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 				{
 					my["combat_exp"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]);
 					if (my["potential"] - my["learned_points"] < 100000)
-						my["potential"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]);
+						my["potential"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]) * 2;
 					// 限制基本功夫上限
 					if (me->query_skill(attack_skill, 1) < 300)
 						me->improve_skill(attack_skill, 1);
@@ -674,7 +674,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 				{
 					your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
 					if (your["potential"] - your["learned_points"] < 100000)
-						your["potential"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
+						your["potential"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]) * 2;
 				}
 			}
 		}

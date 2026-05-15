@@ -15,8 +15,8 @@ int exert(object me, object target)
 		return notify_fail("你正忙着呢！\n");
 	if((int)me->query_skill("xixing-dafa", 1) > 20)
 		return notify_fail("你现在不必散功。\n");
-	if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2)
-		return notify_fail("你受伤过重，只怕一运真气便有生命危险！\n");
+	//if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2)
+	//	return notify_fail("你受伤过重，只怕一运真气便有生命危险！\n");
 
 	message_vision( HIY"$N坐下来开始散功：“当令丹田常如空箱，恒似深谷，空箱可贮物，深谷可容水。若有内息，散之于任脉诸穴。”\n" NOR, me);
 	me->start_busy(5);

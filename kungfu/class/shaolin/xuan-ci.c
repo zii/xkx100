@@ -127,7 +127,8 @@ void attempt_apprentice(object ob)
 	if ( ob_fam["generation"] == (my_fam["generation"] + 1) && name[0..0] == "澄")
 	{
 		command("say " + ob_fam["master_name"] + "的徒弟怎麽跑到我这儿来了，哈哈哈 !");
-		command("recruit " + ob->query("id"));
+		ob->delete_temp("pending/apprentice");
+		this_object()->set_temp("pending/recruit", ob);
 	}
 	else
 	{

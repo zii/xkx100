@@ -35,8 +35,8 @@ int exert(object me,object target)
 	if( (int)me->query("neili") < 100 )
 		return notify_fail("你的真气不够。\n");
 
-	if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2 )
-		return notify_fail("你已经受伤过重，只怕一运真气便有生命危险！\n");
+	//if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2 )
+	//	return notify_fail("你已经受伤过重，只怕一运真气便有生命危险！\n");
 
 	if ((int)me->query_skill("hamagong", 1) < 50)
 		return notify_fail("你的蛤蟆功修为还不够。\n");

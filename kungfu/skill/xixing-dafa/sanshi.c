@@ -24,8 +24,8 @@ int exert(object me, object target)
 		return notify_fail("你的气不够。\n");
 	if((int)me->query("neili") < 400)
 		return notify_fail("你的真气不够。\n");
-	if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2)
-		return notify_fail("你受伤过重，只怕一运真气便有生命危险！\n");
+	//if( (int)me->query("eff_qi") < (int)me->query("max_qi") / 2)
+	//	return notify_fail("你受伤过重，只怕一运真气便有生命危险！\n");
 
 	write( HIW "你坐下来开始运功炼制丹药。\n" NOR);
 	message("vision",

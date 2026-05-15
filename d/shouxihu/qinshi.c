@@ -13,7 +13,7 @@ void create()
 水栏槛。槛外疏柳，横卧水际；水面微波，倒影摇曳。
 LONG );
 	set("exits", ([
-		"southeast" : __DIR__"luqiao",
+		"southeast" : "/d/city/luqiao",
 	]));
 	set("outdoors", "yangzhouw");
 	set("no_clean_up", 0);

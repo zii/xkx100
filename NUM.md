@@ -6,7 +6,7 @@
 reward_base = max(5, sqrt(npc_exp) / 5)
 ```
 
-每命中一次 NPC，玩家获得 `reward_base` 点 combat_exp 和 potential。
+每命中一次 NPC，玩家获得 `reward_base` 点 combat_exp 和 `reward_base * 2` 点 potential。
 
 ## 触发时机（do_attack 中 4 个点）
 
@@ -14,8 +14,8 @@ reward_base = max(5, sqrt(npc_exp) / 5)
 |------|------|--------|--------|
 | 躲闪成功 | dp < ap, 至少一方 NPC | combat_exp += 1 | combat_exp += reward_base |
 | 招架成功 | dp < ap, 至少一方 NPC | combat_exp += 1 | combat_exp += reward_base |
-| 命中对方(以弱胜强) | ap < dp, 玩家攻NPC | combat_exp += 1, potential += 1 | combat_exp += reward_base, potential += reward_base |
-| 被命中(伤害够大) | random(max_qi+qi) < damage | combat_exp += 1, potential += 1 | combat_exp += reward_base, potential += reward_base |
+| 命中对方(以弱胜强) | ap < dp, 玩家攻NPC | combat_exp += 1, potential += 1 | combat_exp += reward_base, potential += reward_base*2 |
+| 被命中(伤害够大) | random(2) 50% | combat_exp += 1, potential += 1 | combat_exp += reward_base, potential += reward_base*2 |
 
 所有条件判断保持不变，仅放大数值。
 

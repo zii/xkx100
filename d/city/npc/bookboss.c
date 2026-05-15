@@ -17,7 +17,7 @@ void create()
 	set("attitude","friendly");
 	set("inquiry",([
 	       "书"    : "我这里什么书都有，你想买什么？\n",
-	       "here"  : "这是我花了三百两银子买来的店铺。\n",  
+	       "here"  : "这是我花了三百两银子买来的店铺。\n",
 	       "遗物"  : (: ask_me :),
 	       "恩公"  : (: ask_gong :),
 	]));
@@ -35,7 +35,7 @@ void create()
 		"/clone/book/cuff_book",
 		"/clone/book/unarmed_book",
 	}));
-	set("chat_chance", 15);
+	set("chat_chance", 5);
 	set("chat_msg",(
 	{
 	    "老板手里拿着一把鸡毛掸子，轻轻掸去墙上，书架上的尘土。\n",
@@ -43,7 +43,7 @@ void create()
 	    "老板轻声嘟喃着:识货者分文不取，不识者千金难求。\n",
 	    "辛友清仰头叹道:何日才能见到恩公的后人啊。\n",
 	}));
-     
+
 	setup();
 	carry_object("/clone/cloth/male-cloth")->wear();
 }
@@ -56,7 +56,7 @@ void init()
 }
 int ask_me()
 {
-	if ((int)this_player()->query_skill("literate",1)<125){ 
+	if ((int)this_player()->query_skill("literate",1)<125){
 		say(
 "辛友清白了白眼，对" + this_player()->name() + "说道：怎么看你也不象个读书人。\n");
             return 1;
@@ -87,7 +87,7 @@ int do_answer(string arg)
 	if (arg == "先祖司马迁" && query("book_count"))
 	{
    add("book_count", -1);
-	 book = new("/u/evil/lbook6");	
+	 book = new("/u/evil/lbook6");
 	 if ( book->violate_unique())
 	 {
 	  	destruct(book);

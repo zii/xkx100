@@ -111,14 +111,16 @@ void attempt_apprentice(object ob)
 	if ( ob_fam["generation"] == 0 )
 	{
 		command("say 阿弥陀佛！贫僧就收下你做我的弟子了。");
-		command("recruit " + ob->query("id"));
+		ob->delete_temp("pending/apprentice");
+		this_object()->set_temp("pending/recruit", ob);
 		return;
 	}
 
 	if ( ob_fam["generation"] == (my_fam["generation"] + 1) )
 	{
 		command("say " + ob_fam["master_name"] + "的徒弟怎麽跑到我这儿来了，哈哈哈 !");
-		command("recruit " + ob->query("id"));
+		ob->delete_temp("pending/apprentice");
+		this_object()->set_temp("pending/recruit", ob);
 	}
 
 	if ( ob_fam["generation"] <= my_fam["generation"] )

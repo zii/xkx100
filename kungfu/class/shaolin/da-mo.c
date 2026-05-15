@@ -158,7 +158,8 @@ void attempt_apprentice(object ob)
 		ob->set("name", new_name);
 
 		command("say 从今以后你的法名叫做" + new_name + "，恭喜你荣升为少林派渡字辈弟子 !");
-		command("recruit " + ob->query("id"));
+		ob->delete_temp("pending/apprentice");
+		this_object()->set_temp("pending/recruit", ob);
 	}
 	else
 		command("say 你现在就来找我也太早了点吧 !");

@@ -21,8 +21,8 @@ int perform(object me, object target)
    return notify_fail("你所使用的外功中没有这种功能。\n");
 
 	if( !objectp(target) ) {flag =1;target = offensive_target(me);}
-	
-	if( !target || !target->is_character() || target == me ||	
+
+	if( !target || !target->is_character() || target == me ||
 //	  	!me->is_fighting(target) ||
   	!living(target) || target->query_temp("noliving") )
 	 return notify_fail("你要对谁使用拈花拂穴？\n");
@@ -32,9 +32,9 @@ int perform(object me, object target)
 
   notify_fail("你不能攻击这个人。\n");
 	if (!userp(target) && !target->accept_hit(me)) return 0;
-	
+
 	//兵器空手均可
-	
+
 	fskill = "hunyuan-yiqi";
 	bskill = "finger";
 	if (SCBORN_D->valid_perform(me,sskill,pfname))
@@ -75,7 +75,7 @@ int perform(object me, object target)
 		} else {
 			msg +=  HIG "结果$p被$P点了个动弹不得！\n" NOR;
 			target->start_busy(random((int)me->query_skill(bskill,1) / 20));
-      me->add("neili", -100);
+      		me->add("neili", -100);
 		}
 	}
 	else
@@ -111,4 +111,3 @@ HELP
 	);
 	return 1;
 }
-
