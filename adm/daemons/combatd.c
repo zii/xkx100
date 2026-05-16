@@ -161,35 +161,40 @@ string status_msg(int ratio)
 	return RED"已经陷入半昏迷状态，随时都可能摔倒晕去。"NOR;
 }
 
-varargs void report_status(object ob, int effective)
+varargs void report_status(object ob, int effective, int damage)
 {
+	string dmg_str;
 // 比武现场转播 start
 	player=users();
 // 比武现场转播 end
+	if (damage > 0)
+		dmg_str = HIR " -" + damage + NOR;
+	else
+		dmg_str = "";
 	if( effective )
 	{
 		message_vision( "( $N" + eff_status_msg(
 			(int)ob->query("eff_qi")*100 / (int)ob->query("max_qi"))
-			+ " )\n", ob);
+			+ dmg_str + " )\n", ob);
 // 比武现场转播 start
 		if ((string)environment(ob)->query("short") == "擂台")
 		for (userno=0; userno<sizeof(player); userno++)
 			if ((player[userno])->query_temp("view_leitai")&&
              (string)environment(player[userno])->query("short") == "武道场")
-				tell_object(player[userno], "( " + ob->name() + eff_status_msg((int)ob->query("eff_qi")*100 / (int)ob->query("max_qi"))+" )\n");
+				tell_object(player[userno], "( " + ob->name() + eff_status_msg((int)ob->query("eff_qi")*100 / (int)ob->query("max_qi"))+ dmg_str + " )\n");
 // 比武现场转播 end
 	}
 	else
 	{
 		message_vision( "( $N" + status_msg(
 			(int)ob->query("qi") * 100 / (int)ob->query("max_qi"))
-			+ " )\n", ob);
+			+ dmg_str + " )\n", ob);
 // 比武现场转播 start
 		if ((string)environment(ob)->query("short") == "擂台")
 		for (userno=0; userno<sizeof(player); userno++)
 			if ((player[userno])->query_temp("view_leitai")&&
              (string)environment(player[userno])->query("short") == "武道场")
-				tell_object(player[userno], "( " + ob->name() + status_msg( (int)ob->query("qi") * 100 / (int)ob->query("max_qi") ) + " )\n");
+				tell_object(player[userno], "( " + ob->name() + status_msg( (int)ob->query("qi") * 100 / (int)ob->query("max_qi") ) + dmg_str + " )\n");
 // 比武现场转播 end
 	}
 }
@@ -665,7 +670,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 				if ((ap < dp) && (random(my["jing"] * 30 / my["max_jing"] + my["int"]) > 30))
 				{
 					my["combat_exp"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]);
-						if (my["potential"] - my["learned_points"] < 100000)
+						// 去掉10万上限
 						{
 							int my_pm = 200 - (my["potential"] * 100 / (my["combat_exp"] + 1));
 							if (my_pm < 100) my_pm = 100;
@@ -677,7 +682,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 				if (random(2))
 				{
 					your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
-					if (your["potential"] - your["learned_points"] < 100000)
+					// 去掉10万上限
 					{
 						int your_pm = 200 - (your["potential"] * 100 / (your["combat_exp"] + 1));
 						if (your_pm < 100) your_pm = 100;
@@ -749,7 +754,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 	}
 	if (damage > 0)
 	{
-		report_status(victim, wounded);
+		report_status(victim, wounded, damage);
 		if (victim->is_busy())
 			victim->interrupt_me(me);
 		if ((!me->is_killing(your["id"])) &&

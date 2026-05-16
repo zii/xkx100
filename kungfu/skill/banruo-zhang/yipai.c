@@ -77,7 +77,7 @@ int perform(object me, object target)
 		me->add("neili", -1000);
 		p =(int)target->query("qi")*100/(int)target->query("max_qi");
 		msg += damage_msg(damage, "内伤");
-		msg += "( $n"+eff_status_msg(p)+" )\n";
+		msg += "( $n"+eff_status_msg(p)+HIR " -" + damage + NOR+" )\n";
 		call_out("perform2", 0, me, target, p);
 	} else {
 		msg += BLU "$p"BLU"撤招换掌，右掌迎了过去。两股掌力相交，嗤嗤有声，只听见“砰”的一声，\n双方均退了三步。\n" NOR;

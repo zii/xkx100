@@ -113,8 +113,8 @@ void setup_char(object ob)
 				my["jingli"] = my["max_jingli"];
 		}
 
-		if ((my["potential"]-my["learned_points"])>100000)
-			my["potential"] =my["learned_points"]+100000;
+	//	if ((my["potential"]-my["learned_points"])>100000)
+	//		my["potential"] =my["learned_points"]+100000;
     if( my["shen"]>1000000) 	my["shen"]	=	 1000000;
     if( my["shen"]<-1000000) 	my["shen"]	=	-1000000;
     if( my["score"]>100000) 	my["score"]	=	 100000;
