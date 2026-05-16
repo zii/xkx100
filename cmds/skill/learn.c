@@ -72,8 +72,8 @@ int main(object me, string arg)
 		return notify_fail(ob->name() +"皱了皱眉头，不禁想起你过去的叛师经历。\n");
 	if ( userp(ob) && my_skill >= 200 )
 		return notify_fail("依你目前的能力，已不需向玩家学习了。\n");
-	if ((SKILL_D(skill)->type())!="knowledge" && my_skill >= 250)
-	  return notify_fail(ob->name() + "说道：你" + to_chinese(skill) +"的功力已经是非同凡响了，我就不再教你，你自己多研究吧。\n");
+	//if ((SKILL_D(skill)->type())!="knowledge" && my_skill >= 250)
+	//  return notify_fail(ob->name() + "说道：你" + to_chinese(skill) +"的功力已经是非同凡响了，我就不再教你，你自己多研究吧。\n");
 	notify_fail("依你目前的能力，没有办法学习这种技能。\n");
 	if( !SKILL_D(skill)->valid_learn(me) )
 	return 0;

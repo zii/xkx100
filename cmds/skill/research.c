@@ -21,8 +21,8 @@ int main(object me, string arg)
 	if (me->is_busy())
 		return notify_fail("你现在正忙着呢。\n");
 
-	if (!where->query("sleep_room"))
-		return notify_fail("这里太纷杂，你没法做研究。\n");
+	//if (!where->query("sleep_room"))
+	//	return notify_fail("这里太纷杂，你没法做研究。\n");
 
 	if(!arg || (sscanf(arg, "%s %d", skill, times)!=2 ))
 		return notify_fail("指令格式：research|yanjiu <技能> <次数>\n");
@@ -60,42 +60,41 @@ int main(object me, string arg)
 		return notify_fail("也许是缺乏实战经验，你没法研究"+to_chinese(skill)+"的问题了。\n");
 	} else
 	{
-    if (!me->query("env/auto_regenerate") && 
+    if (!me->query("env/auto_regenerate") &&
         				me->query("jing")< jing_cost * times)
-		return notify_fail("你今天太累了，结果什么也没有研究成。\n");			
+		return notify_fail("你今天太累了，结果什么也没有研究成。\n");
 		for (pertimes = 0; pertimes < times ; pertimes ++)
 		{
 			if ((int)me->query("jing") < jing_cost)
-      {
-         if (me->query("env/auto_regenerate") &&
-              SKILL_D("force/regenerate")->exert(me, me))
-         {
-              // try to regenerate & learn again
-           write("你觉得精神好了一些，继续进行研究。\n");
-           pertimes--;
-           continue;
-         } else
-         {
-	          me->set("jing", 0);
-            break;
-         }
-      }
-      me->add("learned_points", 1);
-     	me->receive_damage("jing", jing_cost );
-		}
+			{
+				if (me->query("env/auto_regenerate") &&
+					SKILL_D("force/regenerate")->exert(me, me))
+				{
+					// try to regenerate & learn again
+					write("你觉得精神好了一些，继续进行研究。\n");
+					pertimes--;
+					continue;
+				} else
+				{
+					me->set("jing", 0);
+					break;
+				}
+			}
+			me->add("learned_points", 1);
+     		me->receive_damage("jing", jing_cost );
+	    }
 	}
 	if (pertimes <= 0)
 		return notify_fail("你今天太累了，结果什么也没有研究成。\n");
 
 	for(i=0;i<pertimes;i++)
-//		me->improve_skill(skill, random((int)me->query_int()/2));
-		me->improve_skill(skill, (int)me->query_int()/8+random((int)me->query_int()/4));
+		me->improve_skill(skill, (int)me->query_int()/2+random((int)me->query_int()));
 	if(skill_name = SKILL_D(skill)->query_skill_name(my_skill))
-	printf("你研究了一会，对「%s」这一招似乎想通了些什么。\n", skill_name);
+		printf("你研究了一会，对「%s」这一招似乎想通了些什么。\n", skill_name);
 	else
-	printf("你研究了一会，似乎对"+to_chinese(skill)+"有些新的领悟。\n");
+		printf("你研究了一会，似乎对"+to_chinese(skill)+"有些新的领悟。\n");
 	if (pertimes < times)
-	return notify_fail("但是你今天太累了，研究了"+chinese_number(pertimes) +"次以后只好先停下来。\n");
+		return notify_fail("但是你今天太累了，研究了"+chinese_number(pertimes) +"次以后只好先停下来。\n");
 
 	return 1;
 }

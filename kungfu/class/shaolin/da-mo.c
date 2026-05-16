@@ -47,7 +47,7 @@ void create()
 	set_skill("cuff", 200);
 	set_skill("dodge", 200);
 	set_skill("finger", 200);
-	set_skill("force", 200);
+	set_skill("force", 400);
 	set_skill("hand", 200);
 	set_skill("parry", 200);
 	set_skill("staff", 200);
@@ -74,7 +74,7 @@ void create()
 	set_skill("wuchang-zhang", 300);
 	set_skill("xiuluo-dao", 300);
 	set_skill("yingzhua-gong", 300);
-	set_skill("yijinjing", 250);
+	set_skill("yijinjing", 400);
 	set_skill("yizhi-chan", 300);
 	set_skill("zui-gun", 300);
 

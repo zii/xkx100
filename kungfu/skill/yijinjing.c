@@ -43,7 +43,7 @@ int valid_learn(object me)
 	if ( nf < 10)
 		return notify_fail("你的基本内功火候还不够，无法领会易筋经神功。\n");
 
-	if ( ns > 0 ) 
+	if ( ns > 0 )
 		return notify_fail("你屡犯僧家数戒，无法领会更高深的易筋经神功。\n");
 
 	return valid_public(me,({"zhanzhuang-gong","hunyuan-yiqi"}));
@@ -61,7 +61,6 @@ string exert_function_file(string func)
 
 //add by sega
 mixed be_hit_ob(object me,object victim,int damage_bonus,int factor)
-
 //factor= 加力 damage_bonus=臂力 .
 {
 	int ap,dp;
@@ -109,4 +108,3 @@ HELP
 	);
 	return 1;
 }
-

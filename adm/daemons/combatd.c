@@ -410,9 +410,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 		if (dp < ap && (!userp(victim) || !userp(me)) && random(your["jing"] * 100 / your["max_jing"] + your["int"]) > 50)
 		{
 			your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
-			// 限制基本功夫上限
-			if (victim->query_skill("dodge", 1) < 300)
-				victim->improve_skill("dodge", 1);
+			victim->improve_skill("dodge", victim->query_skill("dodge")/10 > 1 ? victim->query_skill("dodge")/10 : 1);
 		}
 
 		// This is for NPC only. NPC have chance to get exp when fail to hit.
@@ -482,8 +480,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 			{
 				your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
 				// 限制基本功夫上限
-				if (victim->query_skill("parry", 1) < 300)
-					victim->improve_skill("parry", 1);
+				victim->improve_skill("parry", victim->query_skill("parry")/10 > 1 ? victim->query_skill("parry")/10 : 1);
 			}
 			damage = RESULT_PARRY;
 			//			if (damage<0) damage=0;
@@ -676,8 +673,7 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 							if (my_pm < 100) my_pm = 100;
 							my["potential"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]) * my_pm / 100;
 						}					// 限制基本功夫上限
-					if (me->query_skill(attack_skill, 1) < 300)
-						me->improve_skill(attack_skill, 1);
+					me->improve_skill(attack_skill, me->query_skill(attack_skill)/10 > 1 ? me->query_skill(attack_skill)/10 : 1);
 				}
 				if (random(2))
 				{
