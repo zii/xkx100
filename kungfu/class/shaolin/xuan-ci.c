@@ -89,7 +89,6 @@ void create()
 
         carry_object("/d/shaolin/obj/xuan-cloth")->wear();
 }
-
 void init()
 {
     add_action("do_qiecuo","qiecuo");
@@ -138,3 +137,4 @@ void attempt_apprentice(object ob)
 
 	return;
 }
+#include "/kungfu/class/shaolin/xuan.h"

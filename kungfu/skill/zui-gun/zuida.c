@@ -9,7 +9,7 @@ void remove_effect(object me, int amount, int amount1);
 
 int perform(object me, object target)
 {
-	object weapon;	
+	object weapon;
   	string msg;
 	int count, count1, cnt, skill;
 	int flag;
@@ -25,28 +25,28 @@ int perform(object me, object target)
    return notify_fail("你所使用的外功中没有这种功能。\n");
 /*
 	if( !objectp(target) ) {flag =1;target = offensive_target(me);}
-	
-	if( !target || !target->is_character() || target == me ||	
+
+	if( !target || !target->is_character() || target == me ||
 	  	!me->is_fighting(target) ||
   	!living(target) || target->query_temp("noliving") )
 		return notify_fail(PNAME"只能对战斗中的对手使用。\n");
 */
-	if (!objectp(weapon = me->query_temp("weapon")) || 
+	if (!objectp(weapon = me->query_temp("weapon")) ||
 	(string)weapon->query("skill_type") != "club")
 		return notify_fail("你使用的武器不对。\n");
 
-	if( (int)me->query_temp("jingang") ) 
+	if( (int)me->query_temp("jingang") )
 		return notify_fail("你已经在运大金刚神通了。\n");
 
-	if( (int)me->query_temp("zuida") ) 
+	if( (int)me->query_temp("zuida") )
 		return notify_fail("你已经在运功中了。\n");
 
-	if( (int)me->query_temp("powerup"))
-		return notify_fail(HIG "你已经运起内功加力了，没有更多的内力使用八仙醉打。\n"NOR);
+	//if( (int)me->query_temp("powerup"))
+	//	return notify_fail(HIG "你已经运起内功加力了，没有更多的内力使用八仙醉打。\n"NOR);
 
 	if( (int)me->query_str() < 25 )
 		return notify_fail("你的臂力不够，目前不能使用此绝技！\n");
-		
+
 	fskill = "hunyuan-yiqi";
 	bskill = "club";
 	if (SCBORN_D->valid_perform(me,sskill,pfname))
@@ -75,7 +75,7 @@ int perform(object me, object target)
 		return notify_fail("你的醉意不足激发醉打！\n");
 
 	msg = HIY"$N使出少林醉棍的绝技「八仙醉打」，臂力陡然增加, 身法陡然加快！\n" NOR;
-	
+
    	message_combatd(msg, me, target);
 	skill = me->query_skill("club", 1);
 	count = me->query("str") * random(cnt + 1);
@@ -100,7 +100,7 @@ int perform(object me, object target)
 
 void remove_effect(object me, int amount, int amount1)
 {
-	if ( (int)me->query_temp("zuida") ) 
+	if ( (int)me->query_temp("zuida") )
 	{
 		me->add_temp("apply/strength",-amount);
 		me->add_temp("apply/dexerity",-amount1);
@@ -130,4 +130,3 @@ HELP
 	);
 	return 1;
 }
-

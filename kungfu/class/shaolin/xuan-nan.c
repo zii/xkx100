@@ -89,3 +89,4 @@ void create()
 
 #include "/kungfu/class/shaolin/xuan-nan.h"
 
+#include "/kungfu/class/shaolin/xuan.h"

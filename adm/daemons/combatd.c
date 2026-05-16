@@ -260,7 +260,8 @@ int int_sqrt(int x)
 // 根据经验计算奖励基数
 int reward_base(int exp)
 {
-    int r = int_sqrt(exp) / 5;
+    //int r = int_sqrt(exp) * 2 / 5;
+	int r = int_sqrt(exp) * 2;
     if (r < 5) r = 5;
     return r;
 }
@@ -664,9 +665,12 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 				if ((ap < dp) && (random(my["jing"] * 30 / my["max_jing"] + my["int"]) > 30))
 				{
 					my["combat_exp"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]);
-					if (my["potential"] - my["learned_points"] < 100000)
-						my["potential"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]) * 2;
-					// 限制基本功夫上限
+						if (my["potential"] - my["learned_points"] < 100000)
+						{
+							int my_pm = 200 - (my["potential"] * 100 / (my["combat_exp"] + 1));
+							if (my_pm < 100) my_pm = 100;
+							my["potential"] += reward_base(userp(me) ? your["combat_exp"] : my["combat_exp"]) * my_pm / 100;
+						}					// 限制基本功夫上限
 					if (me->query_skill(attack_skill, 1) < 300)
 						me->improve_skill(attack_skill, 1);
 				}
@@ -674,8 +678,11 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 				{
 					your["combat_exp"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]);
 					if (your["potential"] - your["learned_points"] < 100000)
-						your["potential"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]) * 2;
-				}
+					{
+						int your_pm = 200 - (your["potential"] * 100 / (your["combat_exp"] + 1));
+						if (your_pm < 100) your_pm = 100;
+						your["potential"] += reward_base(userp(victim) ? my["combat_exp"] : your["combat_exp"]) * your_pm / 100;
+					}				}
 			}
 		}
 	}
@@ -764,7 +771,10 @@ varargs int do_attack(object me, object victim, object weapon, int attack_type, 
 					if ((player[userno])->query_temp("view_leitai") &&
 						(string)environment(player[userno])->query("short") == "武道场")
 						tell_object(player[userno], result);
-			// 比武现场转播 end
+				// 比武现场转播 end
+			tell_object(me, CYN "战斗结束。\n" NOR);
+			if (interactive(victim))
+				tell_object(victim, CYN "战斗结束。\n" NOR);
 			return 1;
 		}
 	}
@@ -1065,6 +1075,8 @@ void announce(object ob, string event)
 void winner_reward(object killer, object victim)
 {
 	killer->defeated_enemy(victim);
+	if (interactive(killer))
+		tell_object(killer, CYN "战斗结束。\n" NOR);
 }
 
 void killer_reward(object killer, object victim)
@@ -1220,7 +1232,9 @@ void killer_reward(object killer, object victim)
 			victim->query("party/level"))
 			killer->add("BKS1", 1); // 犯上次数累加
 	}
-// 下面是杀人任务
+	if (interactive(killer))
+		tell_object(killer, CYN "战斗结束。\n" NOR);
+	// 下面是杀人任务
 	if (userp(victim) || victim->query("race")!="人类") return;
 	if( interactive(killer) )
 	{

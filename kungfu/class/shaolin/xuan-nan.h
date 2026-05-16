@@ -173,11 +173,15 @@ int fighting(object me, object fighter, int count)
 
 		monk1 = present(names[count], room1);
 		monk1->move(room2);
+		COMBAT_D->do_attack(monk1, fighter, monk1->query_temp("weapon"));
+		fighter->add_temp("beat_count", 1);
 	}
 
 	if( count >= 1 && count <= 9 ) {
 		monk2 = present(names[count-1], room2);
 		monk2->move(room1);
+		COMBAT_D->do_attack(monk2, fighter, monk2->query_temp("weapon"));
+		fighter->add_temp("beat_count", 1);
 	}
 
 	if( !find_player(me->query("assigned_fighter")) ||

@@ -121,3 +121,4 @@ void attempt_apprentice(object ob)
 
 	return;
 }
+#include "/kungfu/class/shaolin/xuan.h"

@@ -147,3 +147,4 @@ string ask_me()
 	command("rumor "+this_player()->query("name")+"拿到棍法通解啦。\n");
 	return "好吧，这本「棍法通解」你拿回去好好钻研，光大我少林武学。";
 }
+#include "/kungfu/class/shaolin/xuan.h"

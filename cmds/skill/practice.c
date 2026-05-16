@@ -64,7 +64,7 @@ int main(object me, string arg)
 		}
 		else return 0;
 	}
-	write( HIY "你的" + to_chinese(skillname) + "进步了！\n" NOR);
+	//	write( HIY "你的" + to_chinese(skillname) + "进步了！\\n" NOR);
 //	me->start_busy(1);
 	return 1;
 }
